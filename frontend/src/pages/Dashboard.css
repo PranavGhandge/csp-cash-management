@@ -1,0 +1,23 @@
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f4f6f8;
+}
+
+.dashboard-card {
+  padding: 50px;
+  text-align: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-card h1 {
+  margin-bottom: 15px;
+}
+
+.dashboard-card p {
+  color: #666;
+}
