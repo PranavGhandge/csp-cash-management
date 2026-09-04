@@ -3,27 +3,17 @@ import { ICreateAdmin } from "../interface/admin.interface";
 import adminRepo from "../repository/admin.repo";
 
 class AdminService {
-
     async createAdmin(data: ICreateAdmin) {
         try {
-
-            const checkEmailExist = await adminRepo.checkEmailExist(
-                data.email
-            );
+            const checkEmailExist = await adminRepo.checkEmailExist(data.email);
 
             if (checkEmailExist) {
                 throw new Error("Email already exists");
             }
 
-            const hashPassword = await bcrypt.hash(
-                data.password,
-                10
-            );
+            const hashPassword = await bcrypt.hash(data.password, 10);
 
-            const createAdmin = await adminRepo.createAdmin(
-                data,
-                hashPassword
-            );
+            const createAdmin = await adminRepo.createAdmin(data, hashPassword);
 
             return {
                 success: true,

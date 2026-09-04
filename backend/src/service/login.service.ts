@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 class LoginService {
-
     async loginUser(data: ILoginUser) {
         try {
 
@@ -18,10 +17,7 @@ class LoginService {
                 throw new Error("User is inactive");
             }
 
-            const passwordMatch = await bcrypt.compare(
-                data.password,
-                checkEmailExist.password
-            );
+            const passwordMatch = await bcrypt.compare(data.password, checkEmailExist.password);
 
             if (!passwordMatch) {
                 throw new Error("Invalid password");

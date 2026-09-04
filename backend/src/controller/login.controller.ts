@@ -9,6 +9,7 @@ class Login {
             const responce = await loginService.loginUser(data)
 
             return rep.status(200).send(responce)
+            
         } catch (error) {
             return rep.status(500).send({
                 success: false,

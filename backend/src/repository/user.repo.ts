@@ -4,11 +4,7 @@ import Users from "../model/users.model";
 class UserRepository {
 
     async checkEmailExist(email: string) {
-        return await Users.findOne({
-            where: {
-                email
-            }
-        });
+        return await Users.findOne({ where: { email } });
     }
 
     async createUser(data: ICreateUser, password: string) {

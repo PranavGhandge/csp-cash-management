@@ -2,13 +2,8 @@ import { ICreateAdmin } from "../interface/admin.interface";
 import Users from "../model/users.model";
 
 class AdminRepository {
-
     async checkEmailExist(email: string) {
-        return await Users.findOne({
-            where: {
-                email
-            }
-        });
+        return await Users.findOne({ where: { email } });
     }
 
     async createAdmin(data: ICreateAdmin, password: string) {
