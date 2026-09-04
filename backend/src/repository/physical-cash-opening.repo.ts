@@ -16,15 +16,21 @@ class PhysicalCashOpeningRepository {
         data: ICreatePhysicalCashOpening,
         admin_id: string,
         created_by: string,
-        total_amount: number
+        total_amount: number,
+        transaction: any
     ) {
-        return await PhysicalCashOpenings.create({
-            ...data,
-            admin_id,
-            created_by,
-            total_amount
-        });
+        return await PhysicalCashOpenings.create(
+            {
+                ...data,
+                admin_id,
+                created_by,
+                total_amount
+            },
+            {
+                transaction
+            }
+        );
     }
-}
+};
 
 export default new PhysicalCashOpeningRepository();

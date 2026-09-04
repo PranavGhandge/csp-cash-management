@@ -12,16 +12,29 @@ class OpeningBalanceRepository {
         });
     }
 
-    async createOpeningBalance(data: ICreateOpeningBalance, admin_id: string, created_by: string) {
-        return await OpeningBalances.create({
-            bank_id: data.bank_id,
-            opening_balance: data.opening_balance,
-            admin_id,
-            created_by
-        });
+    async createOpeningBalance(
+        data: ICreateOpeningBalance,
+        admin_id: string,
+        created_by: string,
+        transaction: any
+    ) {
+        return await OpeningBalances.create(
+            {
+                bank_id: data.bank_id,
+                opening_balance: data.opening_balance,
+                admin_id,
+                created_by
+            },
+            {
+                transaction
+            }
+        );
     }
 
-    async findBankByAdmin(bank_id: string, admin_id: string) {
+    async findBankByAdmin(
+        bank_id: string,
+        admin_id: string
+    ) {
         return await Banks.findOne({
             where: {
                 id: bank_id,
