@@ -2,6 +2,7 @@ import { ICreateTransaction, ITransactionFilter } from "../interface/transaction
 import transactionRepo from "../repository/transaction.repo";
 import sequelize from "../config/database";
 import PhysicalCashBalances from "../model/physical-cash-balances.model";
+import AppError from "../app-error";
 
 class TransactionService {
 
@@ -13,7 +14,7 @@ class TransactionService {
             const bank = await transactionRepo.findBank(data.bank_id, admin_id);
 
             if (!bank) {
-                throw new Error("Bank not found");
+                throw new AppError("Bank not found", 404);
             }
 
             const denominationTotal =
@@ -25,8 +26,9 @@ class TransactionService {
                 (10 * data.note_10);
 
             if (denominationTotal !== data.amount) {
-                throw new Error(
-                    "Transaction amount and denomination total do not match"
+                throw new AppError(
+                    "Denomination total must match transaction amount",
+                    400
                 );
             }
 
@@ -40,8 +42,9 @@ class TransactionService {
                 });
 
             if (!physicalCash) {
-                throw new Error(
-                    "Physical cash opening balance not found"
+                throw new AppError(
+                    "Physical cash opening not found",
+                    404
                 );
             }
 
@@ -53,11 +56,9 @@ class TransactionService {
                     physicalCash.note_50 < data.note_50 ||
                     physicalCash.note_20 < data.note_20 ||
                     physicalCash.note_10 < data.note_10
-                ) {
-                    throw new Error(
-                        "Insufficient physical cash denominations"
-                    );
-                }
+                ) throw new AppError(
+                    "Insufficient physical cash", 400
+                );
 
                 physicalCash.note_500 -= data.note_500;
                 physicalCash.note_200 -= data.note_200;
@@ -65,17 +66,15 @@ class TransactionService {
                 physicalCash.note_50 -= data.note_50;
                 physicalCash.note_20 -= data.note_20;
                 physicalCash.note_10 -= data.note_10;
-
                 bank.online_balance = Number(bank.online_balance) + data.amount;
             }
 
             if (data.transaction_type === "DEPOSIT") {
 
-                if (Number(bank.online_balance) < data.amount) {
-                    throw new Error(
-                        "Insufficient bank online balance"
-                    );
-                }
+                if (Number(bank.online_balance) < data.amount) throw new AppError(
+                    "Insufficient online balance",
+                    400
+                );
 
                 physicalCash.note_500 += data.note_500;
                 physicalCash.note_200 += data.note_200;
@@ -158,11 +157,14 @@ class TransactionService {
     }
 
     async getTransactionById(transaction_id: string, admin_id: string) {
-        
+
         const transaction = await transactionRepo.getTransactionById(transaction_id, admin_id);
 
         if (!transaction) {
-            throw new Error("Transaction not found");
+            throw new AppError(
+                "Transaction not found",
+                404
+            );
         }
 
         return {
