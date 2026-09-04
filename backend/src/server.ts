@@ -6,6 +6,7 @@ import LoginRoutes from "./routes/login.route";
 import "./types/fastify";
 import AdminRoutes from "./routes/admin.route";
 import OperatorRoutes from "./routes/operator.route";
+import BankRoutes from "./routes/bank.route";
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ const start = async () => {
         await app.register(LoginRoutes);
         await app.register(AdminRoutes);
         await app.register(OperatorRoutes);
+        await app.register(BankRoutes);
 
         await app.listen({
             port: PORT,
