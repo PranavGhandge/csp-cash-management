@@ -2,6 +2,7 @@ import { ICreatePhysicalCashOpening } from "../interface/physical-cash-opening.i
 import physicalCashOpeningRepo from "../repository/physical-cash-opening.repo";
 import PhysicalCashBalances from "../model/physical-cash-balances.model";
 import sequelize from "../config/database";
+import AppError from "../app-error";
 
 class PhysicalCashOpeningService {
     async createOpening(data: ICreatePhysicalCashOpening, admin_id: string, created_by: string) {
@@ -11,8 +12,9 @@ class PhysicalCashOpeningService {
             const checkExist = await physicalCashOpeningRepo.checkOpeningExist(admin_id);
 
             if (checkExist) {
-                throw new Error(
-                    "Physical cash opening already exists for today"
+                throw new AppError(
+                    "Physical cash opening already exists for today",
+                    409
                 );
             }
 

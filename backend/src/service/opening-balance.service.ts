@@ -1,6 +1,7 @@
 import { ICreateOpeningBalance } from "../interface/opening-balance.interface";
 import openingBalanceRepo from "../repository/opening-balance.repo";
 import sequelize from "../config/database";
+import AppError from "../app-error";
 
 class OpeningBalanceService {
     async createOpeningBalance(
@@ -19,8 +20,9 @@ class OpeningBalanceService {
                 );
 
             if (checkExist) {
-                throw new Error(
-                    "Opening balance already exists for this bank and date"
+                throw new AppError(
+                    "Opening balance already exists for this bank and date",
+                    409
                 );
             }
 
@@ -32,7 +34,7 @@ class OpeningBalanceService {
                 );
 
             if (!bank) {
-                throw new Error("Bank not found");
+                throw new AppError("Bank not found", 404);
             }
 
             // 3. Save opening balance history
