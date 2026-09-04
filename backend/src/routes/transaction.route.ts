@@ -12,6 +12,22 @@ async function TransactionRoutes(fastify: FastifyInstance) {
     },
         transactionController.createTransaction
     );
+    fastify.get("/api/transaction", {
+        preHandler: [
+            authMiddleware,
+            roleMiddleware("ADMIN", "OPERATOR")
+        ]
+    },
+        transactionController.getAllTransactions
+    );
+    fastify.get("/api/transaction/:id", {
+        preHandler: [
+            authMiddleware,
+            roleMiddleware("ADMIN", "OPERATOR")
+        ]
+    },
+        transactionController.getTransactionById
+    );
 }
 
 export default TransactionRoutes;

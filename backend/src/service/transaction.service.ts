@@ -1,4 +1,4 @@
-import { ICreateTransaction } from "../interface/transaction.interface";
+import { ICreateTransaction, ITransactionFilter } from "../interface/transaction.interface";
 import transactionRepo from "../repository/transaction.repo";
 import sequelize from "../config/database";
 import PhysicalCashBalances from "../model/physical-cash-balances.model";
@@ -133,6 +133,43 @@ class TransactionService {
             await dbTransaction.rollback();
             throw error;
         }
+    }
+
+    async getAllTransactions(admin_id: string, filter: ITransactionFilter) {
+        const result = await transactionRepo.getAllTransactions(admin_id, filter);
+
+        const page = Number(filter.page) || 1;
+        const limit = Number(filter.limit) || 10;
+
+        const total = result.count;
+        const totalPages = Math.ceil(total / limit);
+
+        return {
+            success: true,
+            message: "Transactions fetched successfully",
+            data: result.rows,
+            pagination: {
+                total,
+                page,
+                limit,
+                totalPages
+            }
+        };
+    }
+
+    async getTransactionById(transaction_id: string, admin_id: string) {
+        
+        const transaction = await transactionRepo.getTransactionById(transaction_id, admin_id);
+
+        if (!transaction) {
+            throw new Error("Transaction not found");
+        }
+
+        return {
+            success: true,
+            message: "Transaction fetched successfully",
+            data: transaction
+        };
     }
 }
 

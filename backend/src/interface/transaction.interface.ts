@@ -10,3 +10,13 @@ export interface ICreateTransaction {
     note_20: number;
     note_10: number;
 }
+
+export interface ITransactionFilter {
+    page?: number;
+    limit?: number;
+    search?: string;
+    transaction_type?: "WITHDRAWAL" | "DEPOSIT";
+    bank_id?: string;
+    start_date?: string;
+    end_date?: string;
+}

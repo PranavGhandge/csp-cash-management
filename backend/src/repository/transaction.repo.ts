@@ -1,7 +1,9 @@
-import { ICreateTransaction } from "../interface/transaction.interface";
 import Transactions from "../model/transactions.model";
 import TransactionDenominations from "../model/transaction-denominations.model";
 import Banks from "../model/banks.model";
+import { Op } from "sequelize";
+import { ICreateTransaction, ITransactionFilter } from "../interface/transaction.interface";
+import Users from "../model/users.model";
 
 class TransactionRepository {
     async findBank(bank_id: string, admin_id: string) {
@@ -47,6 +49,106 @@ class TransactionRepository {
             },
             { transaction }
         );
+    }
+
+    async getAllTransactions(
+        admin_id: string,
+        filter: ITransactionFilter
+    ) {
+        const page = Number(filter.page) || 1;
+        const limit = Number(filter.limit) || 10;
+        const offset = (page - 1) * limit;
+
+        const where: any = {
+            admin_id
+        };
+
+        // Customer search
+        if (filter.search) {
+            where.customer_name = {
+                [Op.iLike]: `%${filter.search}%`
+            };
+        }
+
+        // Transaction type
+        if (filter.transaction_type) {
+            where.transaction_type = filter.transaction_type;
+        }
+
+        // Bank filter
+        if (filter.bank_id) {
+            where.bank_id = filter.bank_id;
+        }
+
+        // Date filter
+        if (filter.start_date && filter.end_date) {
+            where.transaction_date = {
+                [Op.between]: [
+                    `${filter.start_date} 00:00:00`,
+                    `${filter.end_date} 23:59:59`
+                ]
+            };
+        } else if (filter.start_date) {
+            where.transaction_date = {
+                [Op.gte]: `${filter.start_date} 00:00:00`
+            };
+        } else if (filter.end_date) {
+            where.transaction_date = {
+                [Op.lte]: `${filter.end_date} 23:59:59`
+            };
+        }
+
+        return await Transactions.findAndCountAll({
+            where,
+            include: [
+                {
+                    model: Banks,
+                    as: "bank",
+                    attributes: ["id", "bank_name", "csp_id"]
+                },
+                {
+                    model: TransactionDenominations,
+                    as: "denominations"
+                },
+                {
+                    model: Users,
+                    as: "operator",
+                    attributes: ["id", "first_name", "last_name", "email"]
+                }
+            ],
+
+            order: [
+                ["transaction_date", "DESC"]
+            ],
+
+            limit,
+            offset
+        });
+    }
+
+    async getTransactionById(transaction_id: string, admin_id: string) {
+        return await Transactions.findOne({
+            where: {
+                id: transaction_id,
+                admin_id
+            },
+            include: [
+                {
+                    model: Banks,
+                    as: "bank",
+                    attributes: ["id", "bank_name", "csp_id"]
+                },
+                {
+                    model: TransactionDenominations,
+                    as: "denominations"
+                },
+                {
+                    model: Users,
+                    as: "operator",
+                    attributes: ["id", "first_name", "last_name", "email"]
+                }
+            ]
+        });
     }
 }
 
