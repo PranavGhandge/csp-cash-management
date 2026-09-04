@@ -1,29 +1,60 @@
 import { ILoginUser } from "../interface/user.interface";
 import userRepo from "../repository/user.repo";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 class LoginService {
+
     async loginUser(data: ILoginUser) {
         try {
+
             const checkEmailExist = await userRepo.checkEmailExist(data.email);
 
             if (!checkEmailExist) {
-                throw new Error("Email not found")
+                throw new Error("Email not found");
             }
 
-            const loginUser = await bcrypt.compare(data.password, checkEmailExist.password);
-
-            if (!loginUser) {
-                throw new Error("Invalid password")
+            if (!checkEmailExist.status) {
+                throw new Error("User is inactive");
             }
+
+            const passwordMatch = await bcrypt.compare(
+                data.password,
+                checkEmailExist.password
+            );
+
+            if (!passwordMatch) {
+                throw new Error("Invalid password");
+            }
+
+            const token = jwt.sign(
+                {
+                    id: checkEmailExist.id,
+                    role: checkEmailExist.role,
+                    admin_id: checkEmailExist.admin_id
+                },
+                process.env.JWT_SECRET as string,
+                {
+                    expiresIn: "1d"
+                }
+            );
 
             return {
                 success: true,
                 message: "Login successful",
-                data: checkEmailExist,
+                data: {
+                    id: checkEmailExist.id,
+                    first_name: checkEmailExist.first_name,
+                    last_name: checkEmailExist.last_name,
+                    email: checkEmailExist.email,
+                    role: checkEmailExist.role,
+                    admin_id: checkEmailExist.admin_id
+                },
+                token
             };
+
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 }

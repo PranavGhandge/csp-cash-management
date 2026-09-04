@@ -2,8 +2,10 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import sequelize from "./config/database";
 import dotenv from "dotenv";
-import UserRoutes from "./routes/user.route";
 import LoginRoutes from "./routes/login.route";
+import "./types/fastify";
+import AdminRoutes from "./routes/admin.route";
+import OperatorRoutes from "./routes/operator.route";
 
 dotenv.config();
 
@@ -27,8 +29,9 @@ const start = async () => {
             ]
         });
 
-        await app.register(UserRoutes);
         await app.register(LoginRoutes);
+        await app.register(AdminRoutes);
+        await app.register(OperatorRoutes);
 
         await app.listen({
             port: PORT,
