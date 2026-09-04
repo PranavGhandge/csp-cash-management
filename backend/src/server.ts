@@ -10,6 +10,7 @@ import BankRoutes from "./routes/bank.route";
 import OpeningBalanceRoutes from "./routes/opening-balance.route";
 import PhysicalCashOpeningRoutes from "./routes/physical-cash-opening.route";
 import TransactionRoutes from "./routes/transaction.route";
+import "./model/associations";
 
 dotenv.config();
 
