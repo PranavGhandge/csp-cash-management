@@ -4,11 +4,7 @@ import Users from "../model/users.model";
 class OperatorRepository {
 
     async checkEmailExist(email: string) {
-        return await Users.findOne({
-            where: {
-                email
-            }
-        });
+        return await Users.findOne({ where: { email } });
     }
 
     async createOperator(data: ICreateOperator, password: string, adminId: string) {

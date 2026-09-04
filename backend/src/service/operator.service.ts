@@ -3,28 +3,17 @@ import { ICreateOperator } from "../interface/operator.interface";
 import operatorRepo from "../repository/operator.repo";
 
 class OperatorService {
-
     async createOperator(data: ICreateOperator, adminId: string) {
         try {
-
-            const checkEmailExist =
-                await operatorRepo.checkEmailExist(data.email);
+            const checkEmailExist = await operatorRepo.checkEmailExist(data.email);
 
             if (checkEmailExist) {
                 throw new Error("Email already exists");
             }
 
-            const hashPassword = await bcrypt.hash(
-                data.password,
-                10
-            );
+            const hashPassword = await bcrypt.hash(data.password, 10);
 
-            const createOperator =
-                await operatorRepo.createOperator(
-                    data,
-                    hashPassword,
-                    adminId
-                );
+            const createOperator = await operatorRepo.createOperator(data, hashPassword, adminId);
 
             return {
                 success: true,
