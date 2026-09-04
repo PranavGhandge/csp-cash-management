@@ -8,6 +8,7 @@ import AdminRoutes from "./routes/admin.route";
 import OperatorRoutes from "./routes/operator.route";
 import BankRoutes from "./routes/bank.route";
 import OpeningBalanceRoutes from "./routes/opening-balance.route";
+import PhysicalCashOpeningRoutes from "./routes/physical-cash-opening.route";
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ const start = async () => {
         await app.register(OperatorRoutes);
         await app.register(BankRoutes);
         await app.register(OpeningBalanceRoutes);
+        await app.register(PhysicalCashOpeningRoutes);
 
         await app.listen({
             port: PORT,
