@@ -22,9 +22,8 @@ const app = Fastify({ logger: true });
 const PORT = Number(process.env.PORT) || 3000;
 
 
-// ==============================
 // GLOBAL ERROR HANDLER
-// ==============================
+
 
 app.setErrorHandler((error, req, reply) => {
 

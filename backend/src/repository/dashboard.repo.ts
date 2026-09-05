@@ -32,11 +32,7 @@ class DashboardRepository {
         });
     }
 
-    async getTodayTransactions(
-        admin_id: string,
-        startDate: Date,
-        endDate: Date
-    ) {
+    async getTodayTransactions( admin_id: string, startDate: Date, endDate: Date) {
         return await Transactions.findAll({
             where: {
                 admin_id,

@@ -12,13 +12,7 @@ class PhysicalCashOpeningRepository {
         });
     }
 
-    async createOpening(
-        data: ICreatePhysicalCashOpening,
-        admin_id: string,
-        created_by: string,
-        total_amount: number,
-        transaction: any
-    ) {
+    async createOpening( data: ICreatePhysicalCashOpening, admin_id: string, created_by: string, total_amount: number, transaction: any) {
         return await PhysicalCashOpenings.create(
             {
                 ...data,

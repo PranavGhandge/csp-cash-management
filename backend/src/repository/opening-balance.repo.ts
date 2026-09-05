@@ -12,12 +12,7 @@ class OpeningBalanceRepository {
         });
     }
 
-    async createOpeningBalance(
-        data: ICreateOpeningBalance,
-        admin_id: string,
-        created_by: string,
-        transaction: any
-    ) {
+    async createOpeningBalance(data: ICreateOpeningBalance, admin_id: string, created_by: string, transaction: any) {
         return await OpeningBalances.create(
             {
                 bank_id: data.bank_id,
@@ -31,10 +26,7 @@ class OpeningBalanceRepository {
         );
     }
 
-    async findBankByAdmin(
-        bank_id: string,
-        admin_id: string
-    ) {
+    async findBankByAdmin(bank_id: string, admin_id: string) {
         return await Banks.findOne({
             where: {
                 id: bank_id,

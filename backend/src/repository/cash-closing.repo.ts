@@ -6,10 +6,7 @@ import { ICreateCashClosing } from "../interface/cash-closing.interface";
 
 class CashClosingRepository {
 
-    async checkClosingExist(
-        admin_id: string,
-        closing_date: string
-    ) {
+    async checkClosingExist(admin_id: string, closing_date: string) {
         return await CashClosings.findOne({
             where: {
                 admin_id,
@@ -35,12 +32,7 @@ class CashClosingRepository {
         });
     }
 
-    async createDenominations(
-        closing_id: string,
-        data: ICreateCashClosing,
-        total_amount: number,
-        transaction: any
-    ) {
+    async createDenominations(closing_id: string, data: ICreateCashClosing, total_amount: number, transaction: any) {
         return await CashClosingDenominations.create(
             {
                 closing_id,
@@ -58,10 +50,7 @@ class CashClosingRepository {
         );
     }
 
-    async getBanksByAdmin(
-        admin_id: string,
-        transaction: any
-    ) {
+    async getBanksByAdmin(admin_id: string, transaction: any) {
         return await Banks.findAll({
             where: {
                 admin_id,
@@ -90,12 +79,7 @@ class CashClosingRepository {
         );
     }
 
-    async getAllClosings(
-        admin_id: string,
-        page: number,
-        limit: number,
-        offset: number
-    ) {
+    async getAllClosings(admin_id: string, page: number, limit: number, offset: number) {
         return await CashClosings.findAndCountAll({
             where: {
                 admin_id
@@ -120,10 +104,7 @@ class CashClosingRepository {
         });
     }
 
-    async getClosingById(
-        closing_id: string,
-        admin_id: string
-    ) {
+    async getClosingById( closing_id: string, admin_id: string) {
         return await CashClosings.findOne({
             where: {
                 id: closing_id,

@@ -4,11 +4,7 @@ import sequelize from "../config/database";
 import AppError from "../app-error";
 
 class OpeningBalanceService {
-    async createOpeningBalance(
-        data: ICreateOpeningBalance,
-        admin_id: string,
-        created_by: string
-    ) {
+    async createOpeningBalance(data: ICreateOpeningBalance,admin_id: string,created_by: string) {
         const dbTransaction = await sequelize.transaction();
 
         try {

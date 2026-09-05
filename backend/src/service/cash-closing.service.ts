@@ -9,11 +9,7 @@ import OpeningBalances from "../model/opening-balances.model";
 
 class CashClosingService {
 
-    async createClosing(
-        data: ICreateCashClosing,
-        admin_id: string,
-        created_by: string
-    ) {
+    async createClosing(data: ICreateCashClosing, admin_id: string, created_by: string) {
         const dbTransaction = await sequelize.transaction();
 
         try {
@@ -187,7 +183,7 @@ class CashClosingService {
                 data: {
                     closing,
                     denominations,
-                    banks:bankSnapshots
+                    banks: bankSnapshots
                 }
             };
 
