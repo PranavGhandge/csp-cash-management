@@ -1,0 +1,122 @@
+.management-page {
+    padding: 30px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.page-header p {
+    margin-top: 8px;
+    color: #666;
+}
+
+.form-card,
+.list-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    max-width: 900px;
+}
+
+.form-card h2,
+.list-card h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.form-card button {
+    padding: 11px 20px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.form-card button:disabled {
+    cursor: not-allowed;
+}
+
+.success-message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    background: #e8f5e9;
+}
+
+.error-message {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 6px;
+    background: #ffebee;
+}
+
+.bank-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.bank-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.bank-item h3 {
+    margin: 0 0 6px;
+}
+
+.bank-item p {
+    margin: 0;
+    color: #666;
+}
+
+.balance {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.balance span {
+    font-size: 13px;
+    color: #666;
+}
+
+.balance strong {
+    margin-top: 5px;
+    font-size: 20px;
+}
+
+.empty-state {
+    padding: 20px;
+    text-align: center;
+    color: #777;
+}

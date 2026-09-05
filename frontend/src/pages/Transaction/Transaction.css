@@ -1,0 +1,137 @@
+.transaction-page {
+    padding: 30px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.page-header p {
+    margin-top: 8px;
+    color: #666;
+}
+
+.transaction-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 850px;
+}
+
+.transaction-card h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select {
+    padding: 11px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.denomination-section {
+    margin-top: 30px;
+}
+
+.denomination-section h3 {
+    margin-bottom: 5px;
+}
+
+.section-info {
+    color: #666;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.denomination-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.denomination-row {
+    display: grid;
+    grid-template-columns: 1fr 180px 180px;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 15px;
+    border: 1px solid #eee;
+    border-radius: 7px;
+}
+
+.note-name strong {
+    font-size: 17px;
+}
+
+.denomination-row input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.note-total {
+    text-align: right;
+    font-weight: 600;
+}
+
+.denomination-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 18px;
+    background: #f5f7fa;
+    border-radius: 8px;
+}
+
+.denomination-total span {
+    font-weight: 600;
+}
+
+.denomination-total strong {
+    font-size: 22px;
+}
+
+.success-message {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    background: #e8f5e9;
+}
+
+.error-message {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    background: #ffebee;
+}
+
+.transaction-card button {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.transaction-card button:disabled {
+    cursor: not-allowed;
+}

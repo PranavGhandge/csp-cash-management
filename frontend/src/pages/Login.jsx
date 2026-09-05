@@ -1,129 +1,89 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import axios from "axios";
-import "./Login.css";
+import { useNavigate } from "react-router-dom";
+import apiRequest from "../services/api";
 
 const Login = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-
     const [formData, setFormData] = useState({
         email: "",
-        password: "",
+        password: ""
     });
 
-    const [message, setMessage] = useState(
-        location.state?.message || ""
-    );
-
-    const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        setMessage("");
-        setError("");
-
         try {
-            const API_URL = import.meta.env.VITE_API_URL;
+            setLoading(true);
 
-            const response = await axios.post(
-                `${API_URL}/api/login`,
-                formData
-            );
+            const result = await apiRequest("/api/login", {
+                method: "POST",
+                body: JSON.stringify(formData)
+            });
 
-            console.log(response.data);
+            localStorage.setItem("token", result.token);
 
             localStorage.setItem(
                 "user",
-                JSON.stringify(response.data.data)
+                JSON.stringify(result.data)
             );
 
-            setMessage("Login successful!");
-
-            // Dashboard ला redirect
-            setTimeout(() => {
-                navigate("/dashboard");
-            }, 1000);
+            navigate("/dashboard");
 
         } catch (error) {
-            console.log(error);
-
-            setError(
-                error.response?.data?.message ||
-                "Invalid email or password"
-            );
+            console.error("Login error:", error);
+            alert(error.message);
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="login-container">
-            <div className="login-card">
+        <div>
+            <h1>Login</h1>
 
-                <h2>Welcome Back</h2>
+            <form onSubmit={handleSubmit}>
+                <div>
+                    <label>Email</label>
 
-                <form onSubmit={handleSubmit}>
+                    <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        placeholder="Enter email"
+                    />
+                </div>
 
-                    <div className="form-group">
-                        <label>Email</label>
+                <div>
+                    <label>Password</label>
 
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Enter email"
-                            value={formData.email}
-                            onChange={handleChange}
-                        />
-                    </div>
+                    <input
+                        type="password"
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        placeholder="Enter password"
+                    />
+                </div>
 
-                    <div className="form-group">
-                        <label>Password</label>
-
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Enter password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <button
-                        type="submit"
-                        className="login-btn"
-                    >
-                        Login
-                    </button>
-
-                    {message && (
-                        <p className="success-message">
-                            {message}
-                        </p>
-                    )}
-
-                    {error && (
-                        <p className="error-message">
-                            {error}
-                        </p>
-                    )}
-
-                    <button
-                        type="button"
-                        className="switch-btn"
-                        onClick={() => navigate("/signup")}
-                    >
-                        Don't have an account? Signup
-                    </button>
-
-                </form>
-            </div>
+                <button
+                    type="submit"
+                    disabled={loading}
+                >
+                    {loading ? "Logging in..." : "Login"}
+                </button>
+            </form>
         </div>
     );
 };

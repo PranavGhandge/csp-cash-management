@@ -1,23 +1,83 @@
-.dashboard-container {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: #f4f6f8;
+.app-layout {
+    display: flex;
+    min-height: 100vh;
 }
 
-.dashboard-card {
-  padding: 50px;
-  text-align: center;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+.sidebar {
+    width: 240px;
+    min-height: 100vh;
+    background: #1f2937;
+    color: white;
+    padding: 20px;
+    box-sizing: border-box;
+    position: fixed;
+    left: 0;
+    top: 0;
 }
 
-.dashboard-card h1 {
-  margin-bottom: 15px;
+.sidebar-header {
+    margin-bottom: 30px;
 }
 
-.dashboard-card p {
-  color: #666;
+.sidebar-header h2 {
+    margin: 0;
+}
+
+.sidebar-header p {
+    margin: 5px 0;
+    font-size: 13px;
+}
+
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.sidebar nav h4 {
+    margin: 20px 0 5px;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.sidebar nav a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.sidebar nav a.active {
+    background: #374151;
+}
+
+.sidebar-footer {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+.sidebar-footer p {
+    margin: 0 0 5px;
+}
+
+.sidebar-footer small {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.sidebar-footer button {
+    width: 100%;
+    padding: 9px;
+    cursor: pointer;
+}
+
+.dashboard {
+    margin-left: 240px;
+    flex: 1;
+    min-height: 100vh;
+    padding: 30px;
+    background: #f5f7fa;
+    box-sizing: border-box;
 }

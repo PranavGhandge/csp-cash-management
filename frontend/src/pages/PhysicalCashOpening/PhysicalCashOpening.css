@@ -1,0 +1,116 @@
+.physical-cash-page {
+    padding: 30px;
+}
+
+.page-header {
+    margin-bottom: 30px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 30px;
+}
+
+.page-header p {
+    margin-top: 8px;
+    color: #666;
+}
+
+.cash-opening-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 850px;
+}
+
+.cash-opening-card h2 {
+    margin-top: 0;
+    margin-bottom: 25px;
+}
+
+.notes-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.note-row {
+    display: grid;
+    grid-template-columns: 1fr 180px 180px;
+    align-items: center;
+    gap: 20px;
+    padding: 15px;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.note-info {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.note-info strong {
+    font-size: 18px;
+}
+
+.note-info span {
+    color: #777;
+}
+
+.note-row input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+}
+
+.note-amount {
+    text-align: right;
+    font-weight: 600;
+}
+
+.total-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 8px;
+    background: #f5f7fa;
+}
+
+.total-section span {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.total-section strong {
+    font-size: 25px;
+}
+
+.success-message {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    background: #e8f5e9;
+}
+
+.error-message {
+    margin-top: 20px;
+    padding: 12px;
+    border-radius: 6px;
+    background: #ffebee;
+}
+
+.cash-opening-card button {
+    margin-top: 20px;
+    padding: 12px 22px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.cash-opening-card button:disabled {
+    cursor: not-allowed;
+}
