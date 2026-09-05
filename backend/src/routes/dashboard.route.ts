@@ -11,7 +11,7 @@ export default async function dashboardRoutes(
         {
             preHandler: [
                 authMiddleware,
-                roleMiddleware("ADMIN", "OPERATOR")
+                roleMiddleware("ADMIN", "OPERATOR","SUPER_ADMIN")
             ]
         },
         dashboardController.getDashboard
