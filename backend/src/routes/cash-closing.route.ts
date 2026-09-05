@@ -25,6 +25,15 @@ export default async function cashClosingRoutes(
         cashClosingController.getAllClosings
     );
 
+    app.get("/api/closing/summary", {
+        preHandler: [
+            authMiddleware,
+            roleMiddleware("ADMIN", "OPERATOR")
+        ]
+    },
+        cashClosingController.getClosingSummary
+    );
+
     app.get("/api/closing/:id", {
         preHandler: [
             authMiddleware,

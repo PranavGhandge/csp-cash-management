@@ -42,6 +42,30 @@ class CashClosingController {
         return rep.status(200).send(response);
     }
 
+    async getClosingSummary(
+        req: FastifyRequest,
+        rep: FastifyReply
+    ) {
+        const admin_id =
+            req.user.role === "ADMIN"
+                ? req.user.id
+                : req.user.admin_id;
+
+        if (!admin_id) {
+            return rep.status(403).send({
+                success: false,
+                message: "Admin scope not found"
+            });
+        }
+
+        const response =
+            await cashClosingService.getClosingSummary(
+                admin_id
+            );
+
+        return rep.status(200).send(response);
+    }
+
     async getClosingById(req: FastifyRequest, rep: FastifyReply) {
         const { id } = req.params as { id: string };
 

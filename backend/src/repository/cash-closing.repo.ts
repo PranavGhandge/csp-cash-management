@@ -1,19 +1,24 @@
 import CashClosings from "../model/cash-closings.model";
 import CashClosingDenominations from "../model/cash-closing-denominations.model";
-import CashClosingBanks from "../model/cash-closing-banks.model";
-import Banks from "../model/banks.model";
+import PhysicalCashOpenings from "../model/physical-cash-openings.model";
+import Transactions from "../model/transactions.model";
 import { ICreateCashClosing } from "../interface/cash-closing.interface";
+import { Op } from "sequelize";
 
 class CashClosingRepository {
 
-    async checkClosingExist(admin_id: string, closing_date: string) {
+    async checkClosingExist(
+        admin_id: string,
+        closing_date: string
+    ) {
         return await CashClosings.findOne({
             where: {
                 admin_id,
                 closing_date
-            },
+            }
         });
     }
+
 
     async createClosing(
         data: {
@@ -32,7 +37,13 @@ class CashClosingRepository {
         });
     }
 
-    async createDenominations(closing_id: string, data: ICreateCashClosing, total_amount: number, transaction: any) {
+
+    async createDenominations(
+        closing_id: string,
+        data: ICreateCashClosing,
+        total_amount: number,
+        transaction: any
+    ) {
         return await CashClosingDenominations.create(
             {
                 closing_id,
@@ -50,36 +61,54 @@ class CashClosingRepository {
         );
     }
 
-    async getBanksByAdmin(admin_id: string, transaction: any) {
-        return await Banks.findAll({
+
+    /*
+     * Get latest physical cash opening
+     */
+
+    async getLatestPhysicalCashOpening(
+        admin_id: string
+    ) {
+        return await PhysicalCashOpenings.findOne({
             where: {
-                admin_id,
-                status: true
+                admin_id
             },
-            transaction
+            order: [
+                ["opening_date", "DESC"]
+            ]
         });
     }
 
-    async createBankSnapshot(
-        data: {
-            closing_id: string;
-            bank_id: string;
-            bank_name: string;
-            csp_id: string;
-            opening_balance: number;
-            closing_balance: number;
-        },
-        transaction: any
+
+    /*
+     * Get today's transactions
+     */
+
+    async getTransactionsAfterOpening(
+        admin_id: string,
+        opening_date: Date
     ) {
-        return await CashClosingBanks.create(
-            data,
-            {
-                transaction
+        return await Transactions.findAll({
+            where: {
+                admin_id,
+                transaction_date: {
+                    [Op.gte]: opening_date
+                }
             }
-        );
+        });
     }
 
-    async getAllClosings(admin_id: string, page: number, limit: number, offset: number) {
+
+    /*
+     * Get all closings
+     */
+
+    async getAllClosings(
+        admin_id: string,
+        page: number,
+        limit: number,
+        offset: number
+    ) {
         return await CashClosings.findAndCountAll({
             where: {
                 admin_id
@@ -89,10 +118,6 @@ class CashClosingRepository {
                 {
                     model: CashClosingDenominations,
                     as: "denominations"
-                },
-                {
-                    model: CashClosingBanks,
-                    as: "banks"
                 }
             ],
             order: [
@@ -104,7 +129,15 @@ class CashClosingRepository {
         });
     }
 
-    async getClosingById( closing_id: string, admin_id: string) {
+
+    /*
+     * Get closing by ID
+     */
+
+    async getClosingById(
+        closing_id: string,
+        admin_id: string
+    ) {
         return await CashClosings.findOne({
             where: {
                 id: closing_id,
@@ -114,10 +147,6 @@ class CashClosingRepository {
                 {
                     model: CashClosingDenominations,
                     as: "denominations"
-                },
-                {
-                    model: CashClosingBanks,
-                    as: "banks"
                 }
             ]
         });
