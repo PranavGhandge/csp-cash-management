@@ -1,0 +1,75 @@
+.cash-closing-history-page {
+    padding: 24px;
+}
+
+.page-header {
+    margin-bottom: 24px;
+}
+
+.page-header h1 {
+    margin: 0;
+    font-size: 28px;
+}
+
+.page-header p {
+    margin-top: 6px;
+    color: #666;
+}
+
+.error-message {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    background: #ffe5e5;
+    color: #c62828;
+}
+
+.closing-history-card {
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+}
+
+.closing-history-card table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.closing-history-card th,
+.closing-history-card td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.closing-history-card th {
+    font-size: 14px;
+    color: #555;
+    background: #f8f8f8;
+}
+
+.closing-history-card td {
+    font-size: 14px;
+}
+
+.closing-history-card tbody tr:hover {
+    background: #fafafa;
+}
+
+@media (max-width: 700px) {
+    .cash-closing-history-page {
+        padding: 16px;
+    }
+
+    .closing-history-card {
+        padding: 10px;
+    }
+
+    .closing-history-card th,
+    .closing-history-card td {
+        padding: 10px 8px;
+        white-space: nowrap;
+    }
+}

@@ -3,6 +3,29 @@ import apiRequest from "../services/api";
 import "./Dashboard.css";
 import Sidebar from "../components/Sidebar";
 
+const formatAmount = (amount) => {
+    return Number(amount || 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+};
+
+const formatDifference = (amount) => {
+    const value = Number(amount || 0);
+
+    if (value < 0) {
+        return `-₹${Math.abs(value).toLocaleString("en-IN", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        })}`;
+    }
+
+    return `₹${value.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    })}`;
+};
+
 const Dashboard = () => {
 
     const [dashboard, setDashboard] = useState(null);
@@ -10,7 +33,7 @@ const Dashboard = () => {
     const [error, setError] = useState("");
 
     const user = JSON.parse(
-        localStorage.getItem("user")
+        localStorage.getItem("user") || "null"
     );
 
     const fetchDashboard = async () => {
@@ -24,7 +47,7 @@ const Dashboard = () => {
 
         } catch (error) {
             console.error("Dashboard error:", error);
-            setError(error.message);
+            setError(error.message || "Failed to load dashboard");
 
         } finally {
             setLoading(false);
@@ -35,41 +58,84 @@ const Dashboard = () => {
         fetchDashboard();
     }, []);
 
+    /* ---------------- Loading ---------------- */
+
     if (loading) {
         return (
-            <div className="dashboard-loading">
-                <h2>Loading dashboard...</h2>
+            <div className="app-layout">
+
+                <Sidebar />
+
+                <main className="dashboard">
+
+                    <div className="dashboard-loading">
+                        <h2>Loading dashboard...</h2>
+                    </div>
+
+                </main>
+
             </div>
         );
     }
+
+    /* ---------------- Error ---------------- */
 
     if (error) {
         return (
-            <div className="dashboard-error">
+            <div className="app-layout">
 
-                <h2>Something went wrong</h2>
+                <Sidebar />
 
-                <p>{error}</p>
+                <main className="dashboard">
 
-                <button onClick={fetchDashboard}>
-                    Retry
-                </button>
+                    <div className="dashboard-error">
+
+                        <h2>
+                            Something went wrong
+                        </h2>
+
+                        <p>
+                            {error}
+                        </p>
+
+                        <button onClick={fetchDashboard}>
+                            Retry
+                        </button>
+
+                    </div>
+
+                </main>
 
             </div>
         );
     }
+
+    if (!dashboard) {
+        return null;
+    }
+
+    const physicalCash = dashboard.physical_cash || {};
+
+    const banks = dashboard.banks || [];
+
+    const today = dashboard.today || {};
+
+    const lastClosing = dashboard.last_closing;
 
     return (
         <div className="app-layout">
 
-            {/* Sidebar */}
+            {/* ================= Sidebar ================= */}
+
             <Sidebar />
 
 
-            {/* Main Dashboard */}
+            {/* ================= Main Dashboard ================= */}
+
             <main className="dashboard">
 
-                {/* Header */}
+                {/* ================= Header ================= */}
+
                 <div className="dashboard-header">
 
                     <div>
@@ -79,109 +145,36 @@ const Dashboard = () => {
                         </h1>
 
                         <p>
-                            Welcome {user?.first_name} 👋
+                            Welcome {user?.first_name || "User"} 👋
                         </p>
 
                         <small>
-                            Role: {user?.role}
+                            Role: {user?.role || "N/A"}
                         </small>
 
                     </div>
 
+                    <button
+                        className="dashboard-refresh-btn"
+                        onClick={fetchDashboard}
+                    >
+                        Refresh
+                    </button>
+
                 </div>
 
 
-                {/* Physical Cash */}
+                {/* ================= Quick Summary ================= */}
+
                 <section>
 
                     <h2>
-                        Physical Cash
-                    </h2>
-
-                    <div className="cash-card">
-
-                        <h3>
-                            ₹{dashboard.physical_cash.total_amount}
-                        </h3>
-
-                        <div className="denominations">
-
-                            <p>
-                                ₹500 × {dashboard.physical_cash.note_500}
-                            </p>
-
-                            <p>
-                                ₹200 × {dashboard.physical_cash.note_200}
-                            </p>
-
-                            <p>
-                                ₹100 × {dashboard.physical_cash.note_100}
-                            </p>
-
-                            <p>
-                                ₹50 × {dashboard.physical_cash.note_50}
-                            </p>
-
-                            <p>
-                                ₹20 × {dashboard.physical_cash.note_20}
-                            </p>
-
-                            <p>
-                                ₹10 × {dashboard.physical_cash.note_10}
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                {/* Bank Balances */}
-                <section>
-
-                    <h2>
-                        Bank Balances
-                    </h2>
-
-                    <div className="bank-grid">
-
-                        {dashboard.banks.map((bank) => (
-
-                            <div
-                                className="bank-card"
-                                key={bank.id}
-                            >
-
-                                <h3>
-                                    {bank.bank_name}
-                                </h3>
-
-                                <p>
-                                    CSP ID: {bank.csp_id}
-                                </p>
-
-                                <strong>
-                                    ₹{bank.online_balance}
-                                </strong>
-
-                            </div>
-
-                        ))}
-
-                    </div>
-
-                </section>
-
-
-                {/* Today's Summary */}
-                <section>
-
-                    <h2>
-                        Today's Summary
+                        Today's Overview
                     </h2>
 
                     <div className="summary-grid">
+
+                        {/* Deposit */}
 
                         <div className="summary-card">
 
@@ -190,11 +183,13 @@ const Dashboard = () => {
                             </span>
 
                             <strong>
-                                ₹{dashboard.today.total_deposit}
+                                ₹{formatAmount(today.total_deposit)}
                             </strong>
 
                         </div>
 
+
+                        {/* Withdrawal */}
 
                         <div className="summary-card">
 
@@ -203,11 +198,13 @@ const Dashboard = () => {
                             </span>
 
                             <strong>
-                                ₹{dashboard.today.total_withdrawal}
+                                ₹{formatAmount(today.total_withdrawal)}
                             </strong>
 
                         </div>
 
+
+                        {/* Transactions */}
 
                         <div className="summary-card">
 
@@ -216,11 +213,13 @@ const Dashboard = () => {
                             </span>
 
                             <strong>
-                                {dashboard.today.transaction_count}
+                                {Number(today.transaction_count || 0)}
                             </strong>
 
                         </div>
 
+
+                        {/* Expected Cash */}
 
                         <div className="summary-card">
 
@@ -229,7 +228,7 @@ const Dashboard = () => {
                             </span>
 
                             <strong>
-                                ₹{dashboard.today.expected_cash}
+                                ₹{formatAmount(today.expected_cash)}
                             </strong>
 
                         </div>
@@ -239,60 +238,288 @@ const Dashboard = () => {
                 </section>
 
 
-                {/* Last Closing */}
+                {/* ================= Physical Cash ================= */}
+
+                <section>
+
+                    <h2>
+                        Physical Cash
+                    </h2>
+
+                    <div className="cash-card">
+
+                        <div className="cash-card-header">
+
+                            <div>
+
+                                <span>
+                                    Current Physical Cash
+                                </span>
+
+                                <h3>
+                                    ₹{formatAmount(physicalCash.total_amount)}
+                                </h3>
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="denominations">
+
+                            <div className="denomination-item">
+
+                                <span>
+                                    ₹500
+                                </span>
+
+                                <strong>
+                                    × {Number(physicalCash.note_500 || 0)}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="denomination-item">
+
+                                <span>
+                                    ₹200
+                                </span>
+
+                                <strong>
+                                    × {Number(physicalCash.note_200 || 0)}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="denomination-item">
+
+                                <span>
+                                    ₹100
+                                </span>
+
+                                <strong>
+                                    × {Number(physicalCash.note_100 || 0)}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="denomination-item">
+
+                                <span>
+                                    ₹50
+                                </span>
+
+                                <strong>
+                                    × {Number(physicalCash.note_50 || 0)}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="denomination-item">
+
+                                <span>
+                                    ₹20
+                                </span>
+
+                                <strong>
+                                    × {Number(physicalCash.note_20 || 0)}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="denomination-item">
+
+                                <span>
+                                    ₹10
+                                </span>
+
+                                <strong>
+                                    × {Number(physicalCash.note_10 || 0)}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                {/* ================= Bank Balances ================= */}
+
+                <section>
+
+                    <div className="section-header">
+
+                        <div>
+
+                            <h2>
+                                Bank Balances
+                            </h2>
+
+                            <p>
+                                Current online CSP balance
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    {banks.length === 0 ? (
+
+                        <div className="empty-state">
+
+                            <p>
+                                No banks found.
+                            </p>
+
+                        </div>
+
+                    ) : (
+
+                        <div className="bank-grid">
+
+                            {banks.map((bank) => (
+
+                                <div
+                                    className="bank-card"
+                                    key={bank.id}
+                                >
+
+                                    <div className="bank-card-header">
+
+                                        <h3>
+                                            {bank.bank_name}
+                                        </h3>
+
+                                    </div>
+
+                                    <p>
+                                        CSP ID: {bank.csp_id}
+                                    </p>
+
+                                    <strong>
+                                        ₹{formatAmount(bank.online_balance)}
+                                    </strong>
+
+                                </div>
+
+                            ))}
+
+                        </div>
+
+                    )}
+
+                </section>
+
+
+                {/* ================= Last Closing ================= */}
+
                 <section>
 
                     <h2>
                         Last Closing
                     </h2>
 
-                    <div className="closing-card">
 
-                        <p>
-                            Date:{" "}
+                    {!lastClosing ? (
 
-                            <strong>
-                                {dashboard.last_closing?.closing_date || "N/A"}
-                            </strong>
-                        </p>
+                        <div className="empty-state">
 
+                            <p>
+                                No cash closing found yet.
+                            </p>
 
-                        <p>
-                            Expected Cash:{" "}
+                        </div>
 
-                            <strong>
-                                ₹{dashboard.last_closing?.expected_cash ?? 0}
-                            </strong>
-                        </p>
+                    ) : (
 
+                        <div className="closing-card">
 
-                        <p>
-                            Actual Cash:{" "}
+                            <div className="closing-info">
 
-                            <strong>
-                                ₹{dashboard.last_closing?.actual_cash ?? 0}
-                            </strong>
-                        </p>
+                                <span>
+                                    Closing Date
+                                </span>
 
+                                <strong>
+                                    {lastClosing.closing_date}
+                                </strong>
 
-                        <p>
-                            Difference:{" "}
-
-                            <strong>
-                                ₹{dashboard.last_closing?.difference ?? 0}
-                            </strong>
-                        </p>
+                            </div>
 
 
-                        <p>
-                            Status:{" "}
+                            <div className="closing-info">
 
-                            <strong>
-                                {dashboard.last_closing?.status || "N/A"}
-                            </strong>
-                        </p>
+                                <span>
+                                    Expected Cash
+                                </span>
 
-                    </div>
+                                <strong>
+                                    ₹{formatAmount(
+                                        lastClosing.expected_cash
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="closing-info">
+
+                                <span>
+                                    Actual Cash
+                                </span>
+
+                                <strong>
+                                    ₹{formatAmount(
+                                        lastClosing.actual_cash
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="closing-info">
+
+                                <span>
+                                    Difference
+                                </span>
+
+                                <strong>
+                                    {formatDifference(
+                                        lastClosing.difference
+                                    )}
+                                </strong>
+
+                            </div>
+
+
+                            <div className="closing-info">
+
+                                <span>
+                                    Status
+                                </span>
+
+                                <strong
+                                    className={`closing-status ${
+                                        lastClosing.status?.toLowerCase() || ""
+                                    }`}
+                                >
+                                    {lastClosing.status || "N/A"}
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    )}
 
                 </section>
 

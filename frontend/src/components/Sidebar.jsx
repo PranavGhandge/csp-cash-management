@@ -57,6 +57,7 @@ const Sidebar = () => {
                             Banks
                         </NavLink>
 
+
                         <h4>Cash Management</h4>
 
                         <NavLink to="/admin/opening-balance">
@@ -66,6 +67,7 @@ const Sidebar = () => {
                         <NavLink to="/admin/physical-cash-opening">
                             Physical Cash Opening
                         </NavLink>
+
 
                         <h4>Transactions</h4>
 
@@ -77,8 +79,15 @@ const Sidebar = () => {
                             Cash Closing
                         </NavLink>
 
+
+                        <h4>History</h4>
+
                         <NavLink to="/admin/history">
-                            History
+                            Transaction History
+                        </NavLink>
+
+                        <NavLink to="/admin/closing-history">
+                            Cash Closing History
                         </NavLink>
                     </>
                 )}
@@ -97,13 +106,21 @@ const Sidebar = () => {
                             Cash Closing
                         </NavLink>
 
+
+                        <h4>History</h4>
+
                         <NavLink to="/operator/history">
-                            History
+                            Transaction History
+                        </NavLink>
+
+                        <NavLink to="/operator/closing-history">
+                            Cash Closing History
                         </NavLink>
                     </>
                 )}
 
             </nav>
+
 
             <div className="sidebar-footer">
 

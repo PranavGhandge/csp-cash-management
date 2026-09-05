@@ -28,8 +28,59 @@ const CashClosing = () => {
     const [status, setStatus] = useState("");
 
     const [loading, setLoading] = useState(false);
+    const [summaryLoading, setSummaryLoading] = useState(true);
+
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+
+
+    // ==============================
+    // FETCH CLOSING SUMMARY
+    // ==============================
+
+    const fetchClosingSummary = async () => {
+
+        try {
+
+            setSummaryLoading(true);
+            setError("");
+
+            const result = await apiRequest(
+                "/api/closing/summary"
+            );
+
+            setExpectedCash(
+                Number(
+                    result.data?.expected_cash || 0
+                )
+            );
+
+        } catch (error) {
+
+            console.error(
+                "Closing summary error:",
+                error
+            );
+
+            setError(error.message);
+
+        } finally {
+
+            setSummaryLoading(false);
+
+        }
+    };
+
+
+    // ==============================
+    // PAGE LOAD
+    // ==============================
+
+    useEffect(() => {
+
+        fetchClosingSummary();
+
+    }, []);
 
 
     // ==============================
@@ -63,7 +114,8 @@ const CashClosing = () => {
     useEffect(() => {
 
         const diff =
-            actualCash - Number(expectedCash || 0);
+            actualCash -
+            Number(expectedCash || 0);
 
         setDifference(diff);
 
@@ -210,6 +262,8 @@ const CashClosing = () => {
             <div className="closing-summary">
 
 
+                {/* EXPECTED CASH */}
+
                 <div className="summary-card">
 
                     <span>
@@ -217,14 +271,20 @@ const CashClosing = () => {
                     </span>
 
                     <strong>
-                        ₹
-                        {Number(
-                            expectedCash
-                        ).toLocaleString("en-IN")}
+
+                        {summaryLoading
+                            ? "Loading..."
+                            : `₹${Number(
+                                expectedCash
+                            ).toLocaleString("en-IN")}`
+                        }
+
                     </strong>
 
                 </div>
 
+
+                {/* ACTUAL CASH */}
 
                 <div className="summary-card">
 
@@ -242,6 +302,8 @@ const CashClosing = () => {
                 </div>
 
 
+                {/* DIFFERENCE */}
+
                 <div className="summary-card">
 
                     <span>
@@ -257,6 +319,8 @@ const CashClosing = () => {
 
                 </div>
 
+
+                {/* STATUS */}
 
                 <div className="summary-card">
 
@@ -295,6 +359,8 @@ const CashClosing = () => {
                 <form onSubmit={handleSubmit}>
 
 
+                    {/* ================= NOTES ================= */}
+
                     <div className="notes-grid">
 
                         {notes.map((note) => (
@@ -308,6 +374,7 @@ const CashClosing = () => {
                                     {note.label}
                                 </label>
 
+
                                 <input
                                     type="number"
                                     min="0"
@@ -318,6 +385,7 @@ const CashClosing = () => {
                                     }
                                     onChange={handleChange}
                                 />
+
 
                                 <span>
 
@@ -364,7 +432,10 @@ const CashClosing = () => {
 
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={
+                            loading ||
+                            summaryLoading
+                        }
                     >
 
                         {loading

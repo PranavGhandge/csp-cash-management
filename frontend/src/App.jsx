@@ -10,6 +10,7 @@ import PhysicalCashOpening from "./pages/PhysicalCashOpening/PhysicalCashOpening
 import Transaction from "./pages/Transaction/Transaction";
 import TransactionHistory from "./pages/TransactionHistory/TransactionHistory";
 import CashClosing from "./pages/CashClosing/CashClosing";
+import CashClosingHistory from "./pages/CashClosing/CashClosingHistory";
 
 function App() {
   return (
@@ -112,6 +113,24 @@ function App() {
           element={
             <ProtectedRoute>
               <CashClosing />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/closing-history"
+          element={
+            <ProtectedRoute>
+              <CashClosingHistory />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/operator/closing-history"
+          element={
+            <ProtectedRoute>
+              <CashClosingHistory />
             </ProtectedRoute>
           }
         />
