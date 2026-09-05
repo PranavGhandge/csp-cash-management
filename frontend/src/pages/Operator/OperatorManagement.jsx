@@ -1,6 +1,6 @@
 import { useState } from "react";
 import apiRequest from "../../services/api";
-import "./operatorManagement.css";
+import "./OperatorManagement.css";
 
 const OperatorManagement = () => {
     const [formData, setFormData] = useState({
