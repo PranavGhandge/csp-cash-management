@@ -73,11 +73,7 @@ const start = async () => {
 
 
         await app.register(cors, {
-            origin: [
-                "http://localhost:5173",
-                "https://login-dev-pranav.up.railway.app",
-                "https://deploym-development.up.railway.app"
-            ]
+            origin: process.env.CORS_ORIGIN
         });
 
 
