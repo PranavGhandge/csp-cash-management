@@ -3,6 +3,7 @@ import Transactions from "../model/transactions.model";
 import Banks from "../model/banks.model";
 import PhysicalCashBalances from "../model/physical-cash-balances.model";
 import CashClosings from "../model/cash-closings.model";
+import PhysicalCashOpenings from "../model/physical-cash-openings.model";
 
 class DashboardRepository {
 
@@ -11,6 +12,18 @@ class DashboardRepository {
             where: {
                 admin_id
             }
+        });
+    }
+
+    async getPhysicalCashOpening(admin_id: string) {
+        return await PhysicalCashOpenings.findOne({
+            where: {
+                admin_id
+            },
+            order: [
+                ["opening_date", "DESC"],
+                ["created_at", "DESC"]
+            ]
         });
     }
 
@@ -32,7 +45,7 @@ class DashboardRepository {
         });
     }
 
-    async getTodayTransactions( admin_id: string, startDate: Date, endDate: Date) {
+    async getTodayTransactions(admin_id: string, startDate: Date, endDate: Date) {
         return await Transactions.findAll({
             where: {
                 admin_id,

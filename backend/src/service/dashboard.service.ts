@@ -22,9 +22,8 @@ class DashboardService {
         // Fetch data
         const physicalCash = await dashboardRepo.getPhysicalCash(admin_id);
 
-        if (!physicalCash) {
-            throw new AppError("Physical cash balance not found", 404);
-        }
+        const physicalCashOpening =
+            await dashboardRepo.getPhysicalCashOpening(admin_id);
 
         const banks = await dashboardRepo.getBanks(admin_id);
 
@@ -54,11 +53,17 @@ class DashboardService {
         const transactionCount = transactions.length;
 
         // Current physical cash
-        const currentPhysicalCash = Number(physicalCash.total_amount);
+        const currentPhysicalCash = physicalCash
+            ? Number(physicalCash.total_amount)
+            : 0;
 
         // Expected cash for today
+        const openingCash = physicalCashOpening
+            ? Number(physicalCashOpening.total_amount)
+            : 0;
+
         const expectedCash =
-            currentPhysicalCash - totalDeposit + totalWithdrawal;
+            openingCash + totalDeposit - totalWithdrawal;
 
         return {
             success: true,
@@ -67,14 +72,13 @@ class DashboardService {
             data: {
                 physical_cash: {
                     total_amount: currentPhysicalCash,
-                    note_500: physicalCash.note_500,
-                    note_200: physicalCash.note_200,
-                    note_100: physicalCash.note_100,
-                    note_50: physicalCash.note_50,
-                    note_20: physicalCash.note_20,
-                    note_10: physicalCash.note_10
+                    note_500: physicalCash?.note_500 || 0,
+                    note_200: physicalCash?.note_200 || 0,
+                    note_100: physicalCash?.note_100 || 0,
+                    note_50: physicalCash?.note_50 || 0,
+                    note_20: physicalCash?.note_20 || 0,
+                    note_10: physicalCash?.note_10 || 0
                 },
-
                 banks: banks.map((bank) => ({
                     id: bank.id,
                     bank_name: bank.bank_name,
