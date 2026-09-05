@@ -12,6 +12,8 @@ import PhysicalCashOpeningRoutes from "./routes/physical-cash-opening.route";
 import TransactionRoutes from "./routes/transaction.route";
 import "./model/associations";
 import AppError from "./app-error";
+import cashClosingRoutes from "./routes/cash-closing.route";
+import dashboardRoutes from "./routes/dashboard.route";
 
 dotenv.config();
 
@@ -87,7 +89,8 @@ const start = async () => {
         await app.register(OpeningBalanceRoutes);
         await app.register(PhysicalCashOpeningRoutes);
         await app.register(TransactionRoutes);
-
+        await app.register(cashClosingRoutes);
+        await app.register(dashboardRoutes);
 
         await app.listen({
             port: PORT,
