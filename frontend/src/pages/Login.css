@@ -1,122 +1,540 @@
-/* Modern Banking Login Page */
-.login-page-container {
-    min-height: 100vh;
+/* ============================================================
+   CSP Login Page — Premium Dark Glassmorphism Split Layout
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* Root full-screen wrapper — strict 100vh, NO scrollbar */
+.lgn-root {
+    height: 100vh;
+    max-height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: stretch;
+    background: #030712;
+    font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ── Ambient Background Glows ───────────────────────── */
+.lgn-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(90px);
+    pointer-events: none;
+    opacity: 0.45;
+}
+
+.lgn-orb-1 {
+    width: 550px;
+    height: 550px;
+    background: radial-gradient(circle, rgba(37, 99, 235, 0.4) 0%, transparent 70%);
+    top: -120px;
+    left: -100px;
+    animation: lgn-float 10s ease-in-out infinite alternate;
+}
+
+.lgn-orb-2 {
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.3) 0%, transparent 70%);
+    bottom: -120px;
+    left: 25%;
+    animation: lgn-float 12s ease-in-out infinite alternate-reverse;
+}
+
+.lgn-orb-3 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(14, 165, 233, 0.22) 0%, transparent 70%);
+    top: 20%;
+    right: -60px;
+    animation: lgn-float 11s ease-in-out infinite alternate;
+}
+
+@keyframes lgn-float {
+    from { transform: translateY(0px) scale(1); }
+    to   { transform: translateY(24px) scale(1.05); }
+}
+
+/* ── Subtle Technical Grid Overlay ──────────────────── */
+.lgn-grid-overlay {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    mask-image: radial-gradient(ellipse at 50% 50%, black 40%, transparent 85%);
+}
+
+/* ── Main Split Wrapper ─────────────────────────────── */
+.lgn-wrapper {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    position: relative;
+    z-index: 2;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* ══════════════════════════════════════════════════════
+   LEFT PANEL (Brand & Platform Features)
+   ══════════════════════════════════════════════════════ */
+.lgn-left-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 36px 44px;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: none; /* Hide scrollbar for clean UI */
+}
+.lgn-left-panel::-webkit-scrollbar {
+    display: none;
+}
+
+/* Brand mark (Top Left) */
+.lgn-brand-mark {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+}
+
+.lgn-brand-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: radial-gradient(circle at 10% 20%, #1e293b 0%, #0f172a 90%);
-    padding: 24px;
+    box-shadow: 0 0 20px rgba(37, 99, 235, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+    flex-shrink: 0;
+}
+
+.lgn-brand-info {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.lgn-brand-name {
+    font-size: 17px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+}
+
+.lgn-brand-tag {
+    font-size: 11px;
+    font-weight: 600;
+    color: #60a5fa;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+/* Middle Section */
+.lgn-left-main {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 500px;
+    margin: auto 0;
+    padding: 12px 0;
+}
+
+/* Headline */
+.lgn-left-headline h2 {
+    margin: 0 0 10px;
+    font-size: clamp(32px, 3.4vw, 44px);
+    font-weight: 900;
+    line-height: 1.12;
+    letter-spacing: -1.2px;
+    background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 40%, #93c5fd 80%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.lgn-left-headline p {
+    margin: 0;
+    font-size: clamp(13px, 1.1vw, 15px);
+    line-height: 1.6;
+    color: #94a3b8;
+    max-width: 440px;
+}
+
+/* Stats / Feature Cards List */
+.lgn-stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.lgn-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    backdrop-filter: blur(12px);
+    transition: all 0.22s ease;
+}
+
+.lgn-stat-item:hover {
+    background: rgba(30, 41, 59, 0.65);
+    border-color: rgba(59, 130, 246, 0.35);
+    transform: translateX(4px);
+}
+
+.lgn-stat-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.25);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.lgn-stat-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.lgn-stat-text strong {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: #f1f5f9;
+    letter-spacing: -0.1px;
+}
+
+.lgn-stat-text span {
+    font-size: 12px;
+    color: #64748b;
+    line-height: 1.35;
+}
+
+/* Bottom security badge */
+.lgn-left-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.22);
+    border-radius: 20px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #34d399;
+    width: fit-content;
+    flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════════════════════
+   RIGHT PANEL (Glassmorphism Login Form)
+   ══════════════════════════════════════════════════════ */
+.lgn-right-panel {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 56px 32px 24px;
+    box-sizing: border-box;
+    height: 100vh;
+    border-left: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(15, 23, 42, 0.25);
+    backdrop-filter: blur(20px);
+}
+
+/* ── Login Card ──────────────────────────────────────── */
+.lgn-card {
+    width: 100%;
+    max-width: 418px;
+    min-height: 490px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: rgba(11, 17, 33, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    border-radius: 22px;
+    padding: 42px 34px 34px;
+    box-shadow:
+        0 28px 60px -10px rgba(0, 0, 0, 0.75),
+        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
     position: relative;
     overflow: hidden;
+    backdrop-filter: blur(18px);
+    box-sizing: border-box;
 }
 
-.login-page-container::before {
-    content: '';
+/* Glowing top border */
+.lgn-card-glow-bar {
     position: absolute;
-    width: 600px;
-    height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(37, 99, 235, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
-    top: -100px;
-    right: -100px;
-    pointer-events: none;
+    top: 0;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3b82f6, #6366f1, transparent);
+    border-radius: 0 0 2px 2px;
 }
 
-.login-portal-card {
-    background: #ffffff;
-    width: 100%;
-    max-width: 440px;
-    border-radius: var(--radius-xl);
-    padding: 36px 32px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    position: relative;
-    z-index: 10;
-}
-
-.login-brand-header {
-    text-align: center;
+/* Card header */
+.lgn-card-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
     margin-bottom: 28px;
 }
 
-.login-logo-icon {
-    width: 54px;
-    height: 54px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+.lgn-card-logo {
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #1d4ed8, #4f46e5);
     color: #ffffff;
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.4);
-    margin-bottom: 14px;
+    box-shadow: 0 0 18px rgba(37, 99, 235, 0.45);
+    flex-shrink: 0;
 }
 
-.login-brand-header h1 {
-    font-size: 22px;
-    font-weight: 800;
-    color: var(--navy-900);
+.lgn-card-title {
     margin: 0;
+    font-size: 21px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
 }
 
-.login-brand-header p {
+.lgn-card-subtitle {
+    margin: 3px 0 0;
     font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 4px;
+    color: #64748b;
 }
 
-.login-form {
+/* ── Form ────────────────────────────────────────────── */
+.lgn-form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 16px;
 }
 
-.login-input-group {
+.lgn-field-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
-.login-input-group label {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--navy-800);
-}
-
-.login-input-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.login-input-icon {
-    position: absolute;
-    left: 12px;
+.lgn-label {
+    font-size: 12px;
+    font-weight: 600;
     color: #94a3b8;
-    pointer-events: none;
+    letter-spacing: 0.2px;
 }
 
-.login-input-wrapper input {
-    padding-left: 40px !important;
-}
-
-.login-submit-btn {
-    width: 100%;
-    padding: 13px;
-    font-size: 15px;
-    font-weight: 700;
-    margin-top: 6px;
-}
-
-.login-security-notice {
-    margin-top: 24px;
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
-    background: #f8fafc;
-    border: 1px solid var(--border-subtle);
+.lgn-input-box {
     display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 11.5px;
-    color: var(--text-muted);
+    background: #090e1a !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 11px;
+    padding: 0 13px;
+    height: 46px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-sizing: border-box;
+}
+
+.lgn-input-box:focus-within {
+    border-color: #3b82f6 !important;
+    background: #0d1527 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.22), 0 0 16px rgba(59, 130, 246, 0.12) !important;
+}
+
+.lgn-field-icon {
+    color: #475569;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+.lgn-input-box:focus-within .lgn-field-icon {
+    color: #60a5fa;
+}
+
+.lgn-input {
+    flex: 1;
+    min-width: 0;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 13.5px !important;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif !important;
+    font-weight: 500 !important;
+    height: 100% !important;
+    width: 100% !important;
+    border-radius: 0 !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+.lgn-input::placeholder {
+    color: #475569 !important;
+    font-weight: 400 !important;
+    -webkit-text-fill-color: #475569 !important;
+}
+
+/* Kill global input:focus override from index.css */
+.lgn-input:focus,
+.lgn-input:focus-visible {
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Fix Chrome/Edge autofill styling */
+.lgn-input:-webkit-autofill,
+.lgn-input:-webkit-autofill:hover,
+.lgn-input:-webkit-autofill:focus,
+.lgn-input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 1000px #090e1a inset !important;
+    box-shadow: 0 0 0 1000px #090e1a inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+    caret-color: #ffffff !important;
+    border: none !important;
+    background-color: transparent !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+}
+
+.lgn-eye-btn {
+    background: transparent;
+    border: none;
+    color: #475569;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
+}
+
+.lgn-eye-btn:hover {
+    color: #94a3b8;
+}
+
+/* ── Submit Button ───────────────────────────────────── */
+.lgn-submit-btn {
+    width: 100%;
+    height: 48px;
+    margin-top: 4px;
+    border-radius: 11px;
+    border: none;
+    background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #4f46e5 100%);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 18px rgba(37, 99, 235, 0.42), 0 0 0 1px rgba(255,255,255,0.12) inset;
+    transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.lgn-submit-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.14), transparent 60%);
+    pointer-events: none;
+}
+
+.lgn-submit-btn:hover:not(:disabled) {
+    transform: translateY(-1.5px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.55), 0 0 0 1px rgba(255,255,255,0.18) inset;
+    background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #4f46e5 100%);
+}
+
+.lgn-submit-btn:active:not(:disabled) {
+    transform: translateY(0) scale(0.99);
+}
+
+.lgn-submit-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.lgn-spin {
+    animation: lgn-spin 0.85s linear infinite;
+}
+
+@keyframes lgn-spin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* ── Security row ────────────────────────────────────── */
+.lgn-security-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    margin-top: 18px;
+    font-size: 11px;
+    color: #475569;
+    font-weight: 500;
+}
+
+.lgn-shield-icon {
+    color: #10b981;
+    flex-shrink: 0;
+}
+
+/* ── Responsive adjustments ──────────────────────────── */
+@media (max-width: 900px) {
+    .lgn-left-panel {
+        display: none;
+    }
+
+    .lgn-right-panel {
+        max-width: 100%;
+        width: 100%;
+        border-left: none;
+        background: transparent;
+        padding: 24px 20px;
+    }
 }
