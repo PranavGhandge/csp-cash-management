@@ -7,6 +7,9 @@ import AppError from "../app-error";
 class TransactionService {
 
     async createTransaction(data: ICreateTransaction, admin_id: string, operator_id: string) {
+        if (data.customer_name) {
+            data.customer_name = data.customer_name.trim().replace(/(^|\s)\S/g, (char) => char.toUpperCase());
+        }
 
         const dbTransaction = await sequelize.transaction();
 
