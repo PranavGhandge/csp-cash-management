@@ -365,6 +365,149 @@
     box-shadow: none;
 }
 
+.opb-btn-submit.disabled-locked {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+    box-shadow: none !important;
+}
+
+/* Lock Banner */
+.opb-lock-banner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    border-radius: 12px;
+    padding: 16px 20px;
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.1);
+    animation: opbFadeIn 0.3s ease-out;
+}
+
+.opb-lock-icon-wrap {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.4);
+    color: #34d399;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.opb-lock-text-content {
+    flex: 1;
+}
+
+.opb-lock-text-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: #6ee7b7;
+}
+
+.opb-lock-text-content p {
+    margin: 0;
+    font-size: 13px;
+    color: #cbd5e1;
+    line-height: 1.45;
+}
+
+.opb-lock-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(16, 185, 129, 0.25);
+    border: 1px solid rgba(16, 185, 129, 0.45);
+    color: #6ee7b7;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+/* Progress Banner */
+.opb-progress-banner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(59, 130, 246, 0.1);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    border-radius: 10px;
+    padding: 12px 18px;
+    animation: opbFadeIn 0.3s ease-out;
+}
+
+.opb-prog-icon {
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.opb-prog-text {
+    font-size: 13px;
+    color: #bfdbfe;
+}
+
+.opb-prog-text strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.opb-pending-pill {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
+    letter-spacing: 0.2px;
+}
+
+.bank-item-done {
+    border-color: rgba(16, 185, 129, 0.3) !important;
+    background: rgba(16, 185, 129, 0.04) !important;
+}
+
+.opb-item-icon.icon-done {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.35);
+    color: #34d399;
+}
+
+.bank-done-badge {
+    margin-left: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: #34d399;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 1px 6px;
+    border-radius: 4px;
+}
+
+.opb-card-locked {
+    opacity: 0.85;
+}
+
+.opb-field-disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: rgba(15, 23, 42, 0.6) !important;
+}
+
+.opb-field-disabled select,
+.opb-field-disabled input {
+    cursor: not-allowed !important;
+}
+
 .opb-spin-icon {
     animation: opbSpin 0.9s linear infinite;
 }
