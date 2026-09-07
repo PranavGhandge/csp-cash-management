@@ -87,13 +87,44 @@ const TransactionHistory = () => {
 
             if (dateFilter) {
                 params.append("date", dateFilter);
+                params.append("transaction_date", dateFilter);
+                params.append("start_date", dateFilter);
+                params.append("end_date", dateFilter);
+                params.append("startDate", dateFilter);
+                params.append("endDate", dateFilter);
             }
 
             const result = await apiRequest(`/api/transaction?${params.toString()}`);
-            setTransactions(result?.data || []);
-            const total = result?.pagination?.total ?? (result?.data?.length || 0);
+            let list = result?.data || [];
+
+            // If backend does not filter by date in DB query, apply client-side date match fallback
+            if (dateFilter && Array.isArray(list)) {
+                const dateMatchedList = list.filter((tx) => {
+                    const raw = tx.transaction_date || tx.createdAt || tx.created_at || tx.date;
+                    if (!raw) return false;
+                    if (typeof raw === "string" && raw.startsWith(dateFilter)) return true;
+                    try {
+                        const d = new Date(raw);
+                        if (isNaN(d.getTime())) return false;
+                        const yr = d.getFullYear();
+                        const mo = String(d.getMonth() + 1).padStart(2, "0");
+                        const dy = String(d.getDate()).padStart(2, "0");
+                        return `${yr}-${mo}-${dy}` === dateFilter;
+                    } catch {
+                        return false;
+                    }
+                });
+                list = dateMatchedList;
+            }
+
+            setTransactions(list);
+            const total = (result?.pagination?.total !== undefined && !dateFilter)
+                ? result.pagination.total
+                : list.length;
             setTotalRecords(total);
-            const pages = result?.pagination?.totalPages ?? Math.max(1, Math.ceil(total / limit));
+            const pages = (result?.pagination?.totalPages !== undefined && !dateFilter)
+                ? result.pagination.totalPages
+                : Math.max(1, Math.ceil(total / limit));
             setTotalPages(pages);
 
         } catch (err) {

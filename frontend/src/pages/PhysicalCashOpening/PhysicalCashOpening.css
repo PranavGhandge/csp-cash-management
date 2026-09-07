@@ -118,10 +118,10 @@
     color: #34d399;
 }
 
-/* Notes Grid (6 denominations) */
+/* Notes Grid (3x2 layout: 3 columns, 2 rows) */
 .pco-notes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 24px;
 }
@@ -355,6 +355,12 @@
 }
 
 /* Responsive */
+@media (max-width: 960px) {
+    .pco-notes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 @media (max-width: 680px) {
     .pco-dark-card {
         padding: 20px 16px;
