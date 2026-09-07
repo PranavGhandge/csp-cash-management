@@ -110,20 +110,37 @@ const Transaction = () => {
     }, [toast]);
 
     const checkClosingStatus = useCallback(async () => {
+        const todayStr = getTodayDateStr();
+        const savedDate = localStorage.getItem("cash_closed_date");
+
+        if (savedDate === todayStr) {
+            setIsClosedToday(true);
+            setClosedDate(todayStr);
+        }
+
         try {
             setCheckingClosing(true);
             // Check closing history for today's record
             const result = await apiRequest("/api/closing?page=1&limit=5");
             const list = result?.data || [];
             const todayClosing = list.find((item) => 
-                isDateToday(item.closing_date || item.createdAt || item.created_at)
+                isDateToday(item.closing_date || item.createdAt || item.created_at || item.date)
             );
 
             if (todayClosing) {
                 setIsClosedToday(true);
-                setClosedDate(todayClosing.closing_date || "Today");
-            } else {
-                setIsClosedToday(false);
+                setClosedDate(todayClosing.closing_date || todayStr);
+                localStorage.setItem("cash_closed_date", todayStr);
+                return;
+            }
+
+            // Check dashboard last_closing
+            const dashRes = await apiRequest("/api/dashboard");
+            const lastClosing = dashRes?.data?.last_closing;
+            if (lastClosing && isDateToday(lastClosing.closing_date || lastClosing.createdAt || lastClosing.date)) {
+                setIsClosedToday(true);
+                setClosedDate(lastClosing.closing_date || todayStr);
+                localStorage.setItem("cash_closed_date", todayStr);
             }
         } catch (err) {
             console.error("Check closing status error:", err);

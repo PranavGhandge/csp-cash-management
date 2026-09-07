@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import apiRequest from "../../services/api";
 import { useToast } from "../../context/ToastContext";
 import {
@@ -6,7 +6,9 @@ import {
     Banknote,
     Sparkles,
     Loader2,
-    Calculator
+    Calculator,
+    Lock,
+    CheckCircle2
 } from "lucide-react";
 import "./PhysicalCashOpening.css";
 
@@ -15,6 +17,14 @@ const formatAmount = (amount) => {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
     });
+};
+
+const getTodayDateStr = () => {
+    const now = new Date();
+    const yr = now.getFullYear();
+    const mo = String(now.getMonth() + 1).padStart(2, "0");
+    const dy = String(now.getDate()).padStart(2, "0");
+    return `${yr}-${mo}-${dy}`;
 };
 
 const PhysicalCashOpening = () => {
@@ -30,17 +40,53 @@ const PhysicalCashOpening = () => {
     });
 
     const [loading, setLoading] = useState(false);
+    const [isSubmittedToday, setIsSubmittedToday] = useState(false);
+    const [submittedDate, setSubmittedDate] = useState("");
 
     const notes = [
         { name: "note_500", label: "₹500 Note", value: 500, color: "#34d399" },
         { name: "note_200", label: "₹200 Note", value: 200, color: "#fb923c" },
         { name: "note_100", label: "₹100 Note", value: 100, color: "#818cf8" },
-        { name: "note_50",  label: "₹50 Note",  value: 50,  color: "#22d3ee" },
-        { name: "note_20",  label: "₹20 Note",  value: 20,  color: "#f472b6" },
-        { name: "note_10",  label: "₹10 Note",  value: 10,  color: "#a78bfa" }
+        { name: "note_50", label: "₹50 Note", value: 50, color: "#22d3ee" },
+        { name: "note_20", label: "₹20 Note", value: 20, color: "#f472b6" },
+        { name: "note_10", label: "₹10 Note", value: 10, color: "#a78bfa" }
     ];
 
+    const checkDailyStatus = useCallback(async () => {
+        const todayStr = getTodayDateStr();
+        const savedDate = localStorage.getItem("physical_cash_opening_date");
+
+        if (savedDate === todayStr) {
+            setIsSubmittedToday(true);
+            setSubmittedDate(todayStr);
+        }
+
+        try {
+            const res = await apiRequest("/api/dashboard");
+            const physicalCash = res?.data?.physical_cash;
+
+            if (physicalCash) {
+                setFormData({
+                    note_500: physicalCash.note_500 || "",
+                    note_200: physicalCash.note_200 || "",
+                    note_100: physicalCash.note_100 || "",
+                    note_50: physicalCash.note_50 || "",
+                    note_20: physicalCash.note_20 || "",
+                    note_10: physicalCash.note_10 || ""
+                });
+            }
+        } catch (err) {
+            console.error("Check physical cash status error:", err);
+        }
+    }, []);
+
+    useEffect(() => {
+        checkDailyStatus();
+    }, [checkDailyStatus]);
+
     const handleChange = (e) => {
+        if (isSubmittedToday) return;
+
         const { name, value } = e.target;
         if (value === "" || Number(value) >= 0) {
             setFormData((prev) => ({
@@ -61,6 +107,11 @@ const PhysicalCashOpening = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (isSubmittedToday) {
+            toast.error("Physical cash opening has already been recorded for today.");
+            return;
+        }
 
         if (total <= 0) {
             toast.error("Please enter at least one denomination count greater than 0.");
@@ -84,14 +135,10 @@ const PhysicalCashOpening = () => {
 
             toast.success(result?.message || "Physical cash opening recorded successfully! 🎉");
 
-            setFormData({
-                note_500: "",
-                note_200: "",
-                note_100: "",
-                note_50: "",
-                note_20: "",
-                note_10: ""
-            });
+            const todayStr = getTodayDateStr();
+            localStorage.setItem("physical_cash_opening_date", todayStr);
+            setIsSubmittedToday(true);
+            setSubmittedDate(todayStr);
 
         } catch (err) {
             console.error("Physical cash opening error:", err);
@@ -113,8 +160,27 @@ const PhysicalCashOpening = () => {
                 </div>
             </div>
 
+            {/* Daily Lock / Completion Banner */}
+            {isSubmittedToday && (
+                <div className="pco-lock-banner">
+                    <div className="pco-lock-icon-wrap">
+                        <CheckCircle2 size={24} />
+                    </div>
+                    <div className="pco-lock-text-content">
+                        <h4>Physical Cash Opening Completed for Today ({submittedDate || getTodayDateStr()})</h4>
+                        <p>
+                            Thank you! Your vault opening cash denominations have been recorded successfully.
+                        </p>
+                    </div>
+                    <div className="pco-lock-badge">
+                        <Lock size={13} />
+                        <span>COMPLETED & LOCKED</span>
+                    </div>
+                </div>
+            )}
+
             {/* Main Form Card */}
-            <div className="pco-dark-card">
+            <div className={`pco-dark-card ${isSubmittedToday ? "pco-card-locked" : ""}`}>
                 <div className="pco-card-header">
                     <div className="pco-card-icon-box">
                         <Banknote size={20} />
@@ -134,7 +200,7 @@ const PhysicalCashOpening = () => {
                             const amount = count * note.value;
 
                             return (
-                                <div className="pco-note-card" key={note.name}>
+                                <div className={`pco-note-card ${isSubmittedToday ? "pco-item-disabled" : ""}`} key={note.name}>
                                     <div className="pco-note-top">
                                         <span className="pco-note-badge" style={{ color: note.color, borderColor: `${note.color}40`, background: `${note.color}15` }}>
                                             {note.label}
@@ -151,6 +217,7 @@ const PhysicalCashOpening = () => {
                                             className="pco-real-input"
                                             value={formData[note.name]}
                                             onChange={handleChange}
+                                            disabled={isSubmittedToday}
                                             min="0"
                                             step="1"
                                             placeholder="0 pcs"
@@ -187,10 +254,15 @@ const PhysicalCashOpening = () => {
                     <div className="pco-actions-wrap">
                         <button
                             type="submit"
-                            className="pco-btn-submit"
-                            disabled={loading || total <= 0}
+                            className={`pco-btn-submit ${isSubmittedToday ? "disabled-locked" : ""}`}
+                            disabled={loading || total <= 0 || isSubmittedToday}
                         >
-                            {loading ? (
+                            {isSubmittedToday ? (
+                                <>
+                                    <Lock size={16} />
+                                    <span>Already Submitted for Today (Locked)</span>
+                                </>
+                            ) : loading ? (
                                 <>
                                     <Loader2 size={17} className="pco-spin-icon" />
                                     <span>Saving Physical Cash...</span>
