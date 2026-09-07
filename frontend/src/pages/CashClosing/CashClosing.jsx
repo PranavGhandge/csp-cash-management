@@ -124,13 +124,7 @@ const CashClosing = () => {
                 body: JSON.stringify(payload)
             });
 
-            toast.success(result?.message || "Day cash closed successfully! 🎉");
-
-            const now = new Date();
-            const yr = now.getFullYear();
-            const mo = String(now.getMonth() + 1).padStart(2, "0");
-            const dy = String(now.getDate()).padStart(2, "0");
-            localStorage.setItem("cash_closed_date", `${yr}-${mo}-${dy}`);
+            toast.success(result?.message || "Cash closing recorded successfully! 🎉");
 
             setFormData({
                 note_500: "",
