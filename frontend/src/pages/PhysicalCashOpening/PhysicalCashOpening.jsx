@@ -27,6 +27,17 @@ const getTodayDateStr = () => {
     return `${yr}-${mo}-${dy}`;
 };
 
+const isDateToday = (dateStr) => {
+    if (!dateStr) return false;
+    const d = new Date(dateStr);
+    const today = new Date();
+    return (
+        d.getDate() === today.getDate() &&
+        d.getMonth() === today.getMonth() &&
+        d.getFullYear() === today.getFullYear()
+    );
+};
+
 const PhysicalCashOpening = () => {
     const toast = useToast();
 
@@ -74,6 +85,15 @@ const PhysicalCashOpening = () => {
                     note_20: physicalCash.note_20 || "",
                     note_10: physicalCash.note_10 || ""
                 });
+
+                const cashDate = physicalCash.updatedAt || physicalCash.updated_at || physicalCash.createdAt || physicalCash.created_at || physicalCash.date;
+                const totalAmt = Number(physicalCash.total_amount || 0);
+
+                if ((cashDate && isDateToday(cashDate) && totalAmt > 0) || savedDate === todayStr) {
+                    setIsSubmittedToday(true);
+                    setSubmittedDate(todayStr);
+                    localStorage.setItem("physical_cash_opening_date", todayStr);
+                }
             }
         } catch (err) {
             console.error("Check physical cash status error:", err);
