@@ -1,207 +1,483 @@
-.cash-closing-page {
-    padding: 24px;
+/* ================= Cash Closing Page (Dark Cyberpunk Fintech) ================= */
+.cc-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
+    width: 100%;
+    animation: ccFadeIn 0.3s ease-out;
 }
 
-/* ================= HEADER ================= */
+@keyframes ccFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-.page-header {
+/* Header with Logo Badge */
+.cc-page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.cc-header-logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(79, 70, 229, 0.25));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #38bdf8;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
+    flex-shrink: 0;
+}
+
+.cc-header-titles {
+    flex: 1;
+}
+
+.cc-header-titles h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.4px;
+}
+
+/* 4 KPI Metric Cards */
+.cc-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.cc-kpi-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.cc-kpi-card:hover {
+    border-color: #334155;
+    background: #0d1424;
+}
+
+.cc-kpi-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.cc-kpi-label {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.cc-kpi-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cc-kpi-icon.blue {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.cc-kpi-icon.emerald {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.cc-kpi-icon.rose {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.cc-kpi-icon.amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+.cc-kpi-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.4px;
+}
+
+.cc-kpi-value.emerald {
+    color: #34d399;
+}
+
+.cc-kpi-value.rose {
+    color: #f87171;
+}
+
+.cc-kpi-value.amber {
+    color: #fbbf24;
+}
+
+.cc-status-wrap {
+    margin-top: 4px;
+}
+
+.cc-status-pill {
+    display: inline-block;
+    font-size: 11.5px;
+    font-weight: 800;
+    padding: 3px 9px;
+    border-radius: 5px;
+    letter-spacing: 0.3px;
+}
+
+.cc-status-pill.matched {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.cc-status-pill.short {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.cc-status-pill.excess {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.cc-kpi-meta {
+    font-size: 11px;
+    color: #64748b;
+}
+
+/* Dark Card */
+.cc-dark-card {
+    background-color: #111827 !important;
+    background: #111827 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 14px;
+    padding: 30px 32px;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    overflow: hidden;
+}
+
+/* Card Header */
+.cc-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 18px;
     margin-bottom: 24px;
+    border-bottom: 1px solid #1e293b;
 }
 
-.page-header h1 {
+.cc-card-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.cc-card-title-group h2 {
     margin: 0;
-    font-size: 28px;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
 }
 
-.page-header p {
-    margin-top: 6px;
-    color: #666;
+/* Form Layout */
+.cc-form {
+    display: flex;
+    flex-direction: column;
 }
 
-
-/* ================= MESSAGES ================= */
-
-.error-message,
-.success-message {
-    padding: 12px 16px;
-    border-radius: 6px;
-    margin-bottom: 20px;
-}
-
-.error-message {
-    background: #ffe5e5;
-    color: #c62828;
-}
-
-.success-message {
-    background: #e7f7ed;
-    color: #218838;
-}
-
-
-/* ================= SUMMARY ================= */
-
-.closing-summary {
+/* Notes Grid (6 denominations) */
+.cc-notes-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 16px;
     margin-bottom: 24px;
 }
 
-.summary-card {
-    background: white;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    padding: 20px;
-}
-
-.summary-card span {
-    display: block;
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 8px;
-}
-
-.summary-card strong {
-    font-size: 24px;
-}
-
-
-/* ================= CLOSING CARD ================= */
-
-.closing-card {
-    background: white;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    padding: 24px;
-}
-
-.card-header {
-    margin-bottom: 24px;
-}
-
-.card-header h2 {
-    margin: 0;
-}
-
-.card-header p {
-    color: #777;
-    margin-top: 6px;
-}
-
-
-/* ================= NOTES ================= */
-
-.notes-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-}
-
-.note-input-group {
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    padding: 16px;
-}
-
-.note-input-group label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 8px;
-}
-
-.note-input-group input {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-}
-
-.note-input-group span {
-    display: block;
-    margin-top: 8px;
-    color: #666;
-}
-
-
-/* ================= TOTAL ================= */
-
-.cash-total {
+.cc-note-card {
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 16px 18px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.cc-note-card:hover {
+    border-color: #334155;
+    background: #0b1120;
+}
+
+.cc-note-top {
+    display: flex;
     align-items: center;
-
-    margin-top: 24px;
-    padding: 18px;
-
-    background: #f7f7f7;
-    border-radius: 8px;
+    justify-content: space-between;
 }
 
-.cash-total span {
-    font-weight: 600;
-}
-
-.cash-total strong {
-    font-size: 24px;
-}
-
-
-/* ================= BUTTON ================= */
-
-.closing-card button {
-    width: 100%;
-    margin-top: 20px;
-
-    padding: 13px;
-
-    border: none;
+.cc-note-badge {
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 3px 10px;
     border-radius: 6px;
+    border: 1px solid;
+    letter-spacing: 0.2px;
+}
 
-    font-size: 16px;
+.cc-multiplier-text {
+    font-size: 12px;
+    color: #64748b;
     font-weight: 600;
+}
 
+/* Input Box */
+.cc-input-box {
+    background: #111827;
+    border: 1px solid #222f43;
+    border-radius: 8px;
+    padding: 0 12px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.cc-input-box:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.cc-input-box input.cc-real-input,
+.cc-input-box input[type="number"].cc-real-input {
+    flex: 1 !important;
+    width: 100% !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    height: 100% !important;
+}
+
+.cc-input-box input.cc-real-input::placeholder {
+    color: #475569 !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+/* Subtotal */
+.cc-note-subtotal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px dashed #1e293b;
+    font-size: 12.5px;
+}
+
+.cc-note-subtotal span {
+    color: #94a3b8;
+}
+
+.cc-note-subtotal strong {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Grand Total Banner */
+.cc-grand-total-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+    border: 1px solid #222f43;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.cc-total-label-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.cc-calc-icon {
+    color: #38bdf8;
+    flex-shrink: 0;
+}
+
+.cc-total-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.cc-total-hint {
+    display: block;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.cc-total-figure {
+    font-size: 26px;
+    font-weight: 800;
+    color: #34d399;
+    letter-spacing: -0.5px;
+}
+
+/* Submit Button */
+.cc-actions-wrap {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.cc-btn-submit {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    padding: 12px 30px;
+    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.closing-card button:disabled {
+.cc-btn-submit::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -70%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 0.75s ease;
+    pointer-events: none;
+}
+
+.cc-btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.55), 0 0 16px rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #4338ca 100%) !important;
+}
+
+.cc-btn-submit:hover:not(:disabled)::after {
+    left: 130%;
+}
+
+.cc-btn-submit:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+}
+
+.cc-btn-submit:disabled {
+    opacity: 0.65;
     cursor: not-allowed;
-    opacity: 0.6;
+    transform: none;
+    box-shadow: none;
 }
 
-
-/* ================= RESPONSIVE ================= */
-
-@media (max-width: 900px) {
-
-    .closing-summary {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .notes-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
+.cc-spin-icon {
+    animation: ccSpin 0.9s linear infinite;
 }
 
-
-@media (max-width: 600px) {
-
-    .cash-closing-page {
-        padding: 16px;
+@keyframes ccSpin {
+    from {
+        transform: rotate(0deg);
     }
+    to {
+        transform: rotate(360deg);
+    }
+}
 
-    .closing-summary {
+/* Responsive */
+@media (max-width: 960px) {
+    .cc-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 680px) {
+    .cc-kpi-grid {
         grid-template-columns: 1fr;
     }
 
-    .notes-grid {
+    .cc-dark-card {
+        padding: 20px 16px;
+    }
+
+    .cc-notes-grid {
         grid-template-columns: 1fr;
     }
 
+    .cc-grand-total-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cc-btn-submit {
+        width: 100%;
+    }
 }

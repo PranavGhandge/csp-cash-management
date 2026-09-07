@@ -1,116 +1,367 @@
-.physical-cash-page {
-    padding: 30px;
-}
-
-.page-header {
-    margin-bottom: 30px;
-}
-
-.page-header h1 {
-    margin: 0;
-    font-size: 30px;
-}
-
-.page-header p {
-    margin-top: 8px;
-    color: #666;
-}
-
-.cash-opening-card {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    max-width: 850px;
-}
-
-.cash-opening-card h2 {
-    margin-top: 0;
-    margin-bottom: 25px;
-}
-
-.notes-grid {
+/* ================= Physical Cash Opening (Dark Cyberpunk Fintech) ================= */
+.pco-page-container {
     display: flex;
     flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
+    width: 100%;
+    animation: pcoFadeIn 0.3s ease-out;
+}
+
+@keyframes pcoFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header with Logo Badge */
+.pco-page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.pco-header-logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(79, 70, 229, 0.25));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #38bdf8;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
+    flex-shrink: 0;
+}
+
+.pco-header-titles {
+    flex: 1;
+}
+
+.pco-header-titles h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.4px;
+}
+
+/* Dark Card */
+.pco-dark-card {
+    background-color: #111827 !important;
+    background: #111827 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 14px;
+    padding: 30px 32px;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    overflow: hidden;
+}
+
+/* Card Header */
+.pco-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 18px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.pco-card-icon-box {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.pco-card-title-group h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+}
+
+.pco-header-flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
     gap: 12px;
 }
 
-.note-row {
+.pco-total-preview-pill {
+    font-size: 13.5px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 8px;
+    background: rgba(16, 185, 129, 0.15);
+    border: 1px solid rgba(16, 185, 129, 0.35);
+    color: #34d399;
+}
+
+/* Notes Grid (6 denominations) */
+.pco-notes-grid {
     display: grid;
-    grid-template-columns: 1fr 180px 180px;
-    align-items: center;
-    gap: 20px;
-    padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
 }
 
-.note-info {
+.pco-note-card {
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 16px 18px;
     display: flex;
-    gap: 15px;
-    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s ease;
 }
 
-.note-info strong {
-    font-size: 18px;
+.pco-note-card:hover {
+    border-color: #334155;
+    background: #0b1120;
 }
 
-.note-info span {
-    color: #777;
-}
-
-.note-row input {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 15px;
-}
-
-.note-amount {
-    text-align: right;
-    font-weight: 600;
-}
-
-.total-section {
+.pco-note-top {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    align-items: center;
-    margin-top: 25px;
-    padding: 20px;
-    border-radius: 8px;
-    background: #f5f7fa;
 }
 
-.total-section span {
-    font-size: 18px;
+.pco-note-badge {
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid;
+    letter-spacing: 0.2px;
+}
+
+.pco-multiplier-tag {
+    font-size: 12px;
+    color: #64748b;
     font-weight: 600;
 }
 
-.total-section strong {
-    font-size: 25px;
+/* Input Box */
+.pco-input-box {
+    background: #111827;
+    border: 1px solid #222f43;
+    border-radius: 8px;
+    padding: 0 12px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s ease;
 }
 
-.success-message {
-    margin-top: 20px;
-    padding: 12px;
-    border-radius: 6px;
-    background: #e8f5e9;
+.pco-input-box:focus-within {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
-.error-message {
-    margin-top: 20px;
-    padding: 12px;
-    border-radius: 6px;
-    background: #ffebee;
+.pco-input-box input.pco-real-input,
+.pco-input-box input[type="number"].pco-real-input {
+    flex: 1 !important;
+    width: 100% !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 15px !important;
+    font-weight: 600 !important;
+    height: 100% !important;
 }
 
-.cash-opening-card button {
-    margin-top: 20px;
-    padding: 12px 22px;
-    border: none;
-    border-radius: 6px;
+.pco-input-box input.pco-real-input::placeholder {
+    color: #475569 !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}
+
+/* Subtotal */
+.pco-note-subtotal {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 8px;
+    border-top: 1px dashed #1e293b;
+    font-size: 12.5px;
+}
+
+.pco-note-subtotal span {
+    color: #94a3b8;
+}
+
+.pco-note-subtotal strong {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* Grand Total Banner */
+.pco-grand-total-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.7), rgba(15, 23, 42, 0.9));
+    border: 1px solid #222f43;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pco-total-label-wrap {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.pco-calc-icon {
+    color: #38bdf8;
+    flex-shrink: 0;
+}
+
+.pco-total-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.pco-total-hint {
+    display: block;
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 2px;
+}
+
+.pco-total-figure {
+    font-size: 26px;
+    font-weight: 800;
+    color: #34d399;
+    letter-spacing: -0.5px;
+}
+
+/* Submit Button */
+.pco-actions-wrap {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.pco-btn-submit {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    padding: 12px 28px;
+    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.cash-opening-card button:disabled {
+.pco-btn-submit::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -70%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 0.75s ease;
+    pointer-events: none;
+}
+
+.pco-btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.55), 0 0 16px rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #4338ca 100%) !important;
+}
+
+.pco-btn-submit:hover:not(:disabled)::after {
+    left: 130%;
+}
+
+.pco-btn-submit:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+}
+
+.pco-btn-submit:disabled {
+    opacity: 0.65;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.pco-spin-icon {
+    animation: pcoSpin 0.9s linear infinite;
+}
+
+@keyframes pcoSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+    .pco-dark-card {
+        padding: 20px 16px;
+    }
+
+    .pco-notes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pco-grand-total-banner {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pco-btn-submit {
+        width: 100%;
+    }
 }
