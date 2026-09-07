@@ -79,13 +79,143 @@ class DashboardService {
 
 
         // =========================================
-        // PHYSICAL CASH
+        // PHYSICAL CASH OPENING
         // =========================================
 
         const openingCash =
             physicalCashOpening
                 ? Number(physicalCashOpening.total_amount)
                 : 0;
+
+
+        // =========================================
+        // CURRENT PHYSICAL CASH DENOMINATIONS
+        // =========================================
+
+        let note_500 =
+            physicalCashOpening
+                ? Number(physicalCashOpening.note_500)
+                : 0;
+
+        let note_200 =
+            physicalCashOpening
+                ? Number(physicalCashOpening.note_200)
+                : 0;
+
+        let note_100 =
+            physicalCashOpening
+                ? Number(physicalCashOpening.note_100)
+                : 0;
+
+        let note_50 =
+            physicalCashOpening
+                ? Number(physicalCashOpening.note_50)
+                : 0;
+
+        let note_20 =
+            physicalCashOpening
+                ? Number(physicalCashOpening.note_20)
+                : 0;
+
+        let note_10 =
+            physicalCashOpening
+                ? Number(physicalCashOpening.note_10)
+                : 0;
+
+
+        // =========================================
+        // APPLY TRANSACTION DENOMINATIONS
+        // =========================================
+
+        for (const transaction of transactions) {
+
+            const denominations =
+                (transaction as any).denominations;
+
+            if (!denominations) {
+                continue;
+            }
+
+
+            // -----------------------------------------
+            // WITHDRAWAL
+            // Customer gets notes
+            // Physical notes decrease
+            // -----------------------------------------
+
+            if (
+                transaction.transaction_type ===
+                "WITHDRAWAL"
+            ) {
+
+                note_500 -=
+                    Number(denominations.note_500 || 0);
+
+                note_200 -=
+                    Number(denominations.note_200 || 0);
+
+                note_100 -=
+                    Number(denominations.note_100 || 0);
+
+                note_50 -=
+                    Number(denominations.note_50 || 0);
+
+                note_20 -=
+                    Number(denominations.note_20 || 0);
+
+                note_10 -=
+                    Number(denominations.note_10 || 0);
+            }
+
+
+            // -----------------------------------------
+            // DEPOSIT
+            // Customer gives notes
+            // Physical notes increase
+            // -----------------------------------------
+
+            if (
+                transaction.transaction_type ===
+                "DEPOSIT"
+            ) {
+
+                note_500 +=
+                    Number(denominations.note_500 || 0);
+
+                note_200 +=
+                    Number(denominations.note_200 || 0);
+
+                note_100 +=
+                    Number(denominations.note_100 || 0);
+
+                note_50 +=
+                    Number(denominations.note_50 || 0);
+
+                note_20 +=
+                    Number(denominations.note_20 || 0);
+
+                note_10 +=
+                    Number(denominations.note_10 || 0);
+            }
+        }
+
+
+        // =========================================
+        // CURRENT PHYSICAL CASH TOTAL
+        // =========================================
+
+        const currentPhysicalCash =
+            (500 * note_500) +
+            (200 * note_200) +
+            (100 * note_100) +
+            (50 * note_50) +
+            (20 * note_20) +
+            (10 * note_10);
+
+
+        // =========================================
+        // EXPECTED CASH
+        // =========================================
 
         const expectedCash =
             openingCash +
@@ -94,41 +224,32 @@ class DashboardService {
 
 
         // =========================================
-        // PHYSICAL CASH DENOMINATIONS
+        // PHYSICAL CASH RESPONSE
         // =========================================
 
-        const physicalCash = physicalCashOpening
-            ? {
-                total_amount: openingCash,
+        const physicalCash = {
 
-                note_500:
-                    physicalCashOpening.note_500 || 0,
+            total_amount:
+                currentPhysicalCash,
 
-                note_200:
-                    physicalCashOpening.note_200 || 0,
+            note_500:
+                note_500,
 
-                note_100:
-                    physicalCashOpening.note_100 || 0,
+            note_200:
+                note_200,
 
-                note_50:
-                    physicalCashOpening.note_50 || 0,
+            note_100:
+                note_100,
 
-                note_20:
-                    physicalCashOpening.note_20 || 0,
+            note_50:
+                note_50,
 
-                note_10:
-                    physicalCashOpening.note_10 || 0
-            }
-            : {
-                total_amount: 0,
+            note_20:
+                note_20,
 
-                note_500: 0,
-                note_200: 0,
-                note_100: 0,
-                note_50: 0,
-                note_20: 0,
-                note_10: 0
-            };
+            note_10:
+                note_10
+        };
 
 
         // =========================================
@@ -138,7 +259,6 @@ class DashboardService {
         const bankData =
             banks.map((bank) => {
 
-                // Today's opening for this bank
                 const openingRecord =
                     bankOpenings.find(
                         (opening) =>
@@ -151,9 +271,9 @@ class DashboardService {
                         : 0;
 
 
-                // Today's transactions for this bank
                 let bankWithdrawal = 0;
                 let bankDeposit = 0;
+
 
                 for (const transaction of transactions) {
 
@@ -189,7 +309,9 @@ class DashboardService {
 
 
                 return {
-                    id: bank.id,
+
+                    id:
+                        bank.id,
 
                     bank_name:
                         bank.bank_name,
@@ -208,6 +330,7 @@ class DashboardService {
         // =========================================
 
         return {
+
             success: true,
 
             message:
@@ -239,6 +362,7 @@ class DashboardService {
                 last_closing:
                     lastClosing
                         ? {
+
                             closing_date:
                                 lastClosing.closing_date,
 

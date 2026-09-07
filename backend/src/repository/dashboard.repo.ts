@@ -4,6 +4,7 @@ import Banks from "../model/banks.model";
 import CashClosings from "../model/cash-closings.model";
 import PhysicalCashOpenings from "../model/physical-cash-openings.model";
 import OpeningBalances from "../model/opening-balances.model";
+import TransactionDenominations from "../model/transaction-denominations.model";
 
 class DashboardRepository {
 
@@ -101,6 +102,21 @@ class DashboardRepository {
                 "bank_id",
                 "transaction_type",
                 "amount"
+            ],
+
+            include: [
+                {
+                    model: TransactionDenominations,
+                    as: "denominations",
+                    attributes: [
+                        "note_500",
+                        "note_200",
+                        "note_100",
+                        "note_50",
+                        "note_20",
+                        "note_10"
+                    ]
+                }
             ]
         });
     }
