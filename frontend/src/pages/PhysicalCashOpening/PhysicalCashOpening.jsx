@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import apiRequest from "../../services/api";
 import { useToast } from "../../context/ToastContext";
 import {
@@ -17,18 +17,9 @@ const formatAmount = (amount) => {
     });
 };
 
-const getTodayDateStr = () => {
-    const now = new Date();
-    const yr = now.getFullYear();
-    const mo = String(now.getMonth() + 1).padStart(2, "0");
-    const dy = String(now.getDate()).padStart(2, "0");
-    return `${yr}-${mo}-${dy}`;
-};
-
 const PhysicalCashOpening = () => {
     const toast = useToast();
 
-    const [todayDate, setTodayDate] = useState(getTodayDateStr());
     const [formData, setFormData] = useState({
         note_500: "",
         note_200: "",
@@ -39,26 +30,6 @@ const PhysicalCashOpening = () => {
     });
 
     const [loading, setLoading] = useState(false);
-
-    // Midnight 12:00 AM auto-reset checker
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const current = getTodayDateStr();
-            if (current !== todayDate) {
-                setTodayDate(current);
-                setFormData({
-                    note_500: "",
-                    note_200: "",
-                    note_100: "",
-                    note_50: "",
-                    note_20: "",
-                    note_10: ""
-                });
-            }
-        }, 10000);
-
-        return () => clearInterval(interval);
-    }, [todayDate]);
 
     const notes = [
         { name: "note_500", label: "₹500 Note", value: 500, color: "#34d399" },
@@ -99,8 +70,6 @@ const PhysicalCashOpening = () => {
         try {
             setLoading(true);
 
-            const activeDate = getTodayDateStr();
-
             const result = await apiRequest("/api/physical-cash-opening", {
                 method: "POST",
                 body: JSON.stringify({
@@ -109,8 +78,7 @@ const PhysicalCashOpening = () => {
                     note_100: Number(formData.note_100) || 0,
                     note_50: Number(formData.note_50) || 0,
                     note_20: Number(formData.note_20) || 0,
-                    note_10: Number(formData.note_10) || 0,
-                    date: activeDate
+                    note_10: Number(formData.note_10) || 0
                 })
             });
 
