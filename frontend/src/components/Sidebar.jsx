@@ -65,31 +65,29 @@ const Sidebar = ({ onCloseMobile }) => {
 
                 {/* CASH MANAGEMENT */}
                 <div className="nav-section-title">CASH MANAGEMENT</div>
-                {(role === "ADMIN" || role === "SUPER_ADMIN") && (
-                    <>
-                        <NavLink
-                            to="/admin/opening-balance"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <Wallet size={18} />
-                            <span>Opening Balance</span>
-                        </NavLink>
+                {/* Opening Balance (Online Cash Opening) */}
+                <NavLink
+                    to={role === "OPERATOR" ? "/operator/opening-balance" : "/admin/opening-balance"}
+                    className={({ isActive }) =>
+                        `nav-link-item ${isActive ? "active" : ""}`
+                    }
+                    onClick={onCloseMobile}
+                >
+                    <Wallet size={18} />
+                    <span>Opening Balance</span>
+                </NavLink>
 
-                        <NavLink
-                            to="/admin/physical-cash-opening"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <Coins size={18} />
-                            <span>Physical Cash Opening</span>
-                        </NavLink>
-                    </>
-                )}
+                {/* Physical Cash Opening */}
+                <NavLink
+                    to={role === "OPERATOR" ? "/operator/physical-cash-opening" : "/admin/physical-cash-opening"}
+                    className={({ isActive }) =>
+                        `nav-link-item ${isActive ? "active" : ""}`
+                    }
+                    onClick={onCloseMobile}
+                >
+                    <Coins size={18} />
+                    <span>Physical Cash Opening</span>
+                </NavLink>
 
                 {/* Create Transaction */}
                 <NavLink

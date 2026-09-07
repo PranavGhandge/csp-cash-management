@@ -80,9 +80,29 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/operator/opening-balance"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <OpeningBalance />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
           <Route
             path="/admin/physical-cash-opening"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <PhysicalCashOpening />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/operator/physical-cash-opening"
             element={
               <ProtectedRoute>
                 <AppLayout>
