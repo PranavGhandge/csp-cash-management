@@ -38,14 +38,17 @@ const Sidebar = ({ onCloseMobile }) => {
 
     return (
         <aside className="bank-sidebar">
-            {/* Header / Brand (Screenshot 1) */}
+            {/* Header / Brand */}
             <div className="sidebar-brand">
                 <div className="brand-icon-wrap">
-                    <Wallet size={22} />
+                    <Wallet size={21} strokeWidth={2.2} />
                 </div>
                 <div className="brand-details">
-                    <h2>CSP Portal</h2>
-                    <p>CASH FLOW PRO</p>
+                    <h2 className="brand-title">CSP Portal</h2>
+                    <div className="brand-pill">
+                        <span className="brand-live-dot" />
+                        <span>CASH FLOW PRO</span>
+                    </div>
                 </div>
             </div>
 
@@ -190,20 +193,19 @@ const Sidebar = ({ onCloseMobile }) => {
                         <div className="user-name-display">
                             {user?.first_name || "Pranav"} {user?.last_name || "Ghandge"}
                         </div>
-                        <span className="user-role-badge">
-                            {role || "ADMIN"}
+                        <span className={`user-role-badge role-${(role || "admin").toLowerCase().replace("_", "-")}`}>
+                            <span className="role-dot" />
+                            <span>{role || "ADMIN"}</span>
                         </span>
                     </div>
+                    <button
+                        className="user-logout-icon-btn"
+                        onClick={handleLogout}
+                        title="Logout"
+                    >
+                        <LogOut size={16} />
+                    </button>
                 </div>
-
-                <button
-                    className="sidebar-logout-btn"
-                    onClick={handleLogout}
-                    title="Logout from system"
-                >
-                    <LogOut size={16} />
-                    <span>Logout</span>
-                </button>
             </div>
         </aside>
     );

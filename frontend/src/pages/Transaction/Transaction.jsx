@@ -110,33 +110,44 @@ const Transaction = () => {
         }
     };
 
+    const formatTitleCase = (str) => {
+        if (!str) return "";
+        return str.replace(/(^|\s)\S/g, (char) => char.toUpperCase());
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
+        const formattedValue = name === "customer_name" ? formatTitleCase(value) : value;
 
         setFormData((prev) => ({
             ...prev,
-            [name]: value
+            [name]: formattedValue
         }));
 
         if (touched[name]) {
-            const err = validateField(name, value);
+            const err = validateField(name, formattedValue);
             setErrors((prev) => ({ ...prev, [name]: err }));
         }
     };
 
     const handleBlur = (e) => {
         const { name, value } = e.target;
+        const formattedValue = name === "customer_name" ? formatTitleCase(value.trim()) : value;
+        if (name === "customer_name") {
+            setFormData((prev) => ({ ...prev, customer_name: formattedValue }));
+        }
         setTouched((prev) => ({ ...prev, [name]: true }));
-        const err = validateField(name, value);
+        const err = validateField(name, formattedValue);
         setErrors((prev) => ({ ...prev, [name]: err }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formattedCustomerName = formatTitleCase(formData.customer_name.trim());
         const formErrors = {
             bank_id: validateField("bank_id", formData.bank_id),
-            customer_name: validateField("customer_name", formData.customer_name),
+            customer_name: validateField("customer_name", formattedCustomerName),
             amount: validateField("amount", formData.amount)
         };
 
@@ -161,7 +172,7 @@ const Transaction = () => {
                 method: "POST",
                 body: JSON.stringify({
                     bank_id: formData.bank_id,
-                    customer_name: formData.customer_name.trim(),
+                    customer_name: formattedCustomerName,
                     transaction_type: formData.transaction_type,
                     amount: enteredAmount,
                     note_500: Number(formData.note_500) || 0,
@@ -276,6 +287,7 @@ const Transaction = () => {
                                     type="text"
                                     name="customer_name"
                                     className="tx-real-input"
+                                    style={{ textTransform: "capitalize" }}
                                     value={formData.customer_name}
                                     onChange={handleChange}
                                     onBlur={handleBlur}

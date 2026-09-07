@@ -153,7 +153,7 @@ const Dashboard = () => {
             <div className="dashboard-top-hero">
                 <div className="hero-welcome-wrap">
                     <h1 className="hero-welcome-title">
-                        Welcome back,{" "}
+                        Welcome{" "}
                         <span className="hero-name-gradient">
                             {user?.first_name || "Pranav"} {user?.last_name || "Ghandge"}
                         </span>

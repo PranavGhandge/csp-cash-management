@@ -45,7 +45,7 @@ const Login = () => {
                 JSON.stringify(result.data)
             );
 
-            toast.success(`Welcome back, ${result.data?.first_name || "User"}!`);
+            toast.success(`Welcome ${result.data?.first_name || "User"}!`);
             navigate("/dashboard");
 
         } catch (error) {
