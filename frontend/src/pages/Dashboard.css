@@ -1,291 +1,499 @@
-.app-layout {
+/* ================= Dark Cyberpunk Fintech Dashboard ================= */
+.dashboard-container {
     display: flex;
-    min-height: 100vh;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
 }
 
-.sidebar {
-    width: 240px;
-    min-height: 100vh;
-    background: #1f2937;
-    color: white;
-    padding: 20px;
-    box-sizing: border-box;
-    position: fixed;
-    left: 0;
-    top: 0;
+/* ================= 1. Top Hero Header (Screenshot 1) ================= */
+.dashboard-top-hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-bottom: 4px;
 }
 
-.sidebar-header {
-    margin-bottom: 30px;
-}
-
-.sidebar-header h2 {
+.hero-welcome-title {
+    font-size: 28px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
     margin: 0;
 }
 
-.sidebar-header p {
-    margin: 5px 0;
-    font-size: 13px;
+.hero-name-gradient {
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
 }
 
-.sidebar nav {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.sidebar nav h4 {
-    margin: 20px 0 5px;
-    font-size: 12px;
+.hero-role-pill {
+    background: #4f46e5;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
 }
 
-.sidebar nav a {
-    color: white;
-    text-decoration: none;
-    padding: 10px;
-    border-radius: 6px;
-}
-
-.sidebar nav a.active {
-    background: #374151;
-}
-
-.sidebar-footer {
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    right: 20px;
-}
-
-.sidebar-footer p {
-    margin: 0 0 5px;
-}
-
-.sidebar-footer small {
-    display: block;
-    margin-bottom: 10px;
-}
-
-.sidebar-footer button {
-    width: 100%;
-    padding: 9px;
-    cursor: pointer;
-}
-
-.dashboard {
-    margin-left: 240px;
-    flex: 1;
-    min-height: 100vh;
-    padding: 30px;
-    background: #f5f7fa;
-    box-sizing: border-box;
-}
-
-/* ================= Dashboard Header ================= */
-
-.dashboard-header {
+.btn-sync-live {
+    background: #111827;
+    color: #f1f5f9;
+    border: 1px solid #1e293b;
+    padding: 9px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.dashboard-refresh-btn {
-    border: none;
+.btn-sync-live:hover {
+    background: #162032;
+    border-color: #3b82f6;
+    color: #60a5fa;
+}
+
+/* ================= 2. Quick Actions Bar (Screenshot 1) ================= */
+.quick-actions-bar {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 6px 0;
+}
+
+.quick-actions-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-right: 4px;
+}
+
+.qa-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     padding: 10px 18px;
-    border-radius: 6px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
     cursor: pointer;
-    font-size: 14px;
+    border: none;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    color: #ffffff;
 }
 
-
-/* ================= Section Header ================= */
-
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.qa-btn:hover {
+    transform: translateY(-1.5px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
 }
 
-.section-header h2 {
-    margin-bottom: 4px;
+.qa-btn.purple {
+    background: #6366f1;
+}
+.qa-btn.purple:hover {
+    background: #4f46e5;
 }
 
-.section-header p {
-    margin-top: 0;
-    color: #666;
-    font-size: 14px;
+.qa-btn.green {
+    background: #10b981;
+}
+.qa-btn.green:hover {
+    background: #059669;
 }
 
-
-/* ================= Cash Card ================= */
-
-.cash-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.qa-btn.dark {
+    background: #111827;
+    border: 1px solid #334155;
+    color: #f1f5f9;
+}
+.qa-btn.dark:hover {
+    background: #1e293b;
+    border-color: #64748b;
 }
 
-.cash-card-header span {
-    color: #666;
-    font-size: 14px;
+.qa-btn.amber {
+    background: #f59e0b;
+}
+.qa-btn.amber:hover {
+    background: #d97706;
 }
 
-.cash-card-header h3 {
-    margin-top: 8px;
-    font-size: 32px;
-}
-
-
-/* ================= Denominations ================= */
-
-.denomination-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.denomination-item:last-child {
-    border-bottom: none;
-}
-
-
-/* ================= Bank Card ================= */
-
-.bank-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.bank-card strong {
-    display: block;
-    margin-top: 14px;
-    font-size: 24px;
-}
-
-
-/* ================= Closing Card ================= */
-
-.closing-card {
+/* ================= 3. KPI Metrics Grid (Screenshot 1) ================= */
+.kpi-grid-top {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
 }
 
-.closing-info {
+.kpi-card-dark {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px 22px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    position: relative;
+    transition: all 0.2s ease;
 }
 
-.closing-info span {
-    color: #666;
-    font-size: 14px;
+.kpi-card-dark:hover {
+    border-color: #334155;
+    background: #131d31;
 }
 
-.closing-info strong {
-    font-size: 18px;
+.kpi-card-dark.accent-green {
+    border-top: 2px solid #10b981;
+}
+.kpi-card-dark.accent-amber {
+    border-top: 2px solid #f59e0b;
+}
+.kpi-card-dark.accent-blue {
+    border-top: 2px solid #3b82f6;
+}
+.kpi-card-dark.accent-cyan {
+    border-top: 2px solid #06b6d4;
 }
 
-
-/* ================= Closing Status ================= */
-
-.closing-status {
-    display: inline-flex;
-    width: fit-content;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 13px !important;
-}
-
-.closing-status.matched {
-    background: #e8f5e9;
-    color: #2e7d32;
-}
-
-.closing-status.short {
-    background: #ffebee;
-    color: #c62828;
-}
-
-.closing-status.excess {
-    background: #fff8e1;
-    color: #ef6c00;
-}
-
-
-/* ================= Empty State ================= */
-
-.empty-state {
-    background: white;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    padding: 30px;
-    text-align: center;
-    color: #666;
-}
-
-
-/* ================= Loading ================= */
-
-.dashboard-loading {
+.kpi-top-row {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    min-height: 70vh;
 }
 
+.kpi-top-row span {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #94a3b8;
+}
 
-/* ================= Error ================= */
+.kpi-icon-chip {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-.dashboard-error {
-    margin: 40px;
-    padding: 30px;
+.kpi-icon-chip.green {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+.kpi-icon-chip.amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+.kpi-icon-chip.blue {
+    background: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+.kpi-icon-chip.cyan {
+    background: rgba(6, 182, 212, 0.15);
+    color: #22d3ee;
+}
+
+.kpi-amount-val {
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    margin-top: 4px;
+}
+
+.kpi-sub-text {
+    font-size: 12px;
+    color: #64748b;
+}
+
+.kpi-vault-highlight {
+    grid-column: span 1;
+}
+
+/* ================= 4. Charts Section Layout ================= */
+.charts-grid-layout {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Section Header */
+.dash-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.dash-section-header h2 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+}
+
+.dash-section-header p {
+    font-size: 12.5px;
+    color: #64748b;
+    margin: 2px 0 0;
+}
+
+/* ================= 5. Note Inventory Panel (Screenshot 2) ================= */
+.vault-inventory-container {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.vault-inventory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.vault-header-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vault-header-title h3 {
+    font-size: 17px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.vault-header-title p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 3px 0 0 0;
+}
+
+.vault-total-pill {
+    padding: 8px 16px;
+    border-radius: 8px;
+    background: rgba(16, 185, 129, 0.12);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #34d399;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.vault-notes-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 14px;
+}
+
+.note-box-dark {
+    background: #141d2e;
+    border: 1px solid #1e293d;
     border-radius: 10px;
-    background: #fff5f5;
-    border: 1px solid #ffcdd2;
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease;
 }
 
-.dashboard-error h2 {
-    margin-top: 0;
+.note-box-dark:hover {
+    border-color: #3b82f6;
+    background: #172338;
 }
 
-.dashboard-error button {
-    margin-top: 15px;
-    padding: 10px 18px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
+.note-top-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
+.note-badge-tag {
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
 
-/* ================= Responsive ================= */
+.note-pcs-pill {
+    background: #090d16;
+    border: 1px solid #1e293b;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #f1f5f9;
+}
 
-@media (max-width: 1000px) {
+.note-amount-bold {
+    font-size: 18px;
+    font-weight: 800;
+    color: #ffffff;
+    line-height: 1.1;
+}
 
-    .closing-card {
-        grid-template-columns: repeat(2, 1fr);
+.note-calc-formula {
+    font-size: 11px;
+    color: #64748b;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+/* ================= 6. Connected Banks Grid ================= */
+.bank-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+}
+
+.bank-passbook-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 18px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+    transition: all 0.2s ease;
+}
+
+.bank-passbook-card:hover {
+    border-color: #3b82f6;
+    background: #141d2e;
+}
+
+.bank-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.bank-brand-title {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    margin: 0;
+}
+
+.bank-csp-badge {
+    display: inline-block;
+    background: #090d16;
+    color: #94a3b8;
+    border: 1px solid #1e293b;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-top: 4px;
+}
+
+.bank-balance-highlight {
+    margin-top: 16px;
+}
+
+.bank-balance-highlight span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+}
+
+.bank-balance-highlight strong {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: #3b82f6;
+    margin-top: 2px;
+}
+
+/* ================= 7. Cash Closing Summary ================= */
+.closing-summary-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+    align-items: center;
+}
+
+.closing-data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.closing-data-item label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #64748b;
+}
+
+.closing-data-item strong {
+    font-size: 17px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+/* Responsive */
+@media (max-width: 1300px) {
+    .vault-notes-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
-
-}
-
-
-@media (max-width: 700px) {
-
-    .dashboard-header {
-        flex-direction: column;
-    }
-
-    .dashboard-refresh-btn {
-        width: 100%;
-    }
-
-    .closing-card {
+    .charts-grid-layout {
         grid-template-columns: 1fr;
     }
+    .kpi-grid-top {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
 
+@media (max-width: 768px) {
+    .kpi-grid-top {
+        grid-template-columns: 1fr;
+    }
+    .vault-notes-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .closing-summary-card {
+        grid-template-columns: 1fr;
+    }
 }

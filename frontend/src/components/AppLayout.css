@@ -1,0 +1,161 @@
+.app-viewport {
+    display: flex;
+    min-height: 100vh;
+    background-color: #090d16;
+}
+
+.main-viewport {
+    margin-left: 260px;
+    flex: 1;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 260px);
+    background-color: #090d16;
+}
+
+.top-navbar {
+    height: 64px;
+    background: #090d16;
+    border-bottom: 1px solid #1a2234;
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.nav-left-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mobile-menu-btn {
+    display: none;
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--radius-sm);
+}
+
+.portal-tag {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.nav-right-meta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.live-clock-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #111827;
+    color: #93c5fd;
+    border: 1px solid #1e293b;
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.header-user-chip {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.header-user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-user-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.header-user-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.header-user-role {
+    font-size: 10.5px;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.page-content-wrapper {
+    flex: 1;
+    padding: 24px 32px 48px;
+    max-width: 1600px;
+    width: 100%;
+}
+
+/* Mobile backdrop */
+.sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    z-index: 95;
+}
+
+@media (max-width: 960px) {
+    .main-viewport {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .bank-sidebar {
+        transform: translateX(-100%);
+    }
+
+    .bank-sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+    .sidebar-backdrop.active {
+        display: block;
+    }
+
+    .mobile-menu-btn {
+        display: flex;
+    }
+
+    .page-content-wrapper {
+        padding: 20px 16px 36px;
+    }
+
+    .top-navbar {
+        padding: 0 16px;
+    }
+
+    .live-clock-badge {
+        display: none;
+    }
+}

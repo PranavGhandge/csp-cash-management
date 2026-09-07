@@ -1,7 +1,24 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import apiRequest from "../services/api";
+import { useToast } from "../context/ToastContext";
+import CashFlowChart from "../components/Charts/CashFlowChart";
+import BankBalanceChart from "../components/Charts/BankBalanceChart";
+import {
+    ArrowDownLeft,
+    ArrowUpRight,
+    Wallet,
+    Banknote,
+    RefreshCw,
+    Landmark,
+    Lock,
+    ShieldCheck,
+    AlertCircle,
+    Coins,
+    ArrowLeftRight,
+    CheckCircle2
+} from "lucide-react";
 import "./Dashboard.css";
-import Sidebar from "../components/Sidebar";
 
 const formatAmount = (amount) => {
     return Number(amount || 0).toLocaleString("en-IN", {
@@ -12,14 +29,12 @@ const formatAmount = (amount) => {
 
 const formatDifference = (amount) => {
     const value = Number(amount || 0);
-
     if (value < 0) {
         return `-₹${Math.abs(value).toLocaleString("en-IN", {
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         })}`;
     }
-
     return `₹${value.toLocaleString("en-IN", {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2
@@ -27,504 +42,388 @@ const formatDifference = (amount) => {
 };
 
 const Dashboard = () => {
-
+    const navigate = useNavigate();
     const [dashboard, setDashboard] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState("");
+    const toast = useToast();
 
     const user = JSON.parse(
         localStorage.getItem("user") || "null"
     );
+    const role = user?.role || "ADMIN";
 
-    const fetchDashboard = async () => {
+    const fetchDashboard = useCallback(async (isManualRefresh = false) => {
         try {
-            setLoading(true);
+            if (isManualRefresh) {
+                setRefreshing(true);
+            } else {
+                setLoading(true);
+            }
             setError("");
 
             const result = await apiRequest("/api/dashboard");
-
             setDashboard(result.data);
 
-        } catch (error) {
-            console.error("Dashboard error:", error);
-            setError(error.message || "Failed to load dashboard");
-
+            if (isManualRefresh) {
+                toast.success("Dashboard data synchronized successfully!");
+            }
+        } catch (err) {
+            console.error("Dashboard error:", err);
+            const msg = err.message || "Failed to load dashboard";
+            setError(msg);
+            toast.error(msg);
         } finally {
             setLoading(false);
+            setRefreshing(false);
         }
-    };
+    }, [toast]);
 
     useEffect(() => {
-        fetchDashboard();
-    }, []);
-
-    /* ---------------- Loading ---------------- */
+        fetchDashboard(false);
+    }, [fetchDashboard]);
 
     if (loading) {
         return (
-            <div className="app-layout">
-
-                <Sidebar />
-
-                <main className="dashboard">
-
-                    <div className="dashboard-loading">
-                        <h2>Loading dashboard...</h2>
-                    </div>
-
-                </main>
-
+            <div style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: "450px",
+                gap: "16px",
+                color: "#94a3b8"
+            }}>
+                <RefreshCw size={36} style={{ animation: "dashSpin 1s linear infinite", color: "#3b82f6" }} />
+                <h3 style={{ color: "#ffffff", fontWeight: 700, margin: 0 }}>
+                    Loading Financial Overview...
+                </h3>
+                <p style={{ margin: 0, fontSize: "13px" }}>Connecting to CSP core banking database</p>
             </div>
         );
     }
-
-    /* ---------------- Error ---------------- */
 
     if (error) {
         return (
-            <div className="app-layout">
-
-                <Sidebar />
-
-                <main className="dashboard">
-
-                    <div className="dashboard-error">
-
-                        <h2>
-                            Something went wrong
-                        </h2>
-
-                        <p>
-                            {error}
-                        </p>
-
-                        <button onClick={fetchDashboard}>
-                            Retry
-                        </button>
-
-                    </div>
-
-                </main>
-
+            <div style={{
+                background: "#111827",
+                border: "1px solid #ef444450",
+                borderRadius: "12px",
+                padding: "36px",
+                textAlign: "center",
+                maxWidth: "500px",
+                margin: "40px auto"
+            }}>
+                <AlertCircle size={44} style={{ color: "#ef4444", marginBottom: "12px" }} />
+                <h3 style={{ color: "#ffffff", fontWeight: 700, margin: 0 }}>Unable to Load Dashboard</h3>
+                <p style={{ color: "#94a3b8", fontSize: "13.5px", margin: "8px 0 20px" }}>{error}</p>
+                <button
+                    className="btn btn-primary"
+                    onClick={() => fetchDashboard(false)}
+                >
+                    <RefreshCw size={16} />
+                    <span>Retry Connection</span>
+                </button>
             </div>
         );
     }
 
-    if (!dashboard) {
-        return null;
-    }
+    if (!dashboard) return null;
 
     const physicalCash = dashboard.physical_cash || {};
-
     const banks = dashboard.banks || [];
-
     const today = dashboard.today || {};
-
     const lastClosing = dashboard.last_closing;
 
+    const noteCards = [
+        { label: "₹500 Note", key: "note_500", val: 500, color: "#34d399" },
+        { label: "₹200 Note", key: "note_200", val: 200, color: "#fb923c" },
+        { label: "₹100 Note", key: "note_100", val: 100, color: "#818cf8" },
+        { label: "₹50 Note",  key: "note_50",  val: 50,  color: "#22d3ee" },
+        { label: "₹20 Note",  key: "note_20",  val: 20,  color: "#f472b6" },
+        { label: "₹10 Note",  key: "note_10",  val: 10,  color: "#a78bfa" }
+    ];
+
+    const isOperator = role === "OPERATOR";
+
     return (
-        <div className="app-layout">
-
-            {/* ================= Sidebar ================= */}
-
-            <Sidebar />
-
-
-            {/* ================= Main Dashboard ================= */}
-
-            <main className="dashboard">
-
-                {/* ================= Header ================= */}
-
-                <div className="dashboard-header">
-
-                    <div>
-
-                        <h1>
-                            Dashboard
-                        </h1>
-
-                        <p>
-                            Welcome {user?.first_name || "User"} 👋
-                        </p>
-
-                        <small>
-                            Role: {user?.role || "N/A"}
-                        </small>
-
-                    </div>
-
-                    <button
-                        className="dashboard-refresh-btn"
-                        onClick={fetchDashboard}
-                    >
-                        Refresh
-                    </button>
-
+        <div className="dashboard-container">
+            {/* 1. Top Hero Header */}
+            <div className="dashboard-top-hero">
+                <div className="hero-welcome-wrap">
+                    <h1 className="hero-welcome-title">
+                        Welcome back,{" "}
+                        <span className="hero-name-gradient">
+                            {user?.first_name || "Pranav"} {user?.last_name || "Ghandge"}
+                        </span>
+                    </h1>
                 </div>
 
+                <button
+                    className="btn-sync-live"
+                    onClick={() => fetchDashboard(true)}
+                    disabled={refreshing}
+                    title="Sync live ledger data"
+                >
+                    <RefreshCw
+                        size={15}
+                        style={{ animation: refreshing ? "dashSpin 1s linear infinite" : "none" }}
+                    />
+                    <span>{refreshing ? "Syncing..." : "Sync Live Data"}</span>
+                </button>
+            </div>
 
-                {/* ================= Quick Summary ================= */}
+            {/* 2. Quick Actions Bar */}
+            <div className="quick-actions-bar">
+                <div className="quick-actions-label">
+                    <span style={{ fontSize: "15px", lineHeight: 1 }}>⊕</span>
+                    <span>QUICK ACTIONS</span>
+                </div>
 
-                <section>
+                {!isOperator && (
+                    <button
+                        className="qa-btn purple"
+                        onClick={() => navigate("/admin/opening-balance")}
+                    >
+                        <Wallet size={15} />
+                        <span>Set Opening Balance</span>
+                    </button>
+                )}
 
-                    <h2>
-                        Today's Overview
-                    </h2>
+                {!isOperator && (
+                    <button
+                        className="qa-btn green"
+                        onClick={() => navigate("/admin/physical-cash-opening")}
+                    >
+                        <Coins size={15} />
+                        <span>Physical Cash Opening</span>
+                    </button>
+                )}
 
-                    <div className="summary-grid">
+                <button
+                    className="qa-btn dark"
+                    onClick={() => navigate(isOperator ? "/operator/transactions" : "/admin/transactions")}
+                >
+                    <ArrowLeftRight size={15} />
+                    <span>Record Transaction</span>
+                </button>
 
-                        {/* Deposit */}
+                <button
+                    className="qa-btn amber"
+                    onClick={() => navigate(isOperator ? "/operator/closing" : "/admin/closing")}
+                >
+                    <CheckCircle2 size={15} />
+                    <span>Cash Closing</span>
+                </button>
+            </div>
 
-                        <div className="summary-card">
-
-                            <span>
-                                Total Deposit
-                            </span>
-
-                            <strong>
-                                ₹{formatAmount(today.total_deposit)}
-                            </strong>
-
+            {/* 3. Top 3 KPI Metric Cards */}
+            <section className="kpi-grid-top">
+                {/* Today's Deposits */}
+                <div className="kpi-card-dark accent-green">
+                    <div className="kpi-top-row">
+                        <span>Today's Deposits</span>
+                        <div className="kpi-icon-chip green">
+                            <ArrowDownLeft size={18} />
                         </div>
-
-
-                        {/* Withdrawal */}
-
-                        <div className="summary-card">
-
-                            <span>
-                                Total Withdrawal
-                            </span>
-
-                            <strong>
-                                ₹{formatAmount(today.total_withdrawal)}
-                            </strong>
-
-                        </div>
-
-
-                        {/* Transactions */}
-
-                        <div className="summary-card">
-
-                            <span>
-                                Transactions
-                            </span>
-
-                            <strong>
-                                {Number(today.transaction_count || 0)}
-                            </strong>
-
-                        </div>
-
-
-                        {/* Expected Cash */}
-
-                        <div className="summary-card">
-
-                            <span>
-                                Expected Cash
-                            </span>
-
-                            <strong>
-                                ₹{formatAmount(today.expected_cash)}
-                            </strong>
-
-                        </div>
-
                     </div>
+                    <div className="kpi-amount-val">₹{formatAmount(today.total_deposit)}</div>
+                </div>
 
-                </section>
-
-
-                {/* ================= Physical Cash ================= */}
-
-                <section>
-
-                    <h2>
-                        Physical Cash
-                    </h2>
-
-                    <div className="cash-card">
-
-                        <div className="cash-card-header">
-
-                            <div>
-
-                                <span>
-                                    Current Physical Cash
-                                </span>
-
-                                <h3>
-                                    ₹{formatAmount(physicalCash.total_amount)}
-                                </h3>
-
-                            </div>
-
+                {/* Today's Withdrawals */}
+                <div className="kpi-card-dark accent-amber">
+                    <div className="kpi-top-row">
+                        <span>Today's Withdrawals</span>
+                        <div className="kpi-icon-chip amber">
+                            <ArrowUpRight size={18} />
                         </div>
-
-
-                        <div className="denominations">
-
-                            <div className="denomination-item">
-
-                                <span>
-                                    ₹500
-                                </span>
-
-                                <strong>
-                                    × {Number(physicalCash.note_500 || 0)}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="denomination-item">
-
-                                <span>
-                                    ₹200
-                                </span>
-
-                                <strong>
-                                    × {Number(physicalCash.note_200 || 0)}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="denomination-item">
-
-                                <span>
-                                    ₹100
-                                </span>
-
-                                <strong>
-                                    × {Number(physicalCash.note_100 || 0)}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="denomination-item">
-
-                                <span>
-                                    ₹50
-                                </span>
-
-                                <strong>
-                                    × {Number(physicalCash.note_50 || 0)}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="denomination-item">
-
-                                <span>
-                                    ₹20
-                                </span>
-
-                                <strong>
-                                    × {Number(physicalCash.note_20 || 0)}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="denomination-item">
-
-                                <span>
-                                    ₹10
-                                </span>
-
-                                <strong>
-                                    × {Number(physicalCash.note_10 || 0)}
-                                </strong>
-
-                            </div>
-
-                        </div>
-
                     </div>
+                    <div className="kpi-amount-val">₹{formatAmount(today.total_withdrawal)}</div>
+                </div>
 
-                </section>
+                {/* Expected Physical Cash */}
+                <div className="kpi-card-dark accent-blue">
+                    <div className="kpi-top-row">
+                        <span>Expected Physical Cash</span>
+                        <div className="kpi-icon-chip blue">
+                            <Wallet size={18} />
+                        </div>
+                    </div>
+                    <div className="kpi-amount-val">₹{formatAmount(today.expected_cash)}</div>
+                </div>
+            </section>
 
-
-                {/* ================= Bank Balances ================= */}
-
-                <section>
-
-                    <div className="section-header">
-
+            {/* 4. Physical Vault Cash & Note Inventory */}
+            <section className="vault-inventory-container">
+                <div className="vault-inventory-header">
+                    <div className="vault-header-title">
+                        <Banknote size={22} style={{ color: "#34d399" }} />
                         <div>
-
-                            <h2>
-                                Bank Balances
-                            </h2>
-
-                            <p>
-                                Current online CSP balance
-                            </p>
-
+                            <h3>Physical Vault Cash & Note Inventory</h3>
                         </div>
-
                     </div>
+                    <div className="vault-total-pill">
+                        Total Vault Cash: ₹{formatAmount(physicalCash.total_amount)}
+                    </div>
+                </div>
 
+                <div className="vault-notes-grid">
+                    {noteCards.map((n) => {
+                        const count = Number(physicalCash[n.key] || 0);
+                        const subtotal = count * n.val;
 
-                    {banks.length === 0 ? (
+                        return (
+                            <div key={n.key} className="note-box-dark">
+                                <div className="note-top-meta">
+                                    <span className="note-badge-tag" style={{ color: n.color }}>
+                                        {n.label}
+                                    </span>
+                                    <span className="note-pcs-pill">
+                                        {count.toLocaleString("en-IN")} pcs
+                                    </span>
+                                </div>
+                                <div className="note-amount-bold">
+                                    ₹{formatAmount(subtotal)}
+                                </div>
+                                <div className="note-calc-formula">
+                                    {count} × ₹{n.val} = ₹{formatAmount(subtotal)}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </section>
 
-                        <div className="empty-state">
+            {/* 5. Connected Bank Accounts (Moved directly below Note Inventory as requested!) */}
+            <section>
+                <div className="dash-section-header">
+                    <h2>
+                        <Landmark size={18} style={{ color: "#3b82f6" }} />
+                        <span>Connected Bank Accounts</span>
+                    </h2>
+                </div>
 
-                            <p>
-                                No banks found.
-                            </p>
-
-                        </div>
-
-                    ) : (
-
-                        <div className="bank-grid">
-
-                            {banks.map((bank) => (
-
-                                <div
-                                    className="bank-card"
-                                    key={bank.id}
-                                >
-
-                                    <div className="bank-card-header">
-
-                                        <h3>
-                                            {bank.bank_name}
-                                        </h3>
-
+                {banks.length === 0 ? (
+                    <div style={{
+                        background: "#111827",
+                        border: "1px dashed #1e293b",
+                        borderRadius: "12px",
+                        padding: "36px",
+                        textAlign: "center",
+                        color: "#64748b"
+                    }}>
+                        No active bank accounts found.
+                    </div>
+                ) : (
+                    <div className="bank-cards-grid">
+                        {banks.map((bank) => (
+                            <div className="bank-passbook-card" key={bank.id || bank.csp_id}>
+                                <div className="bank-card-top">
+                                    <div>
+                                        <h4 className="bank-brand-title">{bank.bank_name}</h4>
+                                        <span className="bank-csp-badge">
+                                            CSP ID: {bank.csp_id}
+                                        </span>
                                     </div>
-
-                                    <p>
-                                        CSP ID: {bank.csp_id}
-                                    </p>
-
-                                    <strong>
-                                        ₹{formatAmount(bank.online_balance)}
-                                    </strong>
-
+                                    <span className="badge badge-success">Online</span>
                                 </div>
 
-                            ))}
+                                <div className="bank-balance-highlight">
+                                    <span>Available Balance</span>
+                                    <strong>₹{formatAmount(bank.online_balance)}</strong>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </section>
 
-                        </div>
-
-                    )}
-
-                </section>
-
-
-                {/* ================= Last Closing ================= */}
-
-                <section>
-
+            {/* 6. Analytics & Fund Distribution (Moved after Connected Bank Accounts as requested!) */}
+            <section>
+                <div className="dash-section-header">
                     <h2>
-                        Last Closing
+                        <ShieldCheck size={18} style={{ color: "#3b82f6" }} />
+                        <span>Analytics & Fund Distribution</span>
                     </h2>
+                </div>
 
+                <div className="charts-grid-layout">
+                    <CashFlowChart
+                        deposit={today.total_deposit}
+                        withdrawal={today.total_withdrawal}
+                    />
+                    <BankBalanceChart banks={banks} />
+                </div>
+            </section>
 
-                    {!lastClosing ? (
+            {/* 7. Last Cash Closing Audit (At the very bottom as requested!) */}
+            <section>
+                <div className="dash-section-header">
+                    <h2>
+                        <Lock size={18} style={{ color: "#3b82f6" }} />
+                        <span>Last Cash Closing Audit</span>
+                    </h2>
+                </div>
 
-                        <div className="empty-state">
-
-                            <p>
-                                No cash closing found yet.
-                            </p>
-
+                {!lastClosing ? (
+                    <div style={{
+                        background: "#111827",
+                        border: "1px dashed #1e293b",
+                        borderRadius: "12px",
+                        padding: "36px",
+                        textAlign: "center",
+                        color: "#64748b"
+                    }}>
+                        No cash closing record found yet.
+                    </div>
+                ) : (
+                    <div className="closing-summary-card">
+                        <div className="closing-data-item">
+                            <label>Closing Date</label>
+                            <strong>{lastClosing.closing_date}</strong>
                         </div>
 
-                    ) : (
+                        <div className="closing-data-item">
+                            <label>Expected Cash</label>
+                            <strong>₹{formatAmount(lastClosing.expected_cash)}</strong>
+                        </div>
 
-                        <div className="closing-card">
+                        <div className="closing-data-item">
+                            <label>Actual Cash</label>
+                            <strong>₹{formatAmount(lastClosing.actual_cash)}</strong>
+                        </div>
 
-                            <div className="closing-info">
+                        <div className="closing-data-item">
+                            <label>Discrepancy</label>
+                            <strong style={{
+                                color: Number(lastClosing.difference || 0) < 0
+                                    ? "#f87171"
+                                    : Number(lastClosing.difference || 0) > 0
+                                    ? "#fbbf24"
+                                    : "#34d399"
+                            }}>
+                                {formatDifference(lastClosing.difference)}
+                            </strong>
+                        </div>
 
-                                <span>
-                                    Closing Date
-                                </span>
-
-                                <strong>
-                                    {lastClosing.closing_date}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="closing-info">
-
-                                <span>
-                                    Expected Cash
-                                </span>
-
-                                <strong>
-                                    ₹{formatAmount(
-                                        lastClosing.expected_cash
-                                    )}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="closing-info">
-
-                                <span>
-                                    Actual Cash
-                                </span>
-
-                                <strong>
-                                    ₹{formatAmount(
-                                        lastClosing.actual_cash
-                                    )}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="closing-info">
-
-                                <span>
-                                    Difference
-                                </span>
-
-                                <strong>
-                                    {formatDifference(
-                                        lastClosing.difference
-                                    )}
-                                </strong>
-
-                            </div>
-
-
-                            <div className="closing-info">
-
-                                <span>
-                                    Status
-                                </span>
-
-                                <strong
-                                    className={`closing-status ${
-                                        lastClosing.status?.toLowerCase() || ""
-                                    }`}
-                                >
+                        <div className="closing-data-item">
+                            <label>Audit Status</label>
+                            <div>
+                                <span className={`badge ${
+                                    (lastClosing.status || "").toLowerCase() === "matched"
+                                        ? "badge-success"
+                                        : (lastClosing.status || "").toLowerCase() === "short"
+                                        ? "badge-danger"
+                                        : "badge-warning"
+                                }`}>
                                     {lastClosing.status || "N/A"}
-                                </strong>
-
+                                </span>
                             </div>
-
                         </div>
-
-                    )}
-
-                </section>
-
-            </main>
-
+                    </div>
+                )}
+            </section>
         </div>
     );
 };

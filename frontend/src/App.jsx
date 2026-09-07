@@ -1,7 +1,11 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { ToastProvider } from "./context/ToastContext";
+import ToastContainer from "./components/ToastContainer";
+import AppLayout from "./components/AppLayout";
+import ProtectedRoute from "./pages/ProtectedRoute";
+
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./pages/ProtectedRoute";
 import AdminManagement from "./pages/Admin/AdminManagement";
 import OperatorManagement from "./pages/Operator/OperatorManagement";
 import BankManagement from "./pages/Bank/BankManagement";
@@ -14,129 +18,173 @@ import CashClosingHistory from "./pages/CashClosing/CashClosingHistory";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
+    <ToastProvider>
+      <BrowserRouter>
+        <ToastContainer />
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+          {/* Authenticated Banking Routes wrapped in AppLayout */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <Dashboard />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/super-admin/admins"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <AdminManagement />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="*"
-          element={<Login />}
-        />
+          <Route
+            path="/admin/operators"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <OperatorManagement />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/super-admin/admins"
-          element={
-            <ProtectedRoute>
-              <AdminManagement />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/admin/banks"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <BankManagement />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/operators"
-          element={
-            <ProtectedRoute>
-              <OperatorManagement />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/admin/opening-balance"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <OpeningBalance />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/banks"
-          element={
-            <ProtectedRoute>
-              <BankManagement />
-            </ProtectedRoute>
-          }
-        />
+          <Route
+            path="/admin/physical-cash-opening"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <PhysicalCashOpening />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/opening-balance"
-          element={
-            <ProtectedRoute>
-              <OpeningBalance />
-            </ProtectedRoute>
-          }
-        />
+          {/* Transaction Routes */}
+          <Route
+            path="/admin/transactions"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <Transaction />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/operator/transactions"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <Transaction />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/physical-cash-opening"
-          element={
-            <ProtectedRoute>
-              <PhysicalCashOpening />
-            </ProtectedRoute>
-          }
-        />
+          {/* History Routes */}
+          <Route
+            path="/admin/history"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <TransactionHistory />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/operator/history"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <TransactionHistory />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/transactions"
-          element={
-            <ProtectedRoute>
-              <Transaction />
-            </ProtectedRoute>
-          }
-        />
+          {/* Closing Routes */}
+          <Route
+            path="/admin/closing"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CashClosing />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/operator/closing"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CashClosing />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/history"
-          element={
-            <ProtectedRoute>
-              <TransactionHistory />
-            </ProtectedRoute>
-          }
-        />
+          {/* Closing History Routes */}
+          <Route
+            path="/admin/closing-history"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CashClosingHistory />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/operator/closing-history"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <CashClosingHistory />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
 
-        <Route
-          path="/admin/closing"
-          element={
-            <ProtectedRoute>
-              <CashClosing />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/operator/closing"
-          element={
-            <ProtectedRoute>
-              <CashClosing />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin/closing-history"
-          element={
-            <ProtectedRoute>
-              <CashClosingHistory />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/operator/closing-history"
-          element={
-            <ProtectedRoute>
-              <CashClosingHistory />
-            </ProtectedRoute>
-          }
-        />
-
-      </Routes>
-    </BrowserRouter>
+          {/* Fallback */}
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastProvider>
   );
 }
 
