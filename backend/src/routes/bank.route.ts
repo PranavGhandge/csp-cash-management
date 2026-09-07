@@ -16,7 +16,7 @@ async function BankRoutes(fastify: FastifyInstance) {
     fastify.get("/api/bank", {
         preHandler: [
             authMiddleware,
-            roleMiddleware("ADMIN")
+            roleMiddleware("ADMIN", "OPERATOR")
         ]
     },
         bankController.getAllBanks

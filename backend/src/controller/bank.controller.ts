@@ -12,7 +12,15 @@ class BankController {
     }
 
     async getAllBanks(req: FastifyRequest, rep: FastifyReply) {
-        const admin_id = req.user.id;
+        const admin_id = req.user.role === "ADMIN" ? req.user.id : req.user.admin_id;
+
+        if (!admin_id) {
+            return rep.status(403).send({
+                success: false,
+                message: "Admin scope not found"
+            });
+        }
+
         const response = await bankService.getAllBanks(admin_id);
         return rep.status(200).send(response);
     }
