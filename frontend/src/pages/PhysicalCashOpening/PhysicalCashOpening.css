@@ -195,6 +195,14 @@
     font-size: 15px !important;
     font-weight: 600 !important;
     height: 100% !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.pco-input-box input[type="number"]::-webkit-outer-spin-button,
+.pco-input-box input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 
 .pco-input-box input.pco-real-input::placeholder {

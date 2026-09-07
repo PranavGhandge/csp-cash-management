@@ -301,6 +301,14 @@
     font-size: 15px !important;
     font-weight: 600 !important;
     height: 100% !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.cc-input-box input[type="number"]::-webkit-outer-spin-button,
+.cc-input-box input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 
 .cc-input-box input.cc-real-input::placeholder {

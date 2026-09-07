@@ -212,6 +212,14 @@
     font-family: inherit !important;
     height: 100% !important;
     border-radius: 0 !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.opb-field-box input[type="number"]::-webkit-outer-spin-button,
+.opb-field-box input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 
 .opb-field-box input.opb-real-input::placeholder {

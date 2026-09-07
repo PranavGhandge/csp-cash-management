@@ -422,6 +422,14 @@
     font-size: 14px !important;
     font-weight: 600 !important;
     height: 100% !important;
+    -moz-appearance: textfield !important;
+    appearance: textfield !important;
+}
+
+.tx-note-input-wrap input[type="number"]::-webkit-outer-spin-button,
+.tx-note-input-wrap input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0 !important;
 }
 
 .tx-note-input-wrap input.tx-note-input::placeholder {

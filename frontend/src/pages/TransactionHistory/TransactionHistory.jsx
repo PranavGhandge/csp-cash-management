@@ -288,7 +288,6 @@ const TransactionHistory = () => {
                                         <td>
                                             <div className="txh-bank-cell">
                                                 <span className="txh-bank-name">{tx.bank?.bank_name}</span>
-                                                <small className="txh-csp-sub">{tx.bank?.csp_id}</small>
                                             </div>
                                         </td>
                                         <td>
