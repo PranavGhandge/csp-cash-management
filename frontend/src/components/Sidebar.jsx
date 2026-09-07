@@ -345,7 +345,7 @@ const Sidebar = ({ onCloseMobile }) => {
 
                         <h3 className="logout-modal-title">Logout Confirmation</h3>
                         <p className="logout-modal-desc">
-                            Are you sure you want to log out? Any unsaved changes will be lost and you will need to sign in again
+                            Are you sure you want to log out?
                         </p>
 
                         <div className="logout-modal-actions">
