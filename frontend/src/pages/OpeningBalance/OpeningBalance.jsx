@@ -22,17 +22,6 @@ const formatAmount = (amount) => {
     });
 };
 
-const isDateToday = (dateStr) => {
-    if (!dateStr) return false;
-    const d = new Date(dateStr);
-    const today = new Date();
-    return (
-        d.getDate() === today.getDate() &&
-        d.getMonth() === today.getMonth() &&
-        d.getFullYear() === today.getFullYear()
-    );
-};
-
 const getTodayDateStr = () => {
     const now = new Date();
     const yr = now.getFullYear();
@@ -46,7 +35,6 @@ const OpeningBalance = () => {
 
     const [banks, setBanks] = useState([]);
     const [completedBankIds, setCompletedBankIds] = useState([]);
-
     const [formData, setFormData] = useState({
         bank_id: "",
         opening_balance: ""
@@ -89,27 +77,14 @@ const OpeningBalance = () => {
             const result = await apiRequest("/api/bank");
             const bankList = result?.data || [];
             setBanks(bankList);
-
-            const localDone = loadCompletedBanks();
-            const backendDoneIds = bankList
-                .filter((b) => {
-                    const bDate = b.updatedAt || b.updated_at || b.createdAt || b.created_at;
-                    return bDate && isDateToday(bDate) && Number(b.online_balance) > 0;
-                })
-                .map((b) => String(b.id));
-
-            const mergedDone = Array.from(new Set([...localDone, ...backendDoneIds]));
-            if (mergedDone.length > localDone.length) {
-                setCompletedBankIds(mergedDone);
-                localStorage.setItem("opening_balance_banks_" + todayStr, JSON.stringify(mergedDone));
-            }
+            loadCompletedBanks();
         } catch (err) {
             console.error("Fetch banks error:", err);
             toast.error(err.message || "Failed to load bank accounts.");
         } finally {
             setFetchingBanks(false);
         }
-    }, [toast, loadCompletedBanks, todayStr]);
+    }, [toast, loadCompletedBanks]);
 
     useEffect(() => {
         fetchBanks();
