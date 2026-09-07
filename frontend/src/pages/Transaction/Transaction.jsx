@@ -12,7 +12,10 @@ import {
     CheckCircle2,
     Loader2,
     Sparkles,
-    Coins
+    Coins,
+    Lock,
+    ShieldAlert,
+    Calendar
 } from "lucide-react";
 import "./Transaction.css";
 
@@ -32,10 +35,39 @@ const notes = [
     { name: "note_10",  label: "₹10",  value: 10,  color: "#a78bfa" }
 ];
 
+const isDateToday = (dateInput) => {
+    if (!dateInput) return false;
+    const now = new Date();
+    const yr = now.getFullYear();
+    const mo = String(now.getMonth() + 1).padStart(2, "0");
+    const dy = String(now.getDate()).padStart(2, "0");
+    const todayLocal = `${yr}-${mo}-${dy}`;
+
+    if (typeof dateInput === "string") {
+        if (dateInput.startsWith(todayLocal)) return true;
+        try {
+            const d = new Date(dateInput);
+            if (!isNaN(d.getTime())) {
+                const cYr = d.getFullYear();
+                const cMo = String(d.getMonth() + 1).padStart(2, "0");
+                const cDy = String(d.getDate()).padStart(2, "0");
+                return `${cYr}-${cMo}-${cDy}` === todayLocal;
+            }
+        } catch {
+            return false;
+        }
+    }
+    return false;
+};
+
 const Transaction = () => {
     const toast = useToast();
 
     const [banks, setBanks] = useState([]);
+    const [isClosedToday, setIsClosedToday] = useState(false);
+    const [closedDate, setClosedDate] = useState("");
+    const [checkingClosing, setCheckingClosing] = useState(true);
+
     const [formData, setFormData] = useState({
         bank_id: "",
         customer_name: "",
@@ -77,9 +109,33 @@ const Transaction = () => {
         }
     }, [toast]);
 
+    const checkClosingStatus = useCallback(async () => {
+        try {
+            setCheckingClosing(true);
+            // Check closing history for today's record
+            const result = await apiRequest("/api/closing?page=1&limit=5");
+            const list = result?.data || [];
+            const todayClosing = list.find((item) => 
+                isDateToday(item.closing_date || item.createdAt || item.created_at)
+            );
+
+            if (todayClosing) {
+                setIsClosedToday(true);
+                setClosedDate(todayClosing.closing_date || "Today");
+            } else {
+                setIsClosedToday(false);
+            }
+        } catch (err) {
+            console.error("Check closing status error:", err);
+        } finally {
+            setCheckingClosing(false);
+        }
+    }, []);
+
     useEffect(() => {
         fetchBanks();
-    }, [fetchBanks]);
+        checkClosingStatus();
+    }, [fetchBanks, checkClosingStatus]);
 
     const calculateDenominationTotal = () => {
         return notes.reduce((total, note) => {
@@ -116,6 +172,8 @@ const Transaction = () => {
     };
 
     const handleChange = (e) => {
+        if (isClosedToday) return;
+
         const { name, value } = e.target;
         const formattedValue = name === "customer_name" ? formatTitleCase(value) : value;
 
@@ -131,6 +189,8 @@ const Transaction = () => {
     };
 
     const handleBlur = (e) => {
+        if (isClosedToday) return;
+
         const { name, value } = e.target;
         const formattedValue = name === "customer_name" ? formatTitleCase(value.trim()) : value;
         if (name === "customer_name") {
@@ -143,6 +203,11 @@ const Transaction = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (isClosedToday) {
+            toast.error("Transactions are locked because Cash Closing has already been completed for today.");
+            return;
+        }
 
         const formattedCustomerName = formatTitleCase(formData.customer_name.trim());
         const formErrors = {
@@ -224,15 +289,39 @@ const Transaction = () => {
                 </div>
             </div>
 
+            {/* Warning Banner if Cash is Closed Today */}
+            {isClosedToday && (
+                <div className="tx-closed-warning-banner">
+                    <div className="tx-closed-icon-wrap">
+                        <Lock size={22} />
+                    </div>
+                    <div className="tx-closed-text-content">
+                        <h4>Cash Register Closed for Today</h4>
+                        <p>
+                            Daily cash closing has already been completed for today ({closedDate}). Transaction recording is locked until the next business day (new date).
+                        </p>
+                    </div>
+                    <div className="tx-closed-badge">
+                        <ShieldAlert size={14} />
+                        <span>REGISTER CLOSED</span>
+                    </div>
+                </div>
+            )}
+
             {/* Main Form Card */}
-            <div className="tx-dark-card">
+            <div className={`tx-dark-card ${isClosedToday ? "tx-card-locked" : ""}`}>
                 <div className="tx-card-header">
                     <div className="tx-card-icon-box">
-                        <ArrowLeftRight size={20} />
+                        {isClosedToday ? <Lock size={20} style={{ color: "#ef4444" }} /> : <ArrowLeftRight size={20} />}
                     </div>
                     <div className="tx-card-title-group">
                         <h2>New Cash Transaction</h2>
                     </div>
+                    {isClosedToday && (
+                        <span className="badge badge-danger" style={{ marginLeft: "auto" }}>
+                            Locked
+                        </span>
+                    )}
                 </div>
 
                 <form onSubmit={handleSubmit} noValidate className="tx-form">
@@ -243,7 +332,7 @@ const Transaction = () => {
                             <label htmlFor="tx_bank_id">
                                 Bank <span className="tx-req-star">*</span>
                             </label>
-                            <div className={`tx-field-box ${touched.bank_id && errors.bank_id ? "has-error" : ""} ${touched.bank_id && !errors.bank_id && formData.bank_id ? "is-valid" : ""}`}>
+                            <div className={`tx-field-box ${isClosedToday ? "disabled-box" : ""} ${touched.bank_id && errors.bank_id ? "has-error" : ""} ${touched.bank_id && !errors.bank_id && formData.bank_id ? "is-valid" : ""}`}>
                                 <Landmark size={16} className="tx-field-icon" />
                                 <select
                                     id="tx_bank_id"
@@ -252,7 +341,7 @@ const Transaction = () => {
                                     value={formData.bank_id}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
-                                    disabled={fetchingBanks}
+                                    disabled={fetchingBanks || isClosedToday}
                                 >
                                     <option value="">
                                         {fetchingBanks ? "Loading banks..." : "-- Select Bank --"}
@@ -280,7 +369,7 @@ const Transaction = () => {
                             <label htmlFor="tx_customer_name">
                                 Customer Name <span className="tx-req-star">*</span>
                             </label>
-                            <div className={`tx-field-box ${touched.customer_name && errors.customer_name ? "has-error" : ""} ${touched.customer_name && !errors.customer_name && formData.customer_name ? "is-valid" : ""}`}>
+                            <div className={`tx-field-box ${isClosedToday ? "disabled-box" : ""} ${touched.customer_name && errors.customer_name ? "has-error" : ""} ${touched.customer_name && !errors.customer_name && formData.customer_name ? "is-valid" : ""}`}>
                                 <User size={16} className="tx-field-icon" />
                                 <input
                                     id="tx_customer_name"
@@ -291,6 +380,7 @@ const Transaction = () => {
                                     value={formData.customer_name}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    disabled={isClosedToday}
                                     placeholder="e.g. Ramesh Kulkarni"
                                     autoComplete="off"
                                 />
@@ -315,6 +405,7 @@ const Transaction = () => {
                             <div className="tx-type-toggle-group">
                                 <button
                                     type="button"
+                                    disabled={isClosedToday}
                                     className={`tx-type-btn ${formData.transaction_type === "WITHDRAWAL" ? "active-withdrawal" : ""}`}
                                     onClick={() => setFormData((p) => ({ ...p, transaction_type: "WITHDRAWAL" }))}
                                 >
@@ -323,6 +414,7 @@ const Transaction = () => {
                                 </button>
                                 <button
                                     type="button"
+                                    disabled={isClosedToday}
                                     className={`tx-type-btn ${formData.transaction_type === "DEPOSIT" ? "active-deposit" : ""}`}
                                     onClick={() => setFormData((p) => ({ ...p, transaction_type: "DEPOSIT" }))}
                                 >
@@ -337,7 +429,7 @@ const Transaction = () => {
                             <label htmlFor="tx_amount">
                                 Total Amount (₹) <span className="tx-req-star">*</span>
                             </label>
-                            <div className={`tx-field-box ${touched.amount && errors.amount ? "has-error" : ""} ${touched.amount && !errors.amount && formData.amount ? "is-valid" : ""}`}>
+                            <div className={`tx-field-box ${isClosedToday ? "disabled-box" : ""} ${touched.amount && errors.amount ? "has-error" : ""} ${touched.amount && !errors.amount && formData.amount ? "is-valid" : ""}`}>
                                 <IndianRupee size={16} className="tx-field-icon" />
                                 <input
                                     id="tx_amount"
@@ -347,6 +439,7 @@ const Transaction = () => {
                                     value={formData.amount}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    disabled={isClosedToday}
                                     placeholder="Enter total amount (e.g. 5000)"
                                     min="1"
                                     step="0.01"
@@ -412,6 +505,7 @@ const Transaction = () => {
                                                 className="tx-note-input"
                                                 value={formData[n.name]}
                                                 onChange={handleChange}
+                                                disabled={isClosedToday}
                                                 min="0"
                                                 step="1"
                                                 placeholder="0 pcs"
@@ -427,10 +521,15 @@ const Transaction = () => {
                     <div className="tx-actions-wrap">
                         <button
                             type="submit"
-                            className="tx-btn-submit"
-                            disabled={loading}
+                            className={`tx-btn-submit ${isClosedToday ? "disabled-locked" : ""}`}
+                            disabled={loading || isClosedToday || checkingClosing}
                         >
-                            {loading ? (
+                            {isClosedToday ? (
+                                <>
+                                    <Lock size={16} />
+                                    <span>Transactions Locked (Cash Closed for Today)</span>
+                                </>
+                            ) : loading ? (
                                 <>
                                     <Loader2 size={17} className="tx-spin-icon" />
                                     <span>Processing Transaction...</span>
