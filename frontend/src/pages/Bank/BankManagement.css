@@ -1,137 +1,492 @@
-.management-page {
-    padding: 30px;
+/* ================= Bank Management Page (Dark Cyberpunk Fintech) ================= */
+.bank-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
+    width: 100%;
+    animation: bankFadeIn 0.3s ease-out;
 }
 
-.page-header {
-    margin-bottom: 30px;
+@keyframes bankFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.page-header h1 {
+/* Header with Logo Badge */
+.bank-page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.bank-header-logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(79, 70, 229, 0.25));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #38bdf8;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
+    flex-shrink: 0;
+}
+
+.bank-header-titles {
+    flex: 1;
+}
+
+.bank-header-titles h1 {
     margin: 0;
-    font-size: 30px;
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.4px;
 }
 
-.page-header p {
-    margin-top: 8px;
-    color: #666;
+/* Dark Card (Bulletproof Scoping & Full Size) */
+.bank-dark-card {
+    background-color: #111827 !important;
+    background: #111827 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 14px;
+    padding: 30px 32px;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    overflow: hidden;
 }
 
-.form-card,
-.list-card {
-    background: white;
-    padding: 30px;
+/* Card Header */
+.bank-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.bank-card-icon-box {
+    width: 38px;
+    height: 38px;
     border-radius: 10px;
-    margin-bottom: 25px;
-}
-
-.form-card {
-    max-width: 900px;
-}
-
-.form-card h2,
-.list-card h2 {
-    margin-top: 0;
-}
-
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-}
-
-.form-group {
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.35);
+    color: #60a5fa;
     display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
 }
 
-.form-group label {
-    margin-bottom: 8px;
-    font-weight: 600;
+.bank-card-title-group h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
 }
 
-.form-group input {
-    padding: 11px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-}
-
-.form-card button {
-    padding: 11px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.form-card button:disabled {
-    cursor: not-allowed;
-}
-
-.success-message {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 6px;
-    background: #e8f5e9;
-}
-
-.error-message {
-    margin-bottom: 15px;
-    padding: 10px;
-    border-radius: 6px;
-    background: #ffebee;
-}
-
-.list-header {
-    margin-bottom: 20px;
-}
-
-.list-header p {
-    color: #666;
-}
-
-.bank-list {
+.bank-header-flex {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
     gap: 12px;
 }
 
-.bank-item {
+.bank-count-pill {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+    letter-spacing: 0.2px;
+}
+
+/* Form Layout */
+.bank-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.bank-fields-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.bank-form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.bank-form-group label {
+    margin-bottom: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.bank-req-star {
+    color: #f43f5e;
+    font-size: 13px;
+    line-height: 1;
+}
+
+/* Field Container (Flex with Icon + Input) */
+.bank-field-box {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: #090d16 !important;
+    background: #090d16 !important;
+    border: 1px solid #222f43 !important;
+    border-radius: 9px;
+    padding: 0 12px;
+    height: 44px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset;
+}
+
+.bank-field-icon {
+    color: #64748b;
+    flex-shrink: 0;
+    transition: color 0.2s ease;
+}
+
+/* Overriding any global input styling with high specificity */
+.bank-field-box input.bank-real-input,
+.bank-field-box input[type="text"].bank-real-input {
+    flex: 1 !important;
+    width: 100% !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #ffffff !important;
+    font-size: 13.5px !important;
+    font-family: inherit !important;
+    height: 100% !important;
+    border-radius: 0 !important;
+}
+
+.bank-field-box input.bank-real-input::placeholder {
+    color: #475569 !important;
+    font-size: 13px !important;
+}
+
+/* Focus State */
+.bank-field-box:focus-within {
+    border-color: #3b82f6 !important;
+    background-color: #0d1424 !important;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), 0 0 14px rgba(59, 130, 246, 0.1) !important;
+}
+
+.bank-field-box:focus-within .bank-field-icon {
+    color: #60a5fa;
+}
+
+/* Error State */
+.bank-field-box.has-error {
+    border-color: #ef4444 !important;
+    background-color: rgba(239, 68, 68, 0.05) !important;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.18) !important;
+}
+
+.bank-field-box.has-error .bank-field-icon {
+    color: #f87171;
+}
+
+/* Valid State */
+.bank-field-box.is-valid {
+    border-color: #10b981 !important;
+}
+
+.bank-field-box.is-valid .bank-field-icon {
+    color: #34d399;
+}
+
+.bank-check-icon {
+    color: #10b981;
+    flex-shrink: 0;
+    animation: bankCheckPop 0.2s ease-out;
+}
+
+@keyframes bankCheckPop {
+    from {
+        transform: scale(0.6);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Error Text */
+.bank-error-text {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    color: #f87171;
+    font-size: 11.5px;
+    font-weight: 500;
+    animation: bankErrorSlide 0.2s ease-out;
+}
+
+@keyframes bankErrorSlide {
+    from {
+        opacity: 0;
+        transform: translateY(-3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Action Button */
+.bank-actions-wrap {
+    margin-top: 6px;
+    padding-top: 18px;
+    border-top: 1px solid #1e293b;
+    display: flex;
+}
+
+.bank-btn-submit {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #4f46e5 100%) !important;
+    color: #ffffff !important;
+    padding: 11px 26px;
+    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bank-btn-submit::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -70%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(
+        to right,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.25) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(30deg);
+    transition: all 0.75s ease;
+    pointer-events: none;
+}
+
+.bank-btn-submit:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.55), 0 0 16px rgba(99, 102, 241, 0.3);
+    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #4338ca 100%) !important;
+}
+
+.bank-btn-submit:hover:not(:disabled)::after {
+    left: 130%;
+}
+
+.bank-btn-submit:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+}
+
+.bank-btn-submit:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.bank-spin-icon {
+    animation: bankSpin 0.9s linear infinite;
+}
+
+@keyframes bankSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Bank Records Grid */
+.bank-records-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+}
+
+.bank-record-item {
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 18px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    gap: 16px;
+    transition: all 0.2s ease;
 }
 
-.bank-item h3 {
-    margin: 0 0 6px;
+.bank-record-item:hover {
+    border-color: #334155;
+    background: #0c1220;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
 }
 
-.bank-item p {
-    margin: 0;
-    color: #666;
+.bank-item-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.bank-balance {
+.bank-item-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #60a5fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bank-item-meta h3 {
+    margin: 0 0 4px;
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.2px;
+}
+
+.bank-csp-tag {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.bank-csp-tag strong {
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.bank-item-balance {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    flex-shrink: 0;
 }
 
-.bank-balance span {
-    font-size: 13px;
-    color: #666;
+.bank-item-balance .balance-label {
+    font-size: 11.5px;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
-.bank-balance strong {
-    margin-top: 5px;
-    font-size: 20px;
+.bank-item-balance .balance-value {
+    font-size: 17px;
+    font-weight: 800;
+    color: #34d399;
+    letter-spacing: -0.2px;
+    margin-top: 3px;
 }
 
-.empty-state {
-    padding: 30px;
+/* Loading & Empty State */
+.bank-loading-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 36px;
+    color: #94a3b8;
+    font-size: 13.5px;
+}
+
+.bank-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 20px;
     text-align: center;
-    color: #777;
+    color: #94a3b8;
+}
+
+.bank-empty-state p {
+    margin: 0 0 4px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.bank-empty-state span {
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+    .bank-dark-card {
+        padding: 20px 16px;
+    }
+
+    .bank-fields-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .bank-records-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .bank-btn-submit {
+        width: 100%;
+    }
 }

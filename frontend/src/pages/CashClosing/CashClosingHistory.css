@@ -1,75 +1,451 @@
-.cash-closing-history-page {
-    padding: 24px;
+/* ================= Cash Closing History (Dark Cyberpunk Fintech) ================= */
+.cch-page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 100%;
+    width: 100%;
+    animation: cchFadeIn 0.3s ease-out;
 }
 
-.page-header {
-    margin-bottom: 24px;
+@keyframes cchFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.page-header h1 {
+/* Header with Logo Badge */
+.cch-page-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+.cch-header-logo-badge {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(79, 70, 229, 0.25));
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #38bdf8;
+    box-shadow: 0 0 16px rgba(59, 130, 246, 0.2);
+    flex-shrink: 0;
+}
+
+.cch-header-titles {
+    flex: 1;
+}
+
+.cch-header-titles h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 26px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.4px;
 }
 
-.page-header p {
-    margin-top: 6px;
-    color: #666;
+/* Dark Card */
+.cch-dark-card {
+    background-color: #111827 !important;
+    background: #111827 !important;
+    border: 1px solid #1e293b !important;
+    border-radius: 14px;
+    padding: 24px 28px;
+    max-width: 100%;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+    overflow: hidden;
 }
 
-.error-message {
-    padding: 12px 16px;
-    border-radius: 6px;
+/* Table Header Row */
+.cch-table-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    background: #ffe5e5;
-    color: #c62828;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #1e293b;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
-.closing-history-card {
-    background: white;
-    border: 1px solid #e5e5e5;
-    border-radius: 10px;
-    padding: 20px;
+.cch-table-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cch-table-title-wrap h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.cch-records-pill {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(59, 130, 246, 0.15);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    color: #93c5fd;
+}
+
+/* Table */
+.cch-table-wrapper {
     overflow-x: auto;
 }
 
-.closing-history-card table {
+.cch-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.closing-history-card th,
-.closing-history-card td {
-    padding: 14px 12px;
+.cch-table th {
+    padding: 12px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: #090d16;
+    border-bottom: 1px solid #1e293b;
     text-align: left;
-    border-bottom: 1px solid #eee;
+    white-space: nowrap;
 }
 
-.closing-history-card th {
+.cch-table td {
+    padding: 14px 14px;
+    font-size: 13.5px;
+    color: #f1f5f9;
+    border-bottom: 1px solid #1a2333;
+    vertical-align: middle;
+}
+
+.cch-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.cch-table tbody tr:hover {
+    background-color: #0c1220;
+}
+
+.cch-date-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #ffffff;
+}
+
+.cch-num-cell {
+    font-weight: 700;
     font-size: 14px;
-    color: #555;
-    background: #f8f8f8;
 }
 
-.closing-history-card td {
+.cch-num-cell.emerald {
+    color: #34d399;
+}
+
+/* Difference Tag */
+.cch-diff-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.cch-diff-tag.emerald {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+}
+
+.cch-diff-tag.rose {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+}
+
+.cch-diff-tag.amber {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+}
+
+/* Status Pill */
+.cch-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.cch-status-pill.matched {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.cch-status-pill.short {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.cch-status-pill.excess {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+/* View Button */
+.cch-btn-view {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(59, 130, 246, 0.15) !important;
+    border: 1px solid rgba(59, 130, 246, 0.35) !important;
+    color: #93c5fd !important;
+    padding: 5px 12px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cch-btn-view:hover {
+    background: #2563eb !important;
+    color: #ffffff !important;
+    border-color: #2563eb !important;
+    box-shadow: 0 0 12px rgba(37, 99, 235, 0.4);
+}
+
+/* Loading & Empty State */
+.cch-loading-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 48px;
+    color: #94a3b8;
+    font-size: 13.5px;
+}
+
+.cch-spin-icon {
+    animation: cchSpin 0.9s linear infinite;
+    color: #38bdf8;
+}
+
+@keyframes cchSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.cch-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 20px;
+    text-align: center;
+    color: #94a3b8;
+}
+
+.cch-empty-state p {
+    margin: 0 0 4px;
+    font-size: 14.5px;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.cch-empty-state span {
+    font-size: 12.5px;
+    color: #64748b;
+}
+
+/* Modal Backdrop & Card */
+.cch-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    z-index: 1000;
+    animation: cchModalFade 0.2s ease-out;
+}
+
+@keyframes cchModalFade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.cch-modal-card {
+    width: 100%;
+    max-width: 620px;
+    max-height: 90vh;
+    overflow-y: auto;
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 14px;
+    padding: 26px 28px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.8);
+    position: relative;
+}
+
+.cch-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 16px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #1e293b;
+}
+
+.cch-modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.cch-modal-title h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.cch-modal-date-sub {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.cch-modal-close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.cch-modal-close-btn:hover {
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* 4-Box Summary Grid */
+.cch-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.cch-sum-box {
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.cch-sum-label {
+    font-size: 11.5px;
+    color: #64748b;
+    font-weight: 600;
+}
+
+.cch-sum-val {
+    font-size: 16px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.cch-sum-val.emerald {
+    color: #34d399;
+}
+
+.cch-sum-val.rose {
+    color: #f87171;
+}
+
+.cch-sum-val.amber {
+    color: #fbbf24;
+}
+
+/* Notes Breakdown */
+.cch-notes-breakdown-section h4 {
+    margin: 0 0 14px;
     font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.closing-history-card tbody tr:hover {
-    background: #fafafa;
+.cch-notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
 }
 
-@media (max-width: 700px) {
-    .cash-closing-history-page {
-        padding: 16px;
-    }
+.cch-note-box {
+    background: #090d16;
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
 
-    .closing-history-card {
-        padding: 10px;
-    }
+.cch-note-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    .closing-history-card th,
-    .closing-history-card td {
-        padding: 10px 8px;
-        white-space: nowrap;
-    }
+.cch-note-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid;
+}
+
+.cch-note-count {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+.cch-note-subtotal {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: #ffffff;
 }

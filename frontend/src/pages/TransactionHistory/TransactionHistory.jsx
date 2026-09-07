@@ -1,23 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import apiRequest from "../../services/api";
+import { useToast } from "../../context/ToastContext";
+import {
+    History,
+    Search,
+    RotateCcw,
+    Eye,
+    X,
+    Banknote,
+    Landmark,
+    User,
+    ArrowUpRight,
+    ArrowDownLeft,
+    Calendar,
+    Loader2,
+    RefreshCw,
+    Shield
+} from "lucide-react";
 import "./TransactionHistory.css";
 
 const notes = [
-    { name: "note_500", label: "₹500", value: 500 },
-    { name: "note_200", label: "₹200", value: 200 },
-    { name: "note_100", label: "₹100", value: 100 },
-    { name: "note_50", label: "₹50", value: 50 },
-    { name: "note_20", label: "₹20", value: 20 },
-    { name: "note_10", label: "₹10", value: 10 }
+    { name: "note_500", label: "₹500 Note", value: 500, color: "#34d399" },
+    { name: "note_200", label: "₹200 Note", value: 200, color: "#fb923c" },
+    { name: "note_100", label: "₹100 Note", value: 100, color: "#818cf8" },
+    { name: "note_50", label: "₹50 Note", value: 50, color: "#22d3ee" },
+    { name: "note_20", label: "₹20 Note", value: 20, color: "#f472b6" },
+    { name: "note_10", label: "₹10 Note", value: 10, color: "#a78bfa" }
 ];
 
+const formatAmount = (amount) => {
+    return Number(amount || 0).toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+};
+
 const TransactionHistory = () => {
+    const toast = useToast();
+
     const [transactions, setTransactions] = useState([]);
-
     const [banks, setBanks] = useState([]);
-
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
 
     const [search, setSearch] = useState("");
     const [transactionType, setTransactionType] = useState("");
@@ -25,32 +48,25 @@ const TransactionHistory = () => {
 
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
-
     const [totalPages, setTotalPages] = useState(1);
 
-    const [selectedTransaction, setSelectedTransaction] =
-        useState(null);
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
+    const [detailsLoading, setDetailsLoading] = useState(false);
 
-    const [detailsLoading, setDetailsLoading] =
-        useState(false);
-
-    const fetchBanks = async () => {
+    const fetchBanks = useCallback(async () => {
         try {
             const result = await apiRequest("/api/bank");
-
-            setBanks(result.data || []);
-        } catch (error) {
-            console.error("Fetch banks error:", error);
+            setBanks(result?.data || []);
+        } catch (err) {
+            console.error("Fetch banks error:", err);
         }
-    };
+    }, []);
 
-    const fetchTransactions = async () => {
+    const fetchTransactions = useCallback(async () => {
         try {
             setLoading(true);
-            setError("");
 
             const params = new URLSearchParams();
-
             params.append("page", page);
             params.append("limit", limit);
 
@@ -59,54 +75,37 @@ const TransactionHistory = () => {
             }
 
             if (transactionType) {
-                params.append(
-                    "transaction_type",
-                    transactionType
-                );
+                params.append("transaction_type", transactionType);
             }
 
             if (bankId) {
                 params.append("bank_id", bankId);
             }
 
-            const result = await apiRequest(
-                `/api/transaction?${params.toString()}`
-            );
+            const result = await apiRequest(`/api/transaction?${params.toString()}`);
+            setTransactions(result?.data || []);
+            const count = result?.data?.length || 0;
+            setTotalPages(Math.max(1, Math.ceil(count / limit)));
 
-            setTransactions(result.data || []);
-
-            const count = result.data?.length || 0;
-
-            setTotalPages(
-                Math.max(1, Math.ceil(count / limit))
-            );
-
-        } catch (error) {
-            console.error(
-                "Fetch transactions error:",
-                error
-            );
-
-            setError(error.message);
-
+        } catch (err) {
+            console.error("Fetch transactions error:", err);
+            toast.error(err.message || "Failed to load transactions.");
         } finally {
             setLoading(false);
         }
-    };
+    }, [page, limit, search, transactionType, bankId, toast]);
 
     useEffect(() => {
         fetchBanks();
-    }, []);
+    }, [fetchBanks]);
 
     useEffect(() => {
         fetchTransactions();
-    }, [page, transactionType, bankId]);
+    }, [fetchTransactions]);
 
     const handleSearch = (e) => {
         e.preventDefault();
-
         setPage(1);
-
         fetchTransactions();
     };
 
@@ -120,22 +119,11 @@ const TransactionHistory = () => {
     const handleViewDetails = async (id) => {
         try {
             setDetailsLoading(true);
-            setError("");
-
-            const result = await apiRequest(
-                `/api/transaction/${id}`
-            );
-
-            setSelectedTransaction(result.data);
-
-        } catch (error) {
-            console.error(
-                "Fetch transaction details error:",
-                error
-            );
-
-            setError(error.message);
-
+            const result = await apiRequest(`/api/transaction/${id}`);
+            setSelectedTransaction(result?.data);
+        } catch (err) {
+            console.error("Fetch transaction details error:", err);
+            toast.error(err.message || "Failed to load transaction details.");
         } finally {
             setDetailsLoading(false);
         }
@@ -143,574 +131,351 @@ const TransactionHistory = () => {
 
     const formatDate = (date) => {
         if (!date) return "-";
-
-        return new Date(date).toLocaleString(
-            "en-IN"
-        );
+        return new Date(date).toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true
+        });
     };
 
     return (
-        <div className="transaction-history-page">
-
-            {/* Header */}
-
-            <div className="page-header">
-
-                <div>
-                    <h1>
-                        Transaction History
-                    </h1>
-
-                    <p>
-                        View all transactions and
-                        denomination details
-                    </p>
+        <div className="txh-page-container">
+            {/* Header with Logo Badge */}
+            <div className="txh-page-header">
+                <div className="txh-header-logo-badge">
+                    <History size={24} />
                 </div>
-
+                <div className="txh-header-titles">
+                    <h1>Transaction History</h1>
+                </div>
             </div>
 
-
-            {/* Filters */}
-
-            <div className="filter-card">
-
-                <form
-                    onSubmit={handleSearch}
-                    className="filter-form"
-                >
-
-                    <div className="filter-group">
-
-                        <label>
-                            Search
-                        </label>
-
-                        <input
-                            type="text"
-                            value={search}
-                            onChange={(e) =>
-                                setSearch(e.target.value)
-                            }
-                            placeholder="Customer / transaction number"
-                        />
-
+            {/* Filter Bar Card */}
+            <div className="txh-dark-card txh-filter-card">
+                <form onSubmit={handleSearch} className="txh-filter-form">
+                    {/* Search Field */}
+                    <div className="txh-filter-group">
+                        <label htmlFor="txh_search">Search</label>
+                        <div className="txh-input-box">
+                            <Search size={15} className="txh-field-icon" />
+                            <input
+                                id="txh_search"
+                                type="text"
+                                className="txh-real-input"
+                                value={search}
+                                onChange={(e) => setSearch(e.target.value)}
+                                placeholder="Customer name or ref..."
+                            />
+                        </div>
                     </div>
 
-
-                    <div className="filter-group">
-
-                        <label>
-                            Transaction Type
-                        </label>
-
-                        <select
-                            value={transactionType}
-                            onChange={(e) => {
-                                setTransactionType(
-                                    e.target.value
-                                );
-                                setPage(1);
-                            }}
-                        >
-
-                            <option value="">
-                                All
-                            </option>
-
-                            <option value="WITHDRAWAL">
-                                Withdrawal
-                            </option>
-
-                            <option value="DEPOSIT">
-                                Deposit
-                            </option>
-
-                        </select>
-
+                    {/* Transaction Type Filter */}
+                    <div className="txh-filter-group">
+                        <label htmlFor="txh_type">Transaction Type</label>
+                        <div className="txh-input-box">
+                            <select
+                                id="txh_type"
+                                className="txh-real-select"
+                                value={transactionType}
+                                onChange={(e) => {
+                                    setTransactionType(e.target.value);
+                                    setPage(1);
+                                }}
+                            >
+                                <option value="">All Types</option>
+                                <option value="WITHDRAWAL">Withdrawal (Cash Out)</option>
+                                <option value="DEPOSIT">Deposit (Cash In)</option>
+                            </select>
+                        </div>
                     </div>
 
-
-                    <div className="filter-group">
-
-                        <label>
-                            Bank
-                        </label>
-
-                        <select
-                            value={bankId}
-                            onChange={(e) => {
-                                setBankId(e.target.value);
-                                setPage(1);
-                            }}
-                        >
-
-                            <option value="">
-                                All Banks
-                            </option>
-
-                            {banks.map((bank) => (
-
-                                <option
-                                    key={bank.id}
-                                    value={bank.id}
-                                >
-                                    {bank.bank_name}
-                                </option>
-
-                            ))}
-
-                        </select>
-
+                    {/* Bank Filter */}
+                    <div className="txh-filter-group">
+                        <label htmlFor="txh_bank">Bank</label>
+                        <div className="txh-input-box">
+                            <Landmark size={15} className="txh-field-icon" />
+                            <select
+                                id="txh_bank"
+                                className="txh-real-select"
+                                value={bankId}
+                                onChange={(e) => {
+                                    setBankId(e.target.value);
+                                    setPage(1);
+                                }}
+                            >
+                                <option value="">All Banks</option>
+                                {banks.map((b) => (
+                                    <option key={b.id} value={b.id}>
+                                        {b.bank_name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
                     </div>
 
-
-                    <div className="filter-actions">
-
-                        <button type="submit">
-                            Search
+                    {/* Actions */}
+                    <div className="txh-filter-actions">
+                        <button type="submit" className="txh-btn-search">
+                            <Search size={14} />
+                            <span>Filter</span>
                         </button>
-
                         <button
                             type="button"
                             onClick={handleReset}
-                            className="reset-button"
+                            className="txh-btn-reset"
+                            title="Reset all filters"
                         >
-                            Reset
+                            <RotateCcw size={14} />
+                            <span>Reset</span>
                         </button>
-
                     </div>
-
                 </form>
-
             </div>
 
-
-            {/* Error */}
-
-            {error && (
-                <div className="error-message">
-                    {error}
+            {/* Table Card */}
+            <div className="txh-dark-card">
+                <div className="txh-table-header-row">
+                    <div className="txh-table-title-wrap">
+                        <History size={18} style={{ color: "#38bdf8" }} />
+                        <h2>Audit Records</h2>
+                    </div>
+                    <span className="txh-records-pill">
+                        {transactions.length} Records Found
+                    </span>
                 </div>
-            )}
-
-
-            {/* Table */}
-
-            <div className="table-card">
 
                 {loading ? (
-
-                    <div className="loading">
-                        Loading transactions...
+                    <div className="txh-loading-box">
+                        <RefreshCw size={22} className="txh-spin-icon" />
+                        <span>Loading transaction audit records...</span>
                     </div>
-
                 ) : transactions.length === 0 ? (
-
-                    <div className="empty-state">
-                        No transactions found.
+                    <div className="txh-empty-state">
+                        <History size={36} style={{ color: "#475569", marginBottom: "8px" }} />
+                        <p>No transaction records found.</p>
+                        <span>Transactions processed at the counter will appear here in real time.</span>
                     </div>
-
                 ) : (
-
-                    <div className="table-wrapper">
-
-                        <table>
-
+                    <div className="txh-table-wrapper">
+                        <table className="txh-table">
                             <thead>
-
                                 <tr>
-                                    <th>
-                                        Customer
-                                    </th>
-
-                                    <th>
-                                        Bank
-                                    </th>
-
-                                    <th>
-                                        Type
-                                    </th>
-
-                                    <th>
-                                        Amount
-                                    </th>
-
-                                    <th>
-                                        Operator
-                                    </th>
-
-                                    <th>
-                                        Date
-                                    </th>
-
-                                    <th>
-                                        Action
-                                    </th>
+                                    <th>Customer</th>
+                                    <th>Bank</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                    <th>Operator</th>
+                                    <th>Date & Time</th>
+                                    <th style={{ textAlign: "center" }}>Action</th>
                                 </tr>
-
                             </thead>
-
                             <tbody>
-
-                                {transactions.map(
-                                    (transaction) => (
-
-                                        <tr
-                                            key={
-                                                transaction.id
-                                            }
-                                        >
-
-                                            <td>
-                                                {
-                                                    transaction.customer_name
-                                                }
-                                            </td>
-
-                                            <td>
-                                                {
-                                                    transaction.bank
-                                                        ?.bank_name
-                                                }
-                                            </td>
-
-                                            <td>
-
-                                                <span
-                                                    className={
-                                                        transaction.transaction_type ===
-                                                            "WITHDRAWAL"
-                                                            ? "type-withdrawal"
-                                                            : "type-deposit"
-                                                    }
-                                                >
-                                                    {
-                                                        transaction.transaction_type
-                                                    }
-                                                </span>
-
-                                            </td>
-
-                                            <td className="amount">
-
-                                                ₹
-                                                {Number(
-                                                    transaction.amount
-                                                ).toLocaleString(
-                                                    "en-IN"
+                                {transactions.map((tx) => (
+                                    <tr key={tx.id}>
+                                        <td>
+                                            <div className="txh-customer-cell">
+                                                <div className="txh-user-avatar">
+                                                    <User size={13} />
+                                                </div>
+                                                <strong className="txh-customer-name">
+                                                    {tx.customer_name}
+                                                </strong>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div className="txh-bank-cell">
+                                                <span className="txh-bank-name">{tx.bank?.bank_name}</span>
+                                                <small className="txh-csp-sub">{tx.bank?.csp_id}</small>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span
+                                                className={`txh-type-badge ${tx.transaction_type === "WITHDRAWAL" ? "type-withdrawal" : "type-deposit"}`}
+                                            >
+                                                {tx.transaction_type === "WITHDRAWAL" ? (
+                                                    <ArrowUpRight size={12} />
+                                                ) : (
+                                                    <ArrowDownLeft size={12} />
                                                 )}
-
-                                            </td>
-
-                                            <td>
-                                                {
-                                                    transaction.operator
-                                                        ?.first_name
-                                                }{" "}
-                                                {
-                                                    transaction.operator
-                                                        ?.last_name
-                                                }
-                                            </td>
-
-                                            <td>
-                                                {formatDate(
-                                                    transaction.transaction_date
-                                                )}
-                                            </td>
-
-                                            <td>
-
-                                                <button
-                                                    className="view-button"
-                                                    onClick={() =>
-                                                        handleViewDetails(
-                                                            transaction.id
-                                                        )
-                                                    }
-                                                >
-                                                    View
-                                                </button>
-
-                                            </td>
-
-                                        </tr>
-
-                                    )
-                                )}
-
+                                                <span>{tx.transaction_type}</span>
+                                            </span>
+                                        </td>
+                                        <td className="txh-amount-cell">
+                                            <strong
+                                                style={{
+                                                    color: tx.transaction_type === "WITHDRAWAL" ? "#f87171" : "#34d399"
+                                                }}
+                                            >
+                                                ₹{formatAmount(tx.amount)}
+                                            </strong>
+                                        </td>
+                                        <td>
+                                            <span className="txh-operator-name">
+                                                {tx.operator?.first_name} {tx.operator?.last_name || ""}
+                                            </span>
+                                        </td>
+                                        <td className="txh-date-cell">
+                                            <div className="txh-date-wrap">
+                                                <Calendar size={13} style={{ color: "#64748b" }} />
+                                                <span>{formatDate(tx.transaction_date)}</span>
+                                            </div>
+                                        </td>
+                                        <td style={{ textAlign: "center" }}>
+                                            <button
+                                                className="txh-btn-view"
+                                                onClick={() => handleViewDetails(tx.id)}
+                                                title="View Denominations & Audit Details"
+                                            >
+                                                <Eye size={13} />
+                                                <span>View</span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
-
                         </table>
-
                     </div>
-
                 )}
 
-            </div>
-
-
-            {/* Pagination */}
-
-            {!loading &&
-                transactions.length > 0 && (
-
-                    <div className="pagination">
-
+                {/* Pagination */}
+                {!loading && transactions.length > 0 && (
+                    <div className="txh-pagination">
                         <button
+                            className="txh-page-btn"
                             disabled={page <= 1}
-                            onClick={() =>
-                                setPage((prev) =>
-                                    prev - 1
-                                )
-                            }
+                            onClick={() => setPage((prev) => prev - 1)}
                         >
                             Previous
                         </button>
-
-                        <span>
-                            Page {page} of{" "}
-                            {totalPages}
+                        <span className="txh-page-info">
+                            Page <strong>{page}</strong> of <strong>{totalPages}</strong>
                         </span>
-
                         <button
-                            disabled={
-                                page >= totalPages
-                            }
-                            onClick={() =>
-                                setPage((prev) =>
-                                    prev + 1
-                                )
-                            }
+                            className="txh-page-btn"
+                            disabled={page >= totalPages}
+                            onClick={() => setPage((prev) => prev + 1)}
                         >
                             Next
                         </button>
-
                     </div>
                 )}
-
+            </div>
 
             {/* Details Modal */}
-
-            {(selectedTransaction ||
-                detailsLoading) && (
-
-                    <div className="modal-overlay">
-
-                        <div className="transaction-modal">
-
-                            {detailsLoading ? (
-
-                                <p>
-                                    Loading details...
-                                </p>
-
-                            ) : (
-
-                                <>
-                                    <div className="modal-header">
-
-                                        <h2>
-                                            Transaction Details
-                                        </h2>
-
-                                        <button
-                                            onClick={() =>
-                                                setSelectedTransaction(
-                                                    null
-                                                )
-                                            }
-                                        >
-                                            ×
-                                        </button>
-
+            {(selectedTransaction || detailsLoading) && (
+                <div className="txh-modal-backdrop" onClick={() => setSelectedTransaction(null)}>
+                    <div className="txh-modal-card" onClick={(e) => e.stopPropagation()}>
+                        {detailsLoading ? (
+                            <div className="txh-modal-loading">
+                                <Loader2 size={24} className="txh-spin-icon" />
+                                <span>Loading details...</span>
+                            </div>
+                        ) : (
+                            <>
+                                <div className="txh-modal-header">
+                                    <div className="txh-modal-title">
+                                        <Shield size={20} style={{ color: "#38bdf8" }} />
+                                        <h3>Transaction Details</h3>
                                     </div>
+                                    <button
+                                        className="txh-modal-close-btn"
+                                        onClick={() => setSelectedTransaction(null)}
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                </div>
 
+                                <div className="txh-modal-body">
+                                    {/* Meta grid */}
+                                    <div className="txh-meta-grid">
+                                        <div className="txh-meta-item">
+                                            <span className="txh-meta-label">Customer Name</span>
+                                            <strong className="txh-meta-val">{selectedTransaction.customer_name}</strong>
+                                        </div>
 
-                                    <div className="details-grid">
+                                        <div className="txh-meta-item">
+                                            <span className="txh-meta-label">Bank & CSP</span>
+                                            <strong className="txh-meta-val">{selectedTransaction.bank?.bank_name} ({selectedTransaction.bank?.csp_id})</strong>
+                                        </div>
 
-                                        <div>
-                                            <span>
-                                                Customer
+                                        <div className="txh-meta-item">
+                                            <span className="txh-meta-label">Type</span>
+                                            <span
+                                                className={`txh-type-badge ${selectedTransaction.transaction_type === "WITHDRAWAL" ? "type-withdrawal" : "type-deposit"}`}
+                                                style={{ display: "inline-flex", width: "fit-content" }}
+                                            >
+                                                {selectedTransaction.transaction_type}
                                             </span>
+                                        </div>
 
-                                            <strong>
-                                                {
-                                                    selectedTransaction.customer_name
-                                                }
+                                        <div className="txh-meta-item">
+                                            <span className="txh-meta-label">Total Amount</span>
+                                            <strong
+                                                className="txh-meta-val"
+                                                style={{
+                                                    fontSize: "18px",
+                                                    color: selectedTransaction.transaction_type === "WITHDRAWAL" ? "#f87171" : "#34d399"
+                                                }}
+                                            >
+                                                ₹{formatAmount(selectedTransaction.amount)}
                                             </strong>
                                         </div>
 
-
-                                        <div>
-                                            <span>
-                                                Bank
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    selectedTransaction.bank
-                                                        ?.bank_name
-                                                }
+                                        <div className="txh-meta-item">
+                                            <span className="txh-meta-label">Processed By</span>
+                                            <strong className="txh-meta-val">
+                                                {selectedTransaction.operator?.first_name} {selectedTransaction.operator?.last_name || ""}
                                             </strong>
                                         </div>
 
-
-                                        <div>
-                                            <span>
-                                                CSP ID
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    selectedTransaction.bank
-                                                        ?.csp_id
-                                                }
-                                            </strong>
+                                        <div className="txh-meta-item">
+                                            <span className="txh-meta-label">Timestamp</span>
+                                            <strong className="txh-meta-val">{formatDate(selectedTransaction.transaction_date)}</strong>
                                         </div>
-
-
-                                        <div>
-                                            <span>
-                                                Type
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    selectedTransaction.transaction_type
-                                                }
-                                            </strong>
-                                        </div>
-
-
-                                        <div>
-                                            <span>
-                                                Amount
-                                            </span>
-
-                                            <strong>
-                                                ₹
-                                                {Number(
-                                                    selectedTransaction.amount
-                                                ).toLocaleString(
-                                                    "en-IN"
-                                                )}
-                                            </strong>
-                                        </div>
-
-
-                                        <div>
-                                            <span>
-                                                Operator
-                                            </span>
-
-                                            <strong>
-                                                {
-                                                    selectedTransaction.operator
-                                                        ?.first_name
-                                                }{" "}
-                                                {
-                                                    selectedTransaction.operator
-                                                        ?.last_name
-                                                }
-                                            </strong>
-                                        </div>
-
-
-                                        <div>
-                                            <span>
-                                                Date
-                                            </span>
-
-                                            <strong>
-                                                {formatDate(
-                                                    selectedTransaction.transaction_date
-                                                )}
-                                            </strong>
-                                        </div>
-
                                     </div>
-
 
                                     {/* Denominations */}
-
-                                    <div className="modal-denominations">
-
-                                        <h3>
-                                            Denominations
-                                        </h3>
+                                    <div className="txh-modal-notes-section">
+                                        <h4>
+                                            <Banknote size={16} style={{ color: "#34d399" }} />
+                                            <span>Note Denomination Breakdown</span>
+                                        </h4>
 
                                         {selectedTransaction.denominations ? (
-
-                                            <div className="modal-note-list">
-
-                                                {notes.map((note) => {
-
-                                                    const count =
-                                                        Number(
-                                                            selectedTransaction
-                                                                .denominations[
-                                                            note.name
-                                                            ]
-                                                        ) || 0;
-
-                                                    if (count === 0) {
-                                                        return null;
-                                                    }
+                                            <div className="txh-modal-notes-grid">
+                                                {notes.map((n) => {
+                                                    const count = Number(selectedTransaction.denominations[n.name]) || 0;
+                                                    if (count === 0) return null;
+                                                    const subtotal = count * n.value;
 
                                                     return (
-                                                        <div
-                                                            key={
-                                                                note.name
-                                                            }
-                                                            className="modal-note-row"
-                                                        >
-
-                                                            <span>
-                                                                {note.label}
+                                                        <div className="txh-modal-note-box" key={n.name}>
+                                                            <span className="txh-modal-note-tag" style={{ color: n.color, borderColor: `${n.color}40`, background: `${n.color}15` }}>
+                                                                {n.label}
                                                             </span>
-
-                                                            <span>
-                                                                × {count}
+                                                            <span className="txh-modal-note-count">
+                                                                × {count} pcs
                                                             </span>
-
-                                                            <strong>
-                                                                ₹
-                                                                {(
-                                                                    count *
-                                                                    note.value
-                                                                ).toLocaleString(
-                                                                    "en-IN"
-                                                                )}
+                                                            <strong className="txh-modal-note-sub">
+                                                                ₹{subtotal.toLocaleString("en-IN")}
                                                             </strong>
-
                                                         </div>
                                                     );
-
                                                 })}
-
                                             </div>
-
                                         ) : (
-
-                                            <p>
-                                                No denomination
-                                                details available.
-                                            </p>
-
+                                            <p className="txh-no-notes">No denomination data attached to this record.</p>
                                         )}
-
                                     </div>
-
-                                </>
-
-                            )}
-
-                        </div>
-
+                                </div>
+                            </>
+                        )}
                     </div>
-                )}
-
+                </div>
+            )}
         </div>
     );
 };
