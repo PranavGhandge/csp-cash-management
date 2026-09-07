@@ -224,10 +224,10 @@
     flex-direction: column;
 }
 
-/* Notes Grid (6 denominations) */
+/* Notes Grid (3x2 layout: 3 columns, 2 rows) */
 .cc-notes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 24px;
 }
@@ -463,6 +463,10 @@
 /* Responsive */
 @media (max-width: 960px) {
     .cc-kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cc-notes-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }

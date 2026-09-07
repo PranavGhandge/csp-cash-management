@@ -66,7 +66,13 @@
     width: 100%;
     position: relative;
     box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-    overflow: hidden;
+    overflow: visible !important;
+}
+
+.txh-filter-card {
+    overflow: visible !important;
+    position: relative;
+    z-index: 50;
 }
 
 /* Filter Card */
@@ -75,6 +81,7 @@
     grid-template-columns: 1.6fr 1.1fr 1.1fr 1.1fr auto;
     gap: 12px;
     align-items: flex-end;
+    overflow: visible !important;
 }
 
 .txh-input-box input[type="date"].txh-real-input {
@@ -85,6 +92,8 @@
 .txh-filter-group {
     display: flex;
     flex-direction: column;
+    position: relative;
+    overflow: visible !important;
 }
 
 .txh-filter-group label {
