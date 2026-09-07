@@ -1,33 +1,64 @@
-import { Op } from "sequelize";
+﻿import { Op } from "sequelize";
 import Transactions from "../model/transactions.model";
 import Banks from "../model/banks.model";
-import PhysicalCashBalances from "../model/physical-cash-balances.model";
 import CashClosings from "../model/cash-closings.model";
 import PhysicalCashOpenings from "../model/physical-cash-openings.model";
+import OpeningBalances from "../model/opening-balances.model";
 
 class DashboardRepository {
 
-    async getPhysicalCash(admin_id: string) {
-        return await PhysicalCashBalances.findOne({
-            where: {
-                admin_id
-            }
-        });
-    }
+    // =========================================
+    // TODAY PHYSICAL CASH OPENING
+    // =========================================
 
-    async getPhysicalCashOpening(admin_id: string) {
+    async getTodayPhysicalCashOpening(
+        admin_id: string,
+        today: string
+    ) {
         return await PhysicalCashOpenings.findOne({
             where: {
-                admin_id
+                admin_id,
+                opening_date: today
             },
             order: [
-                ["opening_date", "DESC"],
                 ["created_at", "DESC"]
             ]
         });
     }
 
+
+    // =========================================
+    // TODAY BANK OPENING BALANCES
+    // =========================================
+
+    async getTodayBankOpenings(
+        admin_id: string,
+        today: string
+    ) {
+        return await OpeningBalances.findAll({
+            where: {
+                admin_id,
+                opening_date: today
+            },
+            attributes: [
+                "id",
+                "bank_id",
+                "opening_balance",
+                "opening_date"
+            ],
+            order: [
+                ["created_at", "DESC"]
+            ]
+        });
+    }
+
+
+    // =========================================
+    // BANKS
+    // =========================================
+
     async getBanks(admin_id: string) {
+
         return await Banks.findAll({
             where: {
                 admin_id,
@@ -36,8 +67,7 @@ class DashboardRepository {
             attributes: [
                 "id",
                 "bank_name",
-                "csp_id",
-                "online_balance"
+                "csp_id"
             ],
             order: [
                 ["bank_name", "ASC"]
@@ -45,28 +75,48 @@ class DashboardRepository {
         });
     }
 
-    async getTodayTransactions(admin_id: string, startDate: Date, endDate: Date) {
+
+    // =========================================
+    // TODAY TRANSACTIONS
+    // =========================================
+
+    async getTodayTransactions(
+        admin_id: string,
+        startDate: Date,
+        endDate: Date
+    ) {
+
         return await Transactions.findAll({
             where: {
                 admin_id,
+
                 transaction_date: {
                     [Op.gte]: startDate,
                     [Op.lt]: endDate
                 }
             },
+
             attributes: [
                 "id",
+                "bank_id",
                 "transaction_type",
                 "amount"
             ]
         });
     }
 
+
+    // =========================================
+    // LAST CLOSING
+    // =========================================
+
     async getLastClosing(admin_id: string) {
+
         return await CashClosings.findOne({
             where: {
                 admin_id
             },
+
             order: [
                 ["closing_date", "DESC"],
                 ["created_at", "DESC"]
