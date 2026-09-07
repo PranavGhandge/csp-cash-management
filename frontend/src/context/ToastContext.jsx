@@ -9,7 +9,7 @@ export const ToastProvider = ({ children }) => {
         setToasts((prev) => prev.filter((t) => t.id !== id));
     }, []);
 
-    const showToast = useCallback((message, type = "info", duration = 4000) => {
+    const showToast = useCallback((message, type = "info", duration = 2500) => {
         const id = Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
         const newToast = { id, message, type, duration };
 

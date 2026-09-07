@@ -63,51 +63,6 @@ const Sidebar = ({ onCloseMobile }) => {
                     <span>Dashboard</span>
                 </NavLink>
 
-                {/* SUPER ADMIN */}
-                {role === "SUPER_ADMIN" && (
-                    <>
-                        <div className="nav-section-title">ADMINISTRATION</div>
-                        <NavLink
-                            to="/super-admin/admins"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <ShieldCheck size={18} />
-                            <span>Admins</span>
-                        </NavLink>
-                    </>
-                )}
-
-                {/* MANAGEMENT */}
-                {(role === "ADMIN" || role === "SUPER_ADMIN") && (
-                    <>
-                        <div className="nav-section-title">MANAGEMENT</div>
-                        <NavLink
-                            to="/admin/operators"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <Users size={18} />
-                            <span>Operators</span>
-                        </NavLink>
-
-                        <NavLink
-                            to="/admin/banks"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <Landmark size={18} />
-                            <span>Banks</span>
-                        </NavLink>
-                    </>
-                )}
-
                 {/* CASH MANAGEMENT */}
                 <div className="nav-section-title">CASH MANAGEMENT</div>
                 {(role === "ADMIN" || role === "SUPER_ADMIN") && (
@@ -133,59 +88,22 @@ const Sidebar = ({ onCloseMobile }) => {
                             <Coins size={18} />
                             <span>Physical Cash Opening</span>
                         </NavLink>
-
-                        <NavLink
-                            to="/admin/transactions"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <ArrowLeftRight size={18} />
-                            <span>Record Transaction</span>
-                        </NavLink>
-
-                        <NavLink
-                            to="/admin/closing"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <Lock size={18} />
-                            <span>Cash Closing</span>
-                        </NavLink>
                     </>
                 )}
 
-                {role === "OPERATOR" && (
-                    <>
-                        <NavLink
-                            to="/operator/transactions"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <ArrowLeftRight size={18} />
-                            <span>Record Transaction</span>
-                        </NavLink>
+                {/* Create Transaction */}
+                <NavLink
+                    to={role === "OPERATOR" ? "/operator/transactions" : "/admin/transactions"}
+                    className={({ isActive }) =>
+                        `nav-link-item ${isActive ? "active" : ""}`
+                    }
+                    onClick={onCloseMobile}
+                >
+                    <ArrowLeftRight size={18} />
+                    <span>Create Transaction</span>
+                </NavLink>
 
-                        <NavLink
-                            to="/operator/closing"
-                            className={({ isActive }) =>
-                                `nav-link-item ${isActive ? "active" : ""}`
-                            }
-                            onClick={onCloseMobile}
-                        >
-                            <Lock size={18} />
-                            <span>Cash Closing</span>
-                        </NavLink>
-                    </>
-                )}
-
-                {/* AUDIT & REPORTS */}
-                <div className="nav-section-title">AUDIT & REPORTS</div>
+                {/* Transaction Records */}
                 <NavLink
                     to={role === "OPERATOR" ? "/operator/history" : "/admin/history"}
                     className={({ isActive }) =>
@@ -194,9 +112,22 @@ const Sidebar = ({ onCloseMobile }) => {
                     onClick={onCloseMobile}
                 >
                     <History size={18} />
-                    <span>Transaction History</span>
+                    <span>Transaction Records</span>
                 </NavLink>
 
+                {/* Cash Closing */}
+                <NavLink
+                    to={role === "OPERATOR" ? "/operator/closing" : "/admin/closing"}
+                    className={({ isActive }) =>
+                        `nav-link-item ${isActive ? "active" : ""}`
+                    }
+                    onClick={onCloseMobile}
+                >
+                    <Lock size={18} />
+                    <span>Cash Closing</span>
+                </NavLink>
+
+                {/* Closing History */}
                 <NavLink
                     to={role === "OPERATOR" ? "/operator/closing-history" : "/admin/closing-history"}
                     className={({ isActive }) =>
@@ -207,6 +138,48 @@ const Sidebar = ({ onCloseMobile }) => {
                     <FileSpreadsheet size={18} />
                     <span>Closing History</span>
                 </NavLink>
+
+                {/* MANAGEMENT */}
+                {(role === "ADMIN" || role === "SUPER_ADMIN") && (
+                    <>
+                        <div className="nav-section-title">MANAGEMENT</div>
+                        <NavLink
+                            to="/admin/operators"
+                            className={({ isActive }) =>
+                                `nav-link-item ${isActive ? "active" : ""}`
+                            }
+                            onClick={onCloseMobile}
+                        >
+                            <Users size={18} />
+                            <span>Operator</span>
+                        </NavLink>
+
+                        <NavLink
+                            to="/admin/banks"
+                            className={({ isActive }) =>
+                                `nav-link-item ${isActive ? "active" : ""}`
+                            }
+                            onClick={onCloseMobile}
+                        >
+                            <Landmark size={18} />
+                            <span>Bank</span>
+                        </NavLink>
+                    </>
+                )}
+
+                {/* SUPER ADMIN */}
+                {role === "SUPER_ADMIN" && (
+                    <NavLink
+                        to="/super-admin/admins"
+                        className={({ isActive }) =>
+                            `nav-link-item ${isActive ? "active" : ""}`
+                        }
+                        onClick={onCloseMobile}
+                    >
+                        <ShieldCheck size={18} />
+                        <span>Admins</span>
+                    </NavLink>
+                )}
             </nav>
 
             {/* Footer Profile */}

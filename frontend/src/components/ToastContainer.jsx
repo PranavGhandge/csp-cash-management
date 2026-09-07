@@ -10,28 +10,14 @@ const ToastContainer = () => {
     const renderIcon = (type) => {
         switch (type) {
             case "success":
-                return <CheckCircle2 size={18} strokeWidth={2.5} />;
+                return <CheckCircle2 size={18} strokeWidth={2} />;
             case "error":
-                return <AlertCircle size={18} strokeWidth={2.5} />;
+                return <AlertCircle size={18} strokeWidth={2} />;
             case "warning":
-                return <AlertTriangle size={18} strokeWidth={2.5} />;
+                return <AlertTriangle size={18} strokeWidth={2} />;
             case "info":
             default:
-                return <Info size={18} strokeWidth={2.5} />;
-        }
-    };
-
-    const getTitle = (type) => {
-        switch (type) {
-            case "success":
-                return "Success";
-            case "error":
-                return "Error Alert";
-            case "warning":
-                return "Attention";
-            case "info":
-            default:
-                return "Notification";
+                return <Info size={18} strokeWidth={2} />;
         }
     };
 
@@ -43,13 +29,10 @@ const ToastContainer = () => {
                     className={`toast-item toast-${toast.type || "info"}`}
                     role="alert"
                 >
-                    <div className="toast-icon-wrap">
+                    <div className="toast-icon">
                         {renderIcon(toast.type)}
                     </div>
-                    <div className="toast-content">
-                        <div className="toast-title">{getTitle(toast.type)}</div>
-                        <div className="toast-message">{toast.message}</div>
-                    </div>
+                    <span className="toast-message">{toast.message}</span>
                     <button
                         className="toast-close-btn"
                         onClick={() => removeToast(toast.id)}
@@ -57,12 +40,6 @@ const ToastContainer = () => {
                     >
                         <X size={16} />
                     </button>
-                    {toast.duration > 0 && (
-                        <div
-                            className="toast-progress"
-                            style={{ animationDuration: `${toast.duration}ms` }}
-                        />
-                    )}
                 </div>
             ))}
         </div>
