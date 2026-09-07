@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import apiRequest from "../../services/api";
 import { useToast } from "../../context/ToastContext";
+import CustomDatePicker from "../../components/CustomDatePicker";
 import {
     History,
     Search,
@@ -45,10 +46,12 @@ const TransactionHistory = () => {
     const [search, setSearch] = useState("");
     const [transactionType, setTransactionType] = useState("");
     const [bankId, setBankId] = useState("");
+    const [dateFilter, setDateFilter] = useState("");
 
     const [page, setPage] = useState(1);
     const [limit] = useState(10);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalRecords, setTotalRecords] = useState(0);
 
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [detailsLoading, setDetailsLoading] = useState(false);
@@ -82,10 +85,16 @@ const TransactionHistory = () => {
                 params.append("bank_id", bankId);
             }
 
+            if (dateFilter) {
+                params.append("date", dateFilter);
+            }
+
             const result = await apiRequest(`/api/transaction?${params.toString()}`);
             setTransactions(result?.data || []);
-            const count = result?.data?.length || 0;
-            setTotalPages(Math.max(1, Math.ceil(count / limit)));
+            const total = result?.pagination?.total ?? (result?.data?.length || 0);
+            setTotalRecords(total);
+            const pages = result?.pagination?.totalPages ?? Math.max(1, Math.ceil(total / limit));
+            setTotalPages(pages);
 
         } catch (err) {
             console.error("Fetch transactions error:", err);
@@ -93,7 +102,7 @@ const TransactionHistory = () => {
         } finally {
             setLoading(false);
         }
-    }, [page, limit, search, transactionType, bankId, toast]);
+    }, [page, limit, search, transactionType, bankId, dateFilter, toast]);
 
     useEffect(() => {
         fetchBanks();
@@ -113,6 +122,7 @@ const TransactionHistory = () => {
         setSearch("");
         setTransactionType("");
         setBankId("");
+        setDateFilter("");
         setPage(1);
     };
 
@@ -216,6 +226,19 @@ const TransactionHistory = () => {
                         </div>
                     </div>
 
+                    {/* Date Filter */}
+                    <div className="txh-filter-group">
+                        <label>Date</label>
+                        <CustomDatePicker
+                            value={dateFilter}
+                            onChange={(val) => {
+                                setDateFilter(val);
+                                setPage(1);
+                            }}
+                            placeholder="Select date"
+                        />
+                    </div>
+
                     {/* Actions */}
                     <div className="txh-filter-actions">
                         <button type="submit" className="txh-btn-search">
@@ -243,7 +266,7 @@ const TransactionHistory = () => {
                         <h2>Audit Records</h2>
                     </div>
                     <span className="txh-records-pill">
-                        {transactions.length} Records Found
+                        {totalRecords} Records Found
                     </span>
                 </div>
 

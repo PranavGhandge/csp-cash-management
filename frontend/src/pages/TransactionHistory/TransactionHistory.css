@@ -72,9 +72,14 @@
 /* Filter Card */
 .txh-filter-form {
     display: grid;
-    grid-template-columns: 2fr 1.3fr 1.3fr auto;
-    gap: 16px;
+    grid-template-columns: 1.6fr 1.1fr 1.1fr 1.1fr auto;
+    gap: 12px;
     align-items: flex-end;
+}
+
+.txh-input-box input[type="date"].txh-real-input {
+    color-scheme: dark;
+    cursor: pointer;
 }
 
 .txh-filter-group {
