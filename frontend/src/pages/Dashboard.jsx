@@ -286,9 +286,6 @@ const Dashboard = () => {
                                 <div className="note-amount-bold">
                                     ₹{formatAmount(subtotal)}
                                 </div>
-                                <div className="note-calc-formula">
-                                    {count} × ₹{n.val} = ₹{formatAmount(subtotal)}
-                                </div>
                             </div>
                         );
                     })}
