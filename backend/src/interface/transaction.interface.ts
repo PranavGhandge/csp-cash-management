@@ -17,6 +17,7 @@ export interface ITransactionFilter {
     search?: string;
     transaction_type?: "WITHDRAWAL" | "DEPOSIT";
     bank_id?: string;
+    date?: string;
     start_date?: string;
     end_date?: string;
 }
