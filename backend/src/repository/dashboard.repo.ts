@@ -8,9 +8,7 @@ import TransactionDenominations from "../model/transaction-denominations.model";
 
 class DashboardRepository {
 
-    // =========================================
     // TODAY PHYSICAL CASH OPENING
-    // =========================================
 
     async getTodayPhysicalCashOpening(
         admin_id: string,
@@ -28,9 +26,7 @@ class DashboardRepository {
     }
 
 
-    // =========================================
     // TODAY BANK OPENING BALANCES
-    // =========================================
 
     async getTodayBankOpenings(
         admin_id: string,
@@ -54,9 +50,7 @@ class DashboardRepository {
     }
 
 
-    // =========================================
     // BANKS
-    // =========================================
 
     async getBanks(admin_id: string) {
 
@@ -77,9 +71,7 @@ class DashboardRepository {
     }
 
 
-    // =========================================
     // TODAY TRANSACTIONS
-    // =========================================
 
     async getTodayTransactions(
         admin_id: string,
@@ -122,9 +114,7 @@ class DashboardRepository {
     }
 
 
-    // =========================================
     // LAST CLOSING
-    // =========================================
 
     async getLastClosing(admin_id: string) {
 

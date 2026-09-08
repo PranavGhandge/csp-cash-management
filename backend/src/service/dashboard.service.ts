@@ -9,9 +9,7 @@ class DashboardService {
             throw new AppError("Admin scope not found", 403);
         }
 
-        // =========================================
         // TODAY DATE
-        // =========================================
 
         const today = new Date();
 
@@ -26,9 +24,7 @@ class DashboardService {
         endDate.setHours(0, 0, 0, 0);
 
 
-        // =========================================
         // FETCH TODAY DATA
-        // =========================================
 
         const physicalCashOpening =
             await dashboardRepo.getTodayPhysicalCashOpening(
@@ -56,9 +52,7 @@ class DashboardService {
             await dashboardRepo.getLastClosing(admin_id);
 
 
-        // =========================================
         // TODAY TRANSACTION CALCULATION
-        // =========================================
 
         let totalDeposit = 0;
         let totalWithdrawal = 0;
@@ -78,9 +72,7 @@ class DashboardService {
             transactions.length;
 
 
-        // =========================================
         // PHYSICAL CASH OPENING
-        // =========================================
 
         const openingCash =
             physicalCashOpening
@@ -88,9 +80,7 @@ class DashboardService {
                 : 0;
 
 
-        // =========================================
         // CURRENT PHYSICAL CASH DENOMINATIONS
-        // =========================================
 
         let note_500 =
             physicalCashOpening
@@ -123,9 +113,7 @@ class DashboardService {
                 : 0;
 
 
-        // =========================================
         // APPLY TRANSACTION DENOMINATIONS
-        // =========================================
 
         for (const transaction of transactions) {
 
@@ -137,16 +125,7 @@ class DashboardService {
             }
 
 
-            // -----------------------------------------
-            // WITHDRAWAL
-            // Customer gets notes
-            // Physical notes decrease
-            // -----------------------------------------
-
-            if (
-                transaction.transaction_type ===
-                "WITHDRAWAL"
-            ) {
+            if (transaction.transaction_type === "WITHDRAWAL") {
 
                 note_500 -=
                     Number(denominations.note_500 || 0);
@@ -168,11 +147,9 @@ class DashboardService {
             }
 
 
-            // -----------------------------------------
             // DEPOSIT
             // Customer gives notes
             // Physical notes increase
-            // -----------------------------------------
 
             if (
                 transaction.transaction_type ===
@@ -200,9 +177,7 @@ class DashboardService {
         }
 
 
-        // =========================================
         // CURRENT PHYSICAL CASH TOTAL
-        // =========================================
 
         const currentPhysicalCash =
             (500 * note_500) +
@@ -213,9 +188,7 @@ class DashboardService {
             (10 * note_10);
 
 
-        // =========================================
         // EXPECTED CASH
-        // =========================================
 
         const expectedCash =
             openingCash +
@@ -223,9 +196,7 @@ class DashboardService {
             totalWithdrawal;
 
 
-        // =========================================
         // PHYSICAL CASH RESPONSE
-        // =========================================
 
         const physicalCash = {
 
@@ -325,9 +296,7 @@ class DashboardService {
             });
 
 
-        // =========================================
         // RESPONSE
-        // =========================================
 
         return {
 
