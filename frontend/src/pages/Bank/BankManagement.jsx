@@ -139,7 +139,7 @@ const BankManagement = () => {
                 })
             });
 
-            toast.success(result?.message || "Bank account registered successfully! 🎉");
+            toast.success(result?.message || "Bank account registered successfully! ");
 
             setFormData({
                 bank_name: "",
