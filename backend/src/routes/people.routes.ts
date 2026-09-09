@@ -31,4 +31,13 @@ export default async function peopleRoutes(app: FastifyInstance) {
     },
         peopleController.getPersonById
     );
+
+    app.delete("/api/people/:id", {
+        preHandler: [
+            authMiddleware,
+            roleMiddleware("ADMIN", "OPERATOR")
+        ]
+    },
+        peopleController.deletePerson
+    );
 }

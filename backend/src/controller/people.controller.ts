@@ -52,6 +52,23 @@ class PeopleController {
 
         return reply.status(200).send(response);
     }
+
+    async deletePerson(req: FastifyRequest, reply: FastifyReply) {
+        const { id } = req.params as { id: string; };
+
+        const admin_id = req.user.role === "ADMIN" ? req.user.id : req.user.admin_id;
+
+        if (!admin_id) {
+            return reply.status(403).send({
+                success: false,
+                message: "Admin scope not found"
+            });
+        }
+
+        const response = await peopleService.deletePerson(id, admin_id);
+
+        return reply.status(200).send(response);
+    }
 }
 
 export default new PeopleController();

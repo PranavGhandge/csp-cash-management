@@ -75,7 +75,10 @@ const start = async () => {
 
 
         await app.register(cors, {
-            origin: process.env.CORS_ORIGIN
+            origin: process.env.CORS_ORIGIN || true,
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
+            allowedHeaders: ["Content-Type", "Authorization", "Accept", "Origin", "X-Requested-With"],
+            credentials: true
         });
 
 

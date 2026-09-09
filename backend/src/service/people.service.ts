@@ -116,6 +116,30 @@ class PeopleService {
         };
     }
 
+    async deletePerson(person_id: string, admin_id: string) {
+
+        if (!admin_id) {
+            throw new AppError("Admin scope not found", 403);
+        }
+
+        if (!person_id) {
+            throw new AppError("Person ID is required", 400);
+        }
+
+        const person = await peopleRepo.findPerson(person_id, admin_id);
+
+        if (!person) {
+            throw new AppError("Person not found", 404);
+        }
+
+        await peopleRepo.deletePersonWithTransactions(person_id, admin_id);
+
+        return {
+            success: true,
+            message: "Person and transaction history deleted successfully"
+        };
+    }
+
 }
 
 export default new PeopleService();
