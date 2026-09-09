@@ -6,6 +6,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
+import People from "./pages/People/People";
+import PersonDetails from "./pages/People/PersonDetails";
 import AdminManagement from "./pages/Admin/AdminManagement";
 import OperatorManagement from "./pages/Operator/OperatorManagement";
 import BankManagement from "./pages/Bank/BankManagement";
@@ -32,6 +34,28 @@ function App() {
               <ProtectedRoute>
                 <AppLayout>
                   <Dashboard />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* People Ledger Routes (Completely separate from CSP Banking) */}
+          <Route
+            path="/people"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <People />
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/people/:id"
+            element={
+              <ProtectedRoute>
+                <AppLayout>
+                  <PersonDetails />
                 </AppLayout>
               </ProtectedRoute>
             }

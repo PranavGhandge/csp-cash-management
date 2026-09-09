@@ -1,0 +1,524 @@
+/* ==========================================================================
+   PERSON DETAILS PAGE STYLING
+   ========================================================================== */
+
+.pdetail-container {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    animation: pdetailFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pdetailFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Top Back Navigation Bar */
+.pdetail-top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.pdetail-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #111827;
+    border: 1px solid #1e293b;
+    color: #94a3b8;
+    padding: 8px 16px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.pdetail-back-btn:hover {
+    background: #1e293b;
+    color: #f8fafc;
+    border-color: #334155;
+    transform: translateX(-2px);
+}
+
+/* Person Profile Header Hero Card */
+.pdetail-hero-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.pdetail-hero-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%);
+}
+
+.pdetail-hero-left {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.pdetail-avatar-lg {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+    color: #ffffff;
+    font-size: 22px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+.pdetail-hero-meta h1 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #f8fafc;
+    margin: 0 0 6px 0;
+    letter-spacing: -0.4px;
+}
+
+.pdetail-phone-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: #94a3b8;
+    background: #0d1322;
+    padding: 3px 10px;
+    border-radius: 6px;
+    border: 1px solid #1e293b;
+}
+
+/* Center Balance Block */
+.pdetail-hero-balance-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 20px;
+    background: #0d1322;
+    border-radius: 12px;
+    border: 1px solid #1e293b;
+    min-width: 200px;
+}
+
+.pdetail-balance-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 4px;
+}
+
+.pdetail-balance-amount {
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+    font-variant-numeric: tabular-nums;
+}
+
+.pdetail-balance-amount.amount-receive {
+    color: #34d399;
+}
+
+.pdetail-balance-amount.amount-pay {
+    color: #f87171;
+}
+
+.pdetail-balance-amount.amount-settled {
+    color: #94a3b8;
+}
+
+/* Right Action Buttons */
+.pdetail-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.pdetail-btn-give {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pdetail-btn-give:hover {
+    background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.5);
+}
+
+.pdetail-btn-receive {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pdetail-btn-receive:hover {
+    background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+}
+
+/* Summary Stat Cards Grid (2 Columns) */
+.pdetail-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+@media (max-width: 768px) {
+    .pdetail-stats-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.pdetail-stat-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.pdetail-stat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.pdetail-stat-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.pdetail-stat-val {
+    font-size: 20px;
+    font-weight: 800;
+    color: #f8fafc;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Transaction History Card */
+.pdetail-history-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.pdetail-history-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid #1e293b;
+    background: rgba(15, 23, 42, 0.4);
+}
+
+.pdetail-history-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pdetail-history-title-wrap h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0;
+}
+
+.pdetail-tx-table-wrap {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.pdetail-tx-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    text-align: left;
+}
+
+.pdetail-tx-table th {
+    padding: 13px 18px;
+    background: #0d1322;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: 1px solid #1e293b;
+    white-space: nowrap;
+}
+
+.pdetail-tx-table td {
+    padding: 14px 18px;
+    border-bottom: 1px solid #1e293b;
+    color: #e2e8f0;
+    vertical-align: middle;
+}
+
+.pdetail-tx-table tbody tr:hover {
+    background-color: rgba(30, 41, 59, 0.4);
+}
+
+.pdetail-tx-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Date cell */
+.pdetail-date-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+/* Transaction Type Badges */
+.pdetail-type-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.pdetail-type-badge.type-credit {
+    background: rgba(16, 185, 129, 0.12);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.28);
+}
+
+.pdetail-type-badge.type-debit {
+    background: rgba(59, 130, 246, 0.12);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.28);
+}
+
+/* Amount styling */
+.pdetail-amount-cell {
+    font-weight: 800;
+    font-size: 14.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.pdetail-amount-cell.amount-credit {
+    color: #34d399;
+}
+
+.pdetail-amount-cell.amount-debit {
+    color: #60a5fa;
+}
+
+/* Payment Mode Badge */
+.pdetail-mode-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 700;
+    background: #0d1322;
+    border: 1px solid #1e293b;
+    color: #cbd5e1;
+}
+
+.pdetail-note-cell {
+    color: #cbd5e1;
+    max-width: 320px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+/* Loading & Empty state */
+.pdetail-loading-box,
+.pdetail-empty-state {
+    padding: 48px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+}
+
+.pdetail-spin-icon {
+    animation: pdetailSpin 1s linear infinite;
+    color: #3b82f6;
+}
+
+@keyframes pdetailSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================================================
+   TRANSACTION MODAL STYLING (Give / Receive Money)
+   ========================================================================== */
+
+.pdetail-modal-card {
+    background: #0d1322;
+    border: 1px solid #1e293b;
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8);
+    border-radius: 18px;
+    max-width: 500px;
+    width: 100%;
+    overflow: hidden;
+    animation: pdetailModalScaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes pdetailModalScaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.93) translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.pdetail-modal-banner {
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+}
+
+.pdetail-modal-banner.banner-credit {
+    background: rgba(16, 185, 129, 0.1);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.pdetail-modal-banner.banner-debit {
+    background: rgba(59, 130, 246, 0.1);
+    border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+/* Payment Mode Selector Pills */
+.pdetail-mode-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.pdetail-mode-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 9px;
+    color: #94a3b8;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.pdetail-mode-option:hover {
+    border-color: #334155;
+    color: #f8fafc;
+}
+
+.pdetail-mode-option.selected {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+    color: #60a5fa;
+    box-shadow: 0 0 12px rgba(59, 130, 246, 0.2);
+}
+
+.pdetail-textarea {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    color: #f8fafc !important;
+    padding: 10px 0 !important;
+    font-size: 13.5px !important;
+    outline: none !important;
+    width: 100%;
+    min-height: 70px;
+    resize: vertical;
+}

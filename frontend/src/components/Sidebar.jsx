@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import {
     LayoutDashboard,
     Users,
+    UsersRound,
     Landmark,
     Wallet,
     Coins,
@@ -31,6 +32,8 @@ const Sidebar = ({ onCloseMobile }) => {
     );
 
     const role = user?.role;
+
+    const isPeopleActive = location.pathname.startsWith("/people");
 
     const isCashActive = [
         "/admin/opening-balance",
@@ -122,6 +125,18 @@ const Sidebar = ({ onCloseMobile }) => {
                     >
                         <LayoutDashboard size={18} />
                         <span>Dashboard</span>
+                    </NavLink>
+
+                    {/* PEOPLE LEDGER */}
+                    <NavLink
+                        to="/people"
+                        className={({ isActive }) =>
+                            `nav-link-item ${isActive || isPeopleActive ? "active" : ""}`
+                        }
+                        onClick={onCloseMobile}
+                    >
+                        <UsersRound size={18} />
+                        <span>People Ledger</span>
                     </NavLink>
 
                     {/* CASH DROPDOWN */}
