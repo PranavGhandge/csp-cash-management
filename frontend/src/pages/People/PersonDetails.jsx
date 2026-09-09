@@ -20,7 +20,8 @@ import {
     TrendingDown,
     FileText,
     Receipt,
-    Wallet
+    Wallet,
+    Trash2
 } from "lucide-react";
 import "./PersonDetails.css";
 import "./People.css";
@@ -88,24 +89,21 @@ const PersonDetails = () => {
     const [txErrors, setTxErrors] = useState({});
     const [submittingTx, setSubmittingTx] = useState(false);
 
+    // Delete Confirmation State
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deletingPerson, setDeletingPerson] = useState(false);
+
     // Fetch Person details & Transactions
     const fetchPersonDetails = useCallback(async () => {
+        if (!id) return;
         try {
             setLoading(true);
 
-            const [personRes, txRes] = await Promise.allSettled([
-                apiRequest(`/api/people/${id}`),
-                apiRequest(`/api/people-transaction/person/${id}`)
-            ]);
+            const personRes = await apiRequest(`/api/people/${id}`);
 
-            if (personRes.status === "fulfilled" && personRes.value?.data) {
-                setPerson(personRes.value.data);
-            } else {
-                toast.error("Failed to load person record.");
-            }
-
-            if (txRes.status === "fulfilled" && txRes.value?.data) {
-                const list = Array.isArray(txRes.value.data) ? txRes.value.data : [];
+            if (personRes?.data) {
+                setPerson(personRes.data);
+                const list = Array.isArray(personRes.data.transactions) ? personRes.data.transactions : [];
                 // Sort newest transaction first
                 list.sort((a, b) => {
                     const dateA = new Date(a.createdAt || a.created_at || a.transaction_date || 0);
@@ -114,7 +112,7 @@ const PersonDetails = () => {
                 });
                 setTransactions(list);
             } else {
-                setTransactions([]);
+                toast.error("Failed to load person record.");
             }
         } catch (err) {
             console.error("Fetch person details error:", err);
@@ -122,13 +120,11 @@ const PersonDetails = () => {
         } finally {
             setLoading(false);
         }
-    }, [id, toast]);
+    }, [id]);
 
     useEffect(() => {
-        if (id) {
-            fetchPersonDetails();
-        }
-    }, [id, fetchPersonDetails]);
+        fetchPersonDetails();
+    }, [id]);
 
     // Open Modal
     const handleOpenModal = (type) => {
@@ -208,6 +204,22 @@ const PersonDetails = () => {
         }
     };
 
+    const handleDeletePerson = async () => {
+        try {
+            setDeletingPerson(true);
+            const result = await apiRequest(`/api/people/${id}`, {
+                method: "DELETE"
+            });
+            toast.success(result?.message || "Person and transaction history deleted successfully");
+            navigate("/people");
+        } catch (err) {
+            console.error("Delete person error:", err);
+            toast.error(err.message || "Failed to delete person.");
+        } finally {
+            setDeletingPerson(false);
+        }
+    };
+
     // Calculate totals
     const totalCredit = Number(person?.total_credit ?? transactions.filter(t => t.transaction_type === "CREDIT").reduce((acc, t) => acc + Number(t.amount || 0), 0));
     const totalDebit = Number(person?.total_debit ?? transactions.filter(t => t.transaction_type === "DEBIT").reduce((acc, t) => acc + Number(t.amount || 0), 0));
@@ -216,6 +228,8 @@ const PersonDetails = () => {
     let statusLabel = "SETTLED";
     let statusClass = "status-settled";
     let amountClass = "amount-settled";
+
+    const isSettled = balance === 0;
 
     if (balance > 0) {
         statusLabel = "TO RECEIVE";
@@ -288,6 +302,18 @@ const PersonDetails = () => {
                         <ArrowDownLeft size={17} />
                         <span>Receive Money</span>
                     </button>
+
+                    {isSettled && (
+                        <button
+                            type="button"
+                            className="pdetail-btn-delete"
+                            onClick={() => setShowDeleteModal(true)}
+                            title={`Delete ${person?.name}`}
+                        >
+                            <Trash2 size={16} />
+                            <span>Delete Person</span>
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -588,6 +614,56 @@ const PersonDetails = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Delete Person Confirmation Modal */}
+            {showDeleteModal && (
+                <div className="people-modal-backdrop" onClick={() => !deletingPerson && setShowDeleteModal(false)}>
+                    <div className="people-modal-card people-delete-modal-card" onClick={(e) => e.stopPropagation()}>
+                        <div className="people-delete-modal-body">
+                            <div className="people-delete-icon-wrap">
+                                <Trash2 size={26} />
+                            </div>
+
+                            <h3 className="people-delete-title">
+                                Are you sure you want to delete {person?.name}?
+                            </h3>
+
+                            <p className="people-delete-desc">
+                                All transaction history of this person will also be permanently deleted.
+                            </p>
+
+                            <div className="people-delete-modal-actions">
+                                <button
+                                    type="button"
+                                    className="people-btn-cancel"
+                                    disabled={deletingPerson}
+                                    onClick={() => setShowDeleteModal(false)}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="button"
+                                    className="people-btn-delete-confirm"
+                                    disabled={deletingPerson}
+                                    onClick={handleDeletePerson}
+                                >
+                                    {deletingPerson ? (
+                                        <>
+                                            <Loader2 size={15} className="people-spin-icon" />
+                                            <span>Deleting...</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Trash2 size={15} />
+                                            <span>Delete</span>
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             )}

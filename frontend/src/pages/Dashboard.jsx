@@ -78,7 +78,7 @@ const Dashboard = () => {
             setLoading(false);
             setRefreshing(false);
         }
-    }, [toast]);
+    }, []);
 
     useEffect(() => {
         fetchDashboard(false);

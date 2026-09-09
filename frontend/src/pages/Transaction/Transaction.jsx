@@ -107,7 +107,7 @@ const Transaction = () => {
         } finally {
             setFetchingBanks(false);
         }
-    }, [toast]);
+    }, []);
 
     const checkClosingStatus = useCallback(async () => {
         try {
@@ -135,7 +135,7 @@ const Transaction = () => {
     useEffect(() => {
         fetchBanks();
         checkClosingStatus();
-    }, [fetchBanks, checkClosingStatus]);
+    }, []);
 
     const calculateDenominationTotal = () => {
         return notes.reduce((total, note) => {

@@ -216,6 +216,29 @@
     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
 }
 
+.pdetail-btn-delete {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.28);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pdetail-btn-delete:hover {
+    background: #ef4444;
+    color: #ffffff;
+    border-color: #ef4444;
+    transform: translateY(-1.5px);
+    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+}
+
 /* Summary Stat Cards Grid (2 Columns) */
 .pdetail-stats-grid {
     display: grid;

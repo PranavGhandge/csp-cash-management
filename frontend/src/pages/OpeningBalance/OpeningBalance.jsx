@@ -68,7 +68,7 @@ const OpeningBalance = () => {
         } finally {
             setFetchingBanks(false);
         }
-    }, [toast]);
+    }, []);
 
     useEffect(() => {
         fetchBanks();

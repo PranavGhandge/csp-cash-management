@@ -75,32 +75,23 @@ const People = () => {
     });
     const [submitting, setSubmitting] = useState(false);
 
-    // Fetch Summary & People List
+    // Fetch People List and compute summary
     const fetchData = useCallback(async () => {
         try {
             setLoading(true);
 
-            // Fetch people and summary in parallel
-            const [peopleRes, summaryRes] = await Promise.allSettled([
-                apiRequest("/api/people"),
-                apiRequest("/api/people-transaction/summary")
-            ]);
+            const peopleRes = await apiRequest("/api/people");
 
-            let peopleList = [];
-            if (peopleRes.status === "fulfilled" && peopleRes.value?.data) {
-                peopleList = Array.isArray(peopleRes.value.data) ? peopleRes.value.data : [];
-            }
+            const peopleList = Array.isArray(peopleRes?.data) ? peopleRes.data : [];
             setPeople(peopleList);
 
-            // Calculate fallback summary if needed
+            // Compute summary
             let calculatedToReceive = 0;
             let calculatedToPay = 0;
-            let calculatedNet = 0;
 
             peopleList.forEach((person) => {
                 const totalCredit = Number(person.total_credit || 0);
                 const totalDebit = Number(person.total_debit || 0);
-                // balance = credit - debit
                 const balance = person.balance !== undefined ? Number(person.balance) : totalCredit - totalDebit;
 
                 if (balance > 0) {
@@ -109,29 +100,21 @@ const People = () => {
                     calculatedToPay += Math.abs(balance);
                 }
             });
-            calculatedNet = calculatedToReceive - calculatedToPay;
 
-            if (summaryRes.status === "fulfilled" && summaryRes.value?.data) {
-                const s = summaryRes.value.data;
-                setSummary({
-                    total_to_receive: s.total_to_receive !== undefined ? Number(s.total_to_receive) : calculatedToReceive,
-                    total_to_pay: s.total_to_pay !== undefined ? Number(s.total_to_pay) : calculatedToPay,
-                    net_balance: s.net_balance !== undefined ? Number(s.net_balance) : calculatedNet
-                });
-            } else {
-                setSummary({
-                    total_to_receive: calculatedToReceive,
-                    total_to_pay: calculatedToPay,
-                    net_balance: calculatedNet
-                });
-            }
+            const calculatedNet = calculatedToReceive - calculatedToPay;
+
+            setSummary({
+                total_to_receive: calculatedToReceive,
+                total_to_pay: calculatedToPay,
+                net_balance: calculatedNet
+            });
         } catch (err) {
             console.error("Error fetching people ledger data:", err);
             toast.error(err.message || "Failed to load People Ledger records.");
         } finally {
             setLoading(false);
         }
-    }, [toast]);
+    }, []);
 
     useEffect(() => {
         fetchData();

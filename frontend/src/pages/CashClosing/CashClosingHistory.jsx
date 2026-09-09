@@ -49,7 +49,7 @@ const CashClosingHistory = () => {
         } finally {
             setLoading(false);
         }
-    }, [toast]);
+    }, []);
 
     useEffect(() => {
         fetchClosings();

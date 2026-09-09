@@ -63,11 +63,11 @@ const CashClosing = () => {
         } finally {
             setSummaryLoading(false);
         }
-    }, [toast]);
+    }, []);
 
     useEffect(() => {
         fetchClosingSummary();
-    }, [fetchClosingSummary]);
+    }, []);
 
     useEffect(() => {
         const total = notes.reduce((sum, note) => {

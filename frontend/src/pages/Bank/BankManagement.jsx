@@ -115,7 +115,7 @@ const BankManagement = () => {
         } finally {
             setFetching(false);
         }
-    }, [toast]);
+    }, []);
 
     const handleSubmit = async (e) => {
         e.preventDefault();

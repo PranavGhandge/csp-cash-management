@@ -133,7 +133,7 @@ const TransactionHistory = () => {
         } finally {
             setLoading(false);
         }
-    }, [page, limit, search, transactionType, bankId, dateFilter, toast]);
+    }, [page, limit, search, transactionType, bankId, dateFilter]);
 
     useEffect(() => {
         fetchBanks();
