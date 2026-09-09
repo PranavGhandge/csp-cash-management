@@ -5,6 +5,8 @@ import Users from "./users.model";
 import CashClosings from "./cash-closings.model";
 import CashClosingBanks from "./cash-closing-banks.model";
 import CashClosingDenominations from "./cash-closing-denominations.model";
+import PeopleTransactions from "./people-transactions.model";
+import People from "./people.model";
 
 // Transaction → Denomination
 Transactions.hasOne(TransactionDenominations, {
@@ -62,4 +64,14 @@ CashClosings.hasMany(CashClosingBanks, {
 CashClosingBanks.belongsTo(CashClosings, {
     foreignKey: "closing_id",
     as: "closing"
+});
+
+People.hasMany(PeopleTransactions, {
+    foreignKey: "person_id",
+    as: "transactions"
+});
+
+PeopleTransactions.belongsTo(People, {
+    foreignKey: "person_id",
+    as: "person"
 });

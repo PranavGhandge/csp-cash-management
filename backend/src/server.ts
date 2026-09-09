@@ -14,6 +14,8 @@ import "./model/associations";
 import AppError from "./app-error";
 import cashClosingRoutes from "./routes/cash-closing.route";
 import dashboardRoutes from "./routes/dashboard.route";
+import peopleRoutes from "./routes/people.routes";
+import peopleTransactionsRoutes from "./routes/people-transactions.routes";
 
 dotenv.config();
 
@@ -86,6 +88,8 @@ const start = async () => {
         await app.register(TransactionRoutes);
         await app.register(cashClosingRoutes);
         await app.register(dashboardRoutes);
+        await app.register(peopleRoutes);
+        await app.register(peopleTransactionsRoutes);
 
         await app.listen({
             port: PORT,
